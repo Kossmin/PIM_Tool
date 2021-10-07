@@ -9,7 +9,7 @@ namespace DataAccess.Repository
 {
     public interface IProjectRepository
     {
-        Task<List<ProjectObject>> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind);
+        List<ProjectObject> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind);
         bool Add(ProjectObject project);
         bool Update(ProjectObject project);
         int GetMaxPageNumber(string status, string searchString);

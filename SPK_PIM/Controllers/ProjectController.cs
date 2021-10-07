@@ -14,7 +14,7 @@ namespace SPK_PIM.Controllers
     {
         IProjectRepository _projectRepository = new ProjectRepository();
 
-        public async Task<ActionResult> Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1)
+        public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1)
         {
             IndexPageModel indexPage = new IndexPageModel() {
                 _Status = _status,
@@ -32,7 +32,7 @@ namespace SPK_PIM.Controllers
 
             ViewBag._status = EntityState;
 
-            indexPage._Projects = await _projectRepository.GetAllProjectObject(indexPage._Status, indexPage._SearchString, indexPage._PageIndex, indexPage._NumberOfRows, indexPage._SortingKind);
+            indexPage._Projects =  _projectRepository.GetAllProjectObject(indexPage._Status, indexPage._SearchString, indexPage._PageIndex, indexPage._NumberOfRows, indexPage._SortingKind);
             indexPage._MaxPage = _projectRepository.GetMaxPageNumber(indexPage._Status, indexPage._SearchString);
             return View(indexPage);
         }

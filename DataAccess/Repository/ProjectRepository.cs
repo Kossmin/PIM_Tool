@@ -15,7 +15,7 @@ namespace DataAccess.Repository
         public bool Delete(int id)
         => ProjectDAO.Instance.Delete(id);
 
-        public Task<List<ProjectObject>> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
+        public List<ProjectObject> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
             => ProjectDAO.Instance.GetProjectObjects(status, searchString, pageIndex, numberOfRow, sortingKind);
 
         public int GetMaxPageNumber(string status, string searchString)

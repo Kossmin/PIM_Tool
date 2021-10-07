@@ -39,7 +39,7 @@ namespace DataAccess
             }
         }
 
-        public async Task<List<ProjectObject>> GetProjectObjects(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
+        public List<ProjectObject> GetProjectObjects(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
         {
             List<ProjectObject> projectList = new List<ProjectObject>();
             if (!string.IsNullOrWhiteSpace(searchString))
@@ -148,7 +148,11 @@ namespace DataAccess
 
         public bool Add(ProjectObject project)
         {
-            if (SearchByProjectNumber(project.ProjectNumber) != null) return false;
+            var proj = SearchByProjectNumber(project.ProjectNumber);
+            if ( proj != null)
+            {
+                return false;
+            }
             else
             {
                 _db.Add(project);
