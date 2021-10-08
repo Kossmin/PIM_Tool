@@ -13,7 +13,7 @@ namespace DataAccess.Repository
         bool Add(ProjectObject project);
         bool Update(ProjectObject project);
         int GetMaxPageNumber(string status, string searchString);
-        bool Delete(int id);
-        ProjectObject GetProject(int id);
+        bool Delete(IEnumerable<int> id);
+        List<ProjectObject> GetProjects(IEnumerable<int> ids);
     }
 }

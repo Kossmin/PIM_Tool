@@ -7,37 +7,48 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Scripts/css/StyleSheet1.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/f58c939b44.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header col-md-8">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="~/Project/Index" style="width: 100%; ">
-                    <img src="~/Images/images.jpg" style="width: 30px; display: inline-block; margin-right: 5px"/>
-                    <span>Project Information Management</span>
-                </a>
-            </div>
-            <div class="navbar-collapse collapse" >
-                <ul class="nav navbar-nav ">
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
+    <header>
+        <div class="topnav">
+            <div class="container" style="align-items: center; display: flex">
+                <div class="col-md-8">
+                    <a href="~/Project/Index" style="width: 100%; ">
+                        <img src="~/Images/images.jpg" style="width: 30px; display: inline-block; margin-right: 5px" />
+                        <span>Project Information Management</span>
+                    </a>
+                </div>
+                <div class="flex-container col-md-4">
+                    <div style="flex-grow: 4">
+                        <a>En</a>|<a>Vi</a>
+                    </div>
+                    <div style="flex-grow :2">
+                        <a>Help</a>
+                    </div>
+                    <div style="flex-grow: 3">
+                        <a>Logout</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
+    <hr />
+
     <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+        <div class="col-md-3">
+            
+            <ul>
+                <strong>Projects List</strong>
+                <li>New</li>
+                <li>Project</li>
+                <li>Customer</li>
+                <li>Supplier</li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

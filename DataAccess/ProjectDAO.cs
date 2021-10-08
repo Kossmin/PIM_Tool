@@ -141,9 +141,9 @@ namespace DataAccess
             return _db.SingleOrDefault(p => p.ProjectNumber == projectNumber);
         }
 
-        public ProjectObject SearchByID(int id)
+        public List<ProjectObject> SearchByID(IEnumerable<int> ids)
         {
-            return _db.SingleOrDefault(p => p.ID == id);
+            return (from a in _db where ids.Contains(a.ID) select a).ToList();
         }
 
         public bool Add(ProjectObject project)
@@ -160,15 +160,14 @@ namespace DataAccess
             }
         }
 
-        public bool Delete(int id)
+        public bool Delete(IEnumerable<int> ids)
         {
-            var proj = SearchByID(id);
-            if (proj != null)
+            var projects = _db.Where(p => ids.Contains(p.ID)).ToList();
+            for(int i = 0; i < projects.Count; i++)
             {
-                _db.Remove(proj);
-                return true;
+                _db.Remove(projects[i]);
             }
-            return false;
+            return true;
         }
     }
 }

@@ -43,14 +43,44 @@ namespace SPK_PIM.Controllers
             return View();
         }
 
+        
+        public ActionResult BackToHome(string returnUrl)
+        {
+            if (returnUrl == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect(returnUrl);
+            }
+        }
+
         [HttpPost]
         public ActionResult Create(IndexPageModel indexPage, string returnUrl=null)
         {
             if (ModelState.IsValid)
             {
                 _projectRepository.Add(indexPage._Project);
+                if (returnUrl == null)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return Redirect(returnUrl);
+                }
             }
-            return Redirect(returnUrl);
+            return View();
+        }
+
+        public ActionResult Details(int id)
+        {
+            List<int> tmp = new List<int>();
+            tmp.Add(id);
+            var model = _projectRepository.GetProjects(tmp)[0];
+            IndexPageModel indexPageModel = new IndexPageModel { _Project = model };
+            return View("Create", indexPageModel);
         }
 
 
@@ -61,19 +91,16 @@ namespace SPK_PIM.Controllers
             return View();
         }
 
-        public ActionResult Delete(int id, string returnUrl = null)
+        public ActionResult Delete(IEnumerable<int> employeeIds, string returnUrl = null)
         {
-            if(_projectRepository.GetProject(id)!=null) return View(_projectRepository.GetProject(id));
-            else
-            {
-                throw new Exception();
-            }
+            var projects = _projectRepository.GetProjects(employeeIds);
+            return View(projects);
         }
 
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id, string returnUrl = null)
+        public ActionResult DeleteConfirmed(IEnumerable<int> employeeIds, string returnUrl = null)
         {
-            _projectRepository.Delete(id);
+            _projectRepository.Delete(employeeIds);
             return RedirectToAction("Index");
         }
     }

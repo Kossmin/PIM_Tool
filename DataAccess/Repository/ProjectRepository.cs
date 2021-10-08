@@ -12,7 +12,7 @@ namespace DataAccess.Repository
         public bool Add(ProjectObject project)
         => ProjectDAO.Instance.Add(project);
 
-        public bool Delete(int id)
+        public bool Delete(IEnumerable<int> id)
         => ProjectDAO.Instance.Delete(id);
 
         public List<ProjectObject> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
@@ -21,8 +21,9 @@ namespace DataAccess.Repository
         public int GetMaxPageNumber(string status, string searchString)
         => ProjectDAO.Instance.GetMaxPageNumber(status, searchString);
 
-        public ProjectObject GetProject(int id)
+        public List<ProjectObject> GetProjects(IEnumerable<int> id)
         => ProjectDAO.Instance.SearchByID(id);
+
 
         public bool Update(ProjectObject project)
         {

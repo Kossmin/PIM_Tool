@@ -1,1 +1,35 @@
-﻿
+﻿.topnav {
+    height: 40px;
+}
+body{
+    padding-top: 5px !important;
+}
+
+.flex-container div{
+    
+}
+.flex-container{
+    display: inline-flex;
+    
+}
+
+ul{
+    list-style-type: none;
+}
+
+hr{
+    margin-top:7px;
+    margin-bottom:7px;
+}
+
+.input{
+    max-width:100%;
+}
+
+.inline-div{
+    display: inline !important;
+}
+
+.aligned-label{
+    text-align: left;
+}
