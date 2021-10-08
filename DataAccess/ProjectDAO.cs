@@ -169,5 +169,19 @@ namespace DataAccess
             }
             return true;
         }
+
+        public void Update(ProjectObject project)
+        {
+            var tmpProject = _db.Where(p => p.ID == project.ID).FirstOrDefault();
+            if(tmpProject != null)
+            {
+                tmpProject.ProjectName = project.ProjectName;
+                tmpProject.StartDate = project.StartDate;
+                tmpProject.EndDate = project.EndDate;
+                tmpProject.Status = project.Status;
+                tmpProject.Customer = project.Customer;
+                tmpProject.GroupID = project.GroupID;
+            }
+        }
     }
 }

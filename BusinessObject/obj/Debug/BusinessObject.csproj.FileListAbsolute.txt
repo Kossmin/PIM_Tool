@@ -4,3 +4,9 @@ D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\obj\Debug\BusinessObject.csprojAssembly
 D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\obj\Debug\BusinessObject.csproj.CoreCompileInputs.cache
 D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\obj\Debug\BusinessObject.dll
 D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\obj\Debug\BusinessObject.pdb
+D:\PIMTool\SPK_PIM\BusinessObject\bin\Debug\BusinessObject.dll
+D:\PIMTool\SPK_PIM\BusinessObject\bin\Debug\BusinessObject.pdb
+D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.csproj.AssemblyReference.cache
+D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.csproj.CoreCompileInputs.cache
+D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.dll
+D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.pdb

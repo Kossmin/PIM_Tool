@@ -19,6 +19,7 @@ namespace BusinessObject
         public string Customer { get; set; }
         [Display(Name = "Status")]
         public ProjectStatus? Status { get; set; } = ProjectStatus.NEW;
+
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

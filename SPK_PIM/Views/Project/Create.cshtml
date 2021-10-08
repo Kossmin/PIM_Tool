@@ -2,102 +2,140 @@
 
 @{
     ViewBag.Title = "Create";
-
+    var actionName= "";
 }
 @Html.Hidden("returnUrl", ViewBag.ReturnUrl as string)
 
-<h2>Create</h2>
+@if (ViewBag.Details != null)
+{
+    <h2>Details</h2>
+    actionName = "Edit";
+}
+else
+{
+    <h2>Create</h2>
+    actionName = "Create";
+}
 <hr>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(actionName,"Project"))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @*<div class="form-group">
-            @Html.LabelFor(model => model._Project.GroupID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-9">
-        <input class="" name="_Project.ProjectName" style="width: 500px; max-width: 500px" type="text" value="">
-        <input class="form-control input text-box single-line" data-val="true" name="_Project.GroupID" style="width: 200px" type="number" value="">
-                @Html.ValidationMessageFor(model => model._Project.GroupID, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @*<div class="form-group">
+                @Html.LabelFor(model => model._Project.GroupID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-9">
+            <input class="" name="_Project.ProjectName" style="width: 500px; max-width: 500px" type="text" value="">
+            <input class="form-control input text-box single-line" data-val="true" name="_Project.GroupID" style="width: 200px" type="number" value="">
+                    @Html.ValidationMessageFor(model => model._Project.GroupID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model._Project.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
+            <div class="col-md-4">
+                <input class="form-control input text-box single-line" data-val="true" name="_Project.ProjectNumber" type="text" value=@Model._Project.ProjectNumber>
+                @*@Html.EditorFor(model => model._Project.ProjectNumber, new { htmlAttributes = new { @class = "form-control", style = "width: 200px" } })*@
+                @Html.ValidationMessageFor(model => model._Project.ProjectNumber, "", new { @class = "text-danger" })
             </div>
-        </div>*@
+        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model._Project.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-        <div class="col-md-4">
-            <input class="form-control input text-box single-line" data-val="true" name="_Project.ProjectNumber" type="text" value="">
-            @*@Html.EditorFor(model => model._Project.ProjectNumber, new { htmlAttributes = new { @class = "form-control", style = "width: 200px" } })*@
-            @Html.ValidationMessageFor(model => model._Project.ProjectNumber, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model._Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
+            <div class="col-md-9">
+                <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.ProjectName" type="text" value=@Model._Project.ProjectName>
+                @*@Html.EditorFor(model => model._Project.ProjectName, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
+                @Html.ValidationMessageFor(model => model._Project.ProjectName, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model._Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-        <div class="col-md-9">
-            <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.ProjectName" type="text" value="">
-            @*@Html.EditorFor(model => model._Project.ProjectName, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
-            @Html.ValidationMessageFor(model => model._Project.ProjectName, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model._Project.Customer, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
+            <div class="col-md-9">
+                <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Customer" type="text" value=@Model._Project.Customer>
+                @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
+                @Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model._Project.Customer, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-        <div class="col-md-9">
-            <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Customer" type="text" value="">
-            @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
-            @Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model._Project.Status, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
+            <div class="col-md-4">
+                <select class="dropdown form-control" name="_Project.Status">
+                    <option value="0" selected="selected">NEW</option>
+                    <option value="1">PLA</option>
+                    <option value="2">INP</option>
+                    <option value="3">FIN</option>
+                </select>
+                @Html.ValidationMessageFor(model => model._Project.Status, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model._Project.Status, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-        <div class="col-md-4">
-            <select class="dropdown form-control" name="_Project.Status">
-                <option value="0" selected="selected">NEW</option>
-                <option value="1">PLA</option>
-                <option value="2">INP</option>
-                <option value="3">FIN</option>
-            </select>
-            @Html.ValidationMessageFor(model => model._Project.Status, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label class="control-label col-md-2 aligned-label">Member</label>
+            <div class="col-md-9">
+                <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Member" type="text" value="">
+                @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
+                @*@Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })*@
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        <label class="control-label col-md-2 aligned-label">Member</label>
-        <div class="col-md-9">
-            <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Member" type="text" value="">
-            @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
-            @*@Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })*@
+        <div class="col-sm-6 form-group">
+            <label class="control-label col-md-4 aligned-label">Start Date</label>
+            <div class="col-md-8">
+                @if (ViewBag.Details != null)
+                {
+                    <input class="form-control input text-box" data-val="true" name="_Project.StartDate" type="date" value=@Model._Project.StartDate.ToString("yyyy-MM-dd")>
+                }
+                else
+                {
+                    <input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
+                }
+                
+                @Html.ValidationMessageFor(model => model._Project.StartDate, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="col-sm-6 form-group">
-        <label class="control-label col-md-4 aligned-label">Start Date</label>
-        <div class="col-md-8">
-            <input class="form-control input text-box" data-val="true" name="_Project.StartDate" type="date" value="">
-            @Html.ValidationMessageFor(model => model._Project.StartDate, "", new { @class = "text-danger" })
+        <div class="col-sm-6 form-group">
+            <label class="control-label col-md-4 aligned-label">End Date</label>
+            <div class="col-md-8">
+                @if (ViewBag.Details != null)
+                {
+                    <input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value=@Model._Project.EndDate.ToString("yyyy-MM-dd")>
+                }
+                else
+                {
+                    <input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
+                }
+                @Html.ValidationMessageFor(model => model._Project.EndDate, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="col-sm-6 form-group">
-        <label class="control-label col-md-4 aligned-label">End Date</label>
-        <div class="col-md-8">
-            <input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
-            @Html.ValidationMessageFor(model => model._Project.EndDate, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (ViewBag.Details != null)
+                {
+                    <input type="submit" value="Save Changes" class="btn btn-default" />
+                }
+                else
+                {
+                    <input type="submit" value="Create" class="btn btn-default" />
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Back to home", "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string })
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            @Html.ActionLink("Back to home", "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string })
-        </div>
-    </div>
-</div>
 }
+@section Scripts{
+    <script>
+        $(document).load(function () {
+
+        })
+    </script>
+    }

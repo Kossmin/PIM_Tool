@@ -17,7 +17,7 @@ namespace SPK_PIM.Controllers
         public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1)
         {
             IndexPageModel indexPage = new IndexPageModel() {
-                _Status = _status,
+                Status = _status,
                 _SearchString = _searchString,
                 _PageIndex = _pageIndex,
                 _SortingKind = _sortingKind,
@@ -32,15 +32,15 @@ namespace SPK_PIM.Controllers
 
             ViewBag._status = EntityState;
 
-            indexPage._Projects =  _projectRepository.GetAllProjectObject(indexPage._Status, indexPage._SearchString, indexPage._PageIndex, indexPage._NumberOfRows, indexPage._SortingKind);
-            indexPage._MaxPage = _projectRepository.GetMaxPageNumber(indexPage._Status, indexPage._SearchString);
+            indexPage._Projects =  _projectRepository.GetAllProjectObject(indexPage.Status, indexPage._SearchString, indexPage._PageIndex, indexPage._NumberOfRows, indexPage._SortingKind);
+            indexPage._MaxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
             return View(indexPage);
         }
 
         public ActionResult Create(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View(new IndexPageModel());
         }
 
         
@@ -80,6 +80,7 @@ namespace SPK_PIM.Controllers
             tmp.Add(id);
             var model = _projectRepository.GetProjects(tmp)[0];
             IndexPageModel indexPageModel = new IndexPageModel { _Project = model };
+            ViewBag.Details = true;
             return View("Create", indexPageModel);
         }
 
@@ -102,6 +103,17 @@ namespace SPK_PIM.Controllers
         {
             _projectRepository.Delete(employeeIds);
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Edit(IndexPageModel indexPageModel, string returnUrl)
+        {
+            _projectRepository.Update(indexPageModel._Project);
+            if(returnUrl == null)
+            {
+                return RedirectToAction("Index");
+            }
+            return Redirect(returnUrl);
         }
     }
 }

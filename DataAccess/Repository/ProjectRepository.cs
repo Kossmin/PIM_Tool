@@ -25,9 +25,7 @@ namespace DataAccess.Repository
         => ProjectDAO.Instance.SearchByID(id);
 
 
-        public bool Update(ProjectObject project)
-        {
-            throw new NotImplementedException();
-        }
+        public void Update(ProjectObject project)
+        => ProjectDAO.Instance.Update(project);
     }
 }
