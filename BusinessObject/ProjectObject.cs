@@ -13,7 +13,7 @@ namespace BusinessObject
         public int GroupID { get; set; }
         [Display(Name ="Number")]
         public string ProjectNumber { get; set; }
-        [Display(Name ="Name")]
+        [Display(Name ="Project Name")]
         public string ProjectName { get; set; }
         [Display(Name = "Customer")]
         public string Customer { get; set; }

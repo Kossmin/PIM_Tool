@@ -24,14 +24,13 @@ else
 
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @*<div class="form-group">
+        <div class="form-group" hidden>
                 @Html.LabelFor(model => model._Project.GroupID, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-9">
-            <input class="" name="_Project.ProjectName" style="width: 500px; max-width: 500px" type="text" value="">
-            <input class="form-control input text-box single-line" data-val="true" name="_Project.GroupID" style="width: 200px" type="number" value="">
+            <input class="form-control input text-box single-line" data-val="true" name="_Project.ID" style="width: 200px" type="number" value=@Model._Project.ID>
                     @Html.ValidationMessageFor(model => model._Project.GroupID, "", new { @class = "text-danger" })
                 </div>
-            </div>*@
+            </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model._Project.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
@@ -43,10 +42,9 @@ else
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model._Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-            <div class="col-md-9">
-                <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.ProjectName" type="text" value=@Model._Project.ProjectName>
-                @*@Html.EditorFor(model => model._Project.ProjectName, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
+            @Html.LabelFor(model => model._Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control input text-box single-line" data-val="true" name="_Project.ProjectName" type="text" value=@Model._Project.ProjectName>
                 @Html.ValidationMessageFor(model => model._Project.ProjectName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -64,7 +62,7 @@ else
             @Html.LabelFor(model => model._Project.Status, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
             <div class="col-md-4">
                 <select class="dropdown form-control" name="_Project.Status">
-                    <option value="0" selected="selected">NEW</option>
+                    <option value="0">NEW</option>
                     <option value="1">PLA</option>
                     <option value="2">INP</option>
                     <option value="3">FIN</option>
@@ -134,8 +132,9 @@ else
 }
 @section Scripts{
     <script>
-        $(document).load(function () {
-
+        $(document).ready(function () {
+            var sta = @Html.Raw(Json.Encode(Model.Status));
+            
         })
     </script>
     }

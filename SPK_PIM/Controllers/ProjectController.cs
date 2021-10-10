@@ -106,9 +106,9 @@ namespace SPK_PIM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(IndexPageModel indexPageModel, string returnUrl)
+        public ActionResult Edit(IndexPageModel indexModel, string returnUrl)
         {
-            _projectRepository.Update(indexPageModel._Project);
+            _projectRepository.Update(indexModel._Project);
             if(returnUrl == null)
             {
                 return RedirectToAction("Index");
