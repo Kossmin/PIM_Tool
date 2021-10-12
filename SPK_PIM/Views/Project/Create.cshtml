@@ -62,10 +62,10 @@ else
             @Html.LabelFor(model => model._Project.Status, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
             <div class="col-md-4">
                 <select class="dropdown form-control" name="_Project.Status">
-                    <option value="0">NEW</option>
-                    <option value="1">PLA</option>
-                    <option value="2">INP</option>
-                    <option value="3">FIN</option>
+                    <option value="0" id="NEW">NEW</option>
+                    <option value="1" id="PLA">PLA</option>
+                    <option value="2" id="INP">INP</option>
+                    <option value="3" id="FIN">FIN</option>
                 </select>
                 @Html.ValidationMessageFor(model => model._Project.Status, "", new { @class = "text-danger" })
             </div>
@@ -80,32 +80,61 @@ else
             </div>
         </div>
 
+        @{
+            var dateFormat = "";
+            HttpCookie cookie = Request.Cookies["_culture"];
+            var cookieValue = "vi";
+            var language = Request.UserLanguages;
+            if (cookie != null)
+            {
+                cookieValue = cookie.Value;
+            }
+            else
+            {
+                cookieValue =language[0];
+            }
+            if (cookieValue == "en")
+            {
+                dateFormat = "MM-dd-yyyy";
+            }
+            else
+            {
+                dateFormat = "dd-MM-yyyy";
+            }
+            var startDate = Model._Project.StartDate.ToString(dateFormat);
+            var endDate = Model._Project.EndDate.ToString(dateFormat);
+                                }
+
         <div class="col-sm-6 form-group">
-            <label class="control-label col-md-4 aligned-label">Start Date</label>
+            <label class="control-label col-md-4 aligned-label">@Resources.Resources.StartDate</label>
             <div class="col-md-8">
                 @if (ViewBag.Details != null)
                 {
-                    <input class="form-control input text-box" data-val="true" name="_Project.StartDate" type="date" value=@Model._Project.StartDate.ToString("yyyy-MM-dd")>
+                    @Html.EditorFor(m => m._Project.StartDate, new { @Value = Model._Project.StartDate.ToString(dateFormat), @class = "form-control " })
+                    @*<input class="form-control input text-box" data-val="true" name="_Project.StartDate" type="date" value=@startDate>*@
                 }
                 else
                 {
-                    <input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
+                    @*@Html.EditorFor(m => m._Project.StartDate, new { @Value = DateTime.UtcNow, @class = "form-control " })*@
+                    <input class="input text-box" data-val="true" name="_Project.StartDate" type="date" value="">
                 }
-                
+
                 @Html.ValidationMessageFor(model => model._Project.StartDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="col-sm-6 form-group">
-            <label class="control-label col-md-4 aligned-label">End Date</label>
+            <label class="control-label col-md-4 aligned-label">@Resources.Resources.EndDate</label>
             <div class="col-md-8">
                 @if (ViewBag.Details != null)
                 {
-                    <input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value=@Model._Project.EndDate.ToString("yyyy-MM-dd")>
+                    @Html.EditorFor(m => m._Project.EndDate, new { @Value = Model._Project.EndDate.ToString(dateFormat), @class = "form-control " })
+                    @*<input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value=@endDate>*@
                 }
                 else
                 {
-                    <input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
+                    @*@Html.EditorFor(m => m._Project.StartDate, new { @Value = "0", @class = "form-control " })*@
+                    <input class="input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
                 }
                 @Html.ValidationMessageFor(model => model._Project.EndDate, "", new { @class = "text-danger" })
             </div>
@@ -133,8 +162,9 @@ else
 @section Scripts{
     <script>
         $(document).ready(function () {
-            var sta = @Html.Raw(Json.Encode(Model.Status));
-            
+            const value = '@Model._Project.Status';
+           
+            $('#' + value).attr("selected", "selected");
         })
     </script>
     }

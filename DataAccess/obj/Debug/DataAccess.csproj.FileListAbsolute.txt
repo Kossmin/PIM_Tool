@@ -42,3 +42,6 @@ D:\PIMTool\SPK_PIM\DataAccess\obj\Debug\DataAccess.csproj.CoreCompileInputs.cach
 D:\PIMTool\SPK_PIM\DataAccess\obj\Debug\DataAccess.csproj.CopyComplete
 D:\PIMTool\SPK_PIM\DataAccess\obj\Debug\DataAccess.dll
 D:\PIMTool\SPK_PIM\DataAccess\obj\Debug\DataAccess.pdb
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Resources.pdb
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\en\Resources.resources.dll

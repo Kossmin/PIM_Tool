@@ -10,3 +10,7 @@ D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.csproj.AssemblyRefere
 D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.csproj.CoreCompileInputs.cache
 D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.dll
 D:\PIMTool\SPK_PIM\BusinessObject\obj\Debug\BusinessObject.pdb
+D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\bin\Debug\Resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\bin\Debug\Resources.pdb
+D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\obj\Debug\BusinessObject.csproj.CopyComplete
+D:\Demo\PIM_Tool\PIM_Tool\BusinessObject\bin\Debug\en\Resources.resources.dll

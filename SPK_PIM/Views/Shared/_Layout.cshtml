@@ -21,13 +21,14 @@
                 </div>
                 <div class="flex-container col-md-4">
                     <div style="flex-grow: 4">
-                        <a>En</a>|<a>Vi</a>
+                        @Html.ActionLink("En", "SetCulture", "Project", new { culture = "en", returnUrl = Request.RawUrl }, null)|
+                        @Html.ActionLink("Vi", "SetCulture", "Project", new { culture = "vi", returnUrl = Request.RawUrl }, null)
                     </div>
                     <div style="flex-grow :2">
-                        <a>Help</a>
+                        <a>@Resources.Resources.Help</a>
                     </div>
                     <div style="flex-grow: 3">
-                        <a>Logout</a>
+                        <a>@Resources.Resources.Logout</a>
                     </div>
                 </div>
             </div>

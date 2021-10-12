@@ -11,17 +11,22 @@ namespace BusinessObject
     {
         public int ID { get; set; }
         public int GroupID { get; set; }
-        [Display(Name ="Number")]
+        [Display(Name ="Number", ResourceType = typeof(Resources.Resources))]
         public string ProjectNumber { get; set; }
-        [Display(Name ="Project Name")]
+        [Display(Name ="ProjectName", ResourceType = typeof(Resources.Resources))]
         public string ProjectName { get; set; }
-        [Display(Name = "Customer")]
+        [Display(Name = "Customer", ResourceType = typeof(Resources.Resources))]
         public string Customer { get; set; }
-        [Display(Name = "Status")]
+        [Display(Name = "Status", ResourceType = typeof(Resources.Resources))]
         public ProjectStatus? Status { get; set; } = ProjectStatus.NEW;
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "StartDate", ResourceType = typeof(Resources.Resources))]
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "EndDate", ResourceType = typeof(Resources.Resources))]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
         public int Version { get; set; }
 

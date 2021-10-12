@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using DataAccess.Repository;
+using SPK_PIM.Helpers;
 using SPK_PIM.Models;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,20 @@ using System.Web.Mvc;
 
 namespace SPK_PIM.Controllers
 {
-    public class ProjectController : Controller
+    public class ProjectController : BaseController
     {
         IProjectRepository _projectRepository = new ProjectRepository();
 
         public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1)
         {
+            if(_status == "null")
+            {
+                _status = null;
+            }
+            if(_searchString == "null")
+            {
+                _searchString = null;
+            }
             IndexPageModel indexPage = new IndexPageModel() {
                 Status = _status,
                 _SearchString = _searchString,
@@ -33,7 +42,8 @@ namespace SPK_PIM.Controllers
             ViewBag._status = EntityState;
 
             indexPage._Projects =  _projectRepository.GetAllProjectObject(indexPage.Status, indexPage._SearchString, indexPage._PageIndex, indexPage._NumberOfRows, indexPage._SortingKind);
-            indexPage._MaxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
+            var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
+            indexPage._MaxPage = ( maxPage == 0) ? 1 : maxPage;
             return View(indexPage);
         }
 
@@ -114,6 +124,30 @@ namespace SPK_PIM.Controllers
                 return RedirectToAction("Index");
             }
             return Redirect(returnUrl);
+        }
+
+        public ActionResult SetCulture(string culture, string returnUrl = null)
+        {
+            // Validate input
+            culture = CultureHelper.GetImplementedCulture(culture);
+            // Save culture in a cookie
+            HttpCookie cookie = Request.Cookies["_culture"];
+            if (cookie != null)
+                cookie.Value = culture;   // update cookie value
+            else
+            {
+                cookie = new HttpCookie("_culture");
+                cookie.Value = culture;
+                cookie.Expires = DateTime.Now.AddYears(1);
+            }
+            Response.Cookies.Add(cookie);
+            if(returnUrl == null){
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect(returnUrl);
+            }
         }
     }
 }

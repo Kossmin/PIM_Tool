@@ -1,0 +1,11 @@
+D:\Demo\PIM_Tool\PIM_Tool\Resources\bin\Debug\Resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\Resources\bin\Debug\Resources.pdb
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.csprojAssemblyReference.cache
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.Resources.resources
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.csproj.GenerateResource.cache
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.csproj.CoreCompileInputs.cache
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.pdb
+D:\Demo\PIM_Tool\PIM_Tool\Resources\bin\Debug\en\Resources.resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\en\Resources.resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.Resources.en.resources

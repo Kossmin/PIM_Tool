@@ -13,7 +13,7 @@ namespace DataAccess
     {
         private List<ProjectObject> _db = new List<ProjectObject>()
         {
-            new ProjectObject{ID = 1, GroupID = 1, Customer="KimSon", ProjectNumber = "123", ProjectName="PIM", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
+            new ProjectObject{ID = 1, GroupID = 1, Customer="KimSon", ProjectNumber = "123", ProjectName="PIM", StartDate=DateTime.Parse("2/12/2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
             new ProjectObject{ID = 2, GroupID = 2, Customer="KimSon", ProjectNumber = "321", ProjectName="PIM2", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
             new ProjectObject{ID = 3, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM4", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
             new ProjectObject{ID = 4, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM6", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
@@ -72,24 +72,59 @@ namespace DataAccess
                     break;
             }
 
-            switch (sortingKind)
+            var key = "";
+            if (sortingKind != null)
             {
-                case "ProjectNumber":
+                sortingKind = sortingKind.ToLower();
+
+                if (sortingKind.Contains("projectnumber"))
+                {
+                    key = "projectnumber";
+                }
+                else if (sortingKind.Contains("status"))
+                {
+                    key = "status";
+                }
+                else if (sortingKind.Contains("customer"))
+                {
+                    key = "customer";
+                }
+                else if (sortingKind.Contains("startdate"))
+                {
+                    key = "startdate";
+                }else if (sortingKind.Contains("projectname"))
+                {
+                    key = "projectname";
+                }
+            }
+
+            switch (key)
+            {
+                case "projectnumber":
                     projectList = projectList.OrderBy(p => p.ProjectNumber).ToList();
                     break;
-                case "Status":
+                case "status":
                     projectList = projectList.OrderBy(p => p.Status).ToList();
                     break;
-                case "Customer":
+                case "customer":
                     projectList = projectList.OrderBy(p => p.Customer).ToList();
                     break;
-                case "StartDate":
+                case "startdate":
                     projectList = projectList.OrderBy(p => p.StartDate).ToList();
+                    break;
+                case "projectname":
+                    projectList = projectList.OrderBy(p => p.ProjectName).ToList();
                     break;
                 default:
                     projectList = projectList.OrderBy(p=>p.ID).ToList();
                     break;
             }
+
+            if (sortingKind!=null &&!sortingKind.Contains("up"))
+            {
+                projectList.Reverse();
+            }
+
             List<ProjectObject> resultList = new List<ProjectObject>();
             int max;
             if (pageIndex * numberOfRow < projectList.Count) max = pageIndex * numberOfRow;
@@ -115,18 +150,18 @@ namespace DataAccess
 
             switch (status)
             {
-                case "NEW":
+                case "0":
                     projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.NEW select a).ToList();
                     break;
-                case "PLA":
+                case "1":
                     projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.PLA select a).ToList();
 
                     break;
-                case "INP":
+                case "2":
                     projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.INP select a).ToList();
 
                     break;
-                case "FIN":
+                case "3":
                     projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.FIN select a).ToList();
 
                     break;

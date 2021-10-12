@@ -11,14 +11,14 @@
         <h2>Project List</h2>
 
         <p>
-            @Html.ActionLink("Create New", "Create", new { returnUrl = Request.RawUrl })
+            @Html.ActionLink(Resources.Resources.CreateNew, "Create", new { returnUrl = Request.RawUrl })
             @using (Html.BeginForm("Index", "Project", FormMethod.Get))
             {
             <p>
                 Genre: @Html.DropDownList("_status", "All")
                 Title: @Html.TextBox("_searchstring")
-                <input type="submit" value="Filter" />
-                <input type="reset" value="Reset search" />
+                <input type="submit" value="@Resources.Resources.Filter" />
+                <input type="reset" value="@Resources.Resources.ResetSearch" />
             </p>
         }
             </p>
@@ -27,22 +27,97 @@
                     <tr>
                         <th></th>
                         <th>
-                            @Html.DisplayNameFor(model => model._Projects.First().ProjectNumber)
+                            @Html.ActionLink(Resources.Resources.Number, "Index", new
+                            {
+                           _status = (Model.Status != null) ? Model.Status : "",
+                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnumberup") ? "projectnumberup" : "projectnumber",
+                           _pageIndex = Model._PageIndex,
+                           _numberOfRows = Model._NumberOfRows
+                            })
+                            @if (Model._SortingKind == "projectnumberup")
+                            {
+                                <i class="fas fa-sort-up"></i>
+                            }
+                            else if (Model._SortingKind == "projectnumber")
+                            {
+                                <i class="fas fa-sort-down"></i>
+                            }
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model._Projects.First().ProjectName)
+                            @Html.ActionLink(Resources.Resources.ProjectName, "Index", new
+                            {
+                           _status = (Model.Status != null) ? Model.Status : "",
+                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnameup") ? "projectnameup" : "projectname",
+                           _pageIndex = Model._PageIndex,
+                           _numberOfRows = Model._NumberOfRows
+                            })
+                            @if (Model._SortingKind == "projectnameup")
+                            {
+                                <i class="fas fa-sort-up"></i>
+                            }
+                            else if (Model._SortingKind == "projectname")
+                            {
+                                <i class="fas fa-sort-down"></i>
+                            }
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model._Projects.First().Status)
+                            @Html.ActionLink(Resources.Resources.Status, "Index", new
+                            {
+                           _status = (Model.Status != null) ? Model.Status : "",
+                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "statusup") ? "statusup" : "status",
+                           _pageIndex = Model._PageIndex,
+                           _numberOfRows = Model._NumberOfRows
+                            })
+                            @if (Model._SortingKind == "statusup")
+                            {
+                                <i class="fas fa-sort-up"></i>
+                            }
+                            else if (Model._SortingKind == "status")
+                            {
+                                <i class="fas fa-sort-down"></i>
+                            }
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model._Projects.First().Customer)
+                            @Html.ActionLink(Resources.Resources.Customer, "Index", new
+                            {
+                           _status = (Model.Status != null) ? Model.Status : "",
+                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "customerup") ? "customerup" : "customer",
+                           _pageIndex = Model._PageIndex,
+                           _numberOfRows = Model._NumberOfRows
+                            })
+                            @if (Model._SortingKind == "customerup")
+                            {
+                                <i class="fas fa-sort-up"></i>
+                            }
+                            else if (Model._SortingKind == "customer")
+                            {
+                                <i class="fas fa-sort-down"></i>
+                            }
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model._Projects.First().StartDate)
+                            @Html.ActionLink(Resources.Resources.StartDate, "Index", new
+                            {
+                           _status = (Model.Status != null) ? Model.Status : "",
+                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "startdateup") ? "startdateup" : "startdate",
+                           _pageIndex = Model._PageIndex,
+                           _numberOfRows = Model._NumberOfRows
+                            })
+                            @if (Model._SortingKind == "startdateup")
+                            {
+                               <i class="fas fa-sort-up"></i>
+                            }
+                            else if (Model._SortingKind == "startdate")
+                            {
+                                <i class="fas fa-sort-down"></i>
+                            }
                         </th>
                         <th>
-                            Delete
+                            @Resources.Resources.Delete
                         </th>
                     </tr>
 
@@ -65,7 +140,40 @@
                                 @Html.DisplayFor(modelItem => item.Customer)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.StartDate)
+                                @{
+                                    var dateFormat = "";
+                                    HttpCookie cookie = Request.Cookies["_culture"];
+                                    var cookieValue = "vi";
+                                    var language = "";
+                                    <script>
+                                        $.ajax({
+                                            url: "http://ajaxhttpheaders.appspot.com",
+                                            dataType: 'jsonp',
+                                            success: function (headers) {
+                                                language = headers['Accept-Language'];
+                                                @language = language;
+                                            }
+                                        });
+                                    </script>
+                                    if (cookie != null)
+                                    {
+                                        cookieValue = cookie.Value;
+                                    }
+                                    else
+                                    {
+                                        cookieValue = language;
+                                    }
+                                    if (cookieValue == "en")
+                                    {
+                                        dateFormat = "MM-dd-yyyy";
+                                    }
+                                    else
+                                    {
+                                        dateFormat = "dd-MM-yyyy";
+                                    }
+                                    var date = item.StartDate.ToString(dateFormat);
+                                }
+                                @Html.DisplayFor(modelItem => date)
                             </td>
                             <td>
                                 @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
@@ -101,7 +209,13 @@
                     {
                         var Furl = url + i;
 
-                        <li><a href=@Furl>@i</a></li>
+                        <li>@Html.ActionLink(i.ToString(), "Index", new {
+                           _status = (Model.Status != null) ? Model.Status : "",
+                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                           _sortingKind = Model._SortingKind,
+                           _pageIndex = i,
+                           _numberOfRows = Model._NumberOfRows
+                       })</li>
                     }
                     @if (Model._PageIndex != tmp)
                     {
@@ -116,6 +230,11 @@
             </nav>
         </div>
 </div>
+
+
+<form action="~/Project/Index" method="get" hidden>
+    <input name="_sortingKind" id="_sortingKind"/>
+</form>
 @section Scripts{
     <script>
         $(document).ready(function () {
@@ -130,5 +249,6 @@
                 }
             });
         });
+
     </script>
     }
