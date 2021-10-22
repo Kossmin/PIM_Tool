@@ -18,7 +18,7 @@
                 Genre: @Html.DropDownList("_status", "All")
                 Title: @Html.TextBox("_searchstring")
                 <input type="submit" value="@Resources.Resources.Filter" />
-                <input type="reset" value="@Resources.Resources.ResetSearch" />
+                <input type="button" value="@Resources.Resources.ResetSearch" onclick="Reset()" />
             </p>
         }
             </p>
@@ -163,13 +163,13 @@
                                     {
                                         cookieValue = language;
                                     }
-                                    if (cookieValue == "en")
+                                    if (cookieValue == "vi")
                                     {
-                                        dateFormat = "MM-dd-yyyy";
+                                        dateFormat = "dd-MM-yyyy";
                                     }
                                     else
                                     {
-                                        dateFormat = "dd-MM-yyyy";
+                                        dateFormat = "MM-dd-yyyy";
                                     }
                                     var date = item.StartDate.ToString(dateFormat);
                                 }
@@ -250,5 +250,13 @@
             });
         });
 
+        function Reset() {
+            const txtSearchString = document.getElementsByName("_searchstring")[0];
+            txtSearchString.value = '';
+            debugger;
+            const sltStatus = document.getElementsByName("_status")[0];
+            $("[selected]").removeAttr("selected");
+            sltStatus.firstChild.setAttribute("selected", "selected");
+        }
     </script>
     }

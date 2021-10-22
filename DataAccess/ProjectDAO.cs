@@ -14,10 +14,10 @@ namespace DataAccess
         private List<ProjectObject> _db = new List<ProjectObject>()
         {
             new ProjectObject{ID = 1, GroupID = 1, Customer="KimSon", ProjectNumber = "123", ProjectName="PIM", StartDate=DateTime.Parse("2/12/2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 2, GroupID = 2, Customer="KimSon", ProjectNumber = "321", ProjectName="PIM2", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
+            new ProjectObject{ID = 2, GroupID = 2, Customer="KimSon", ProjectNumber = "321", ProjectName="App", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
             new ProjectObject{ID = 3, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM4", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 4, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM6", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 5, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM4", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
+            new ProjectObject{ID = 4, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="App7", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
+            new ProjectObject{ID = 5, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="App1", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
             new ProjectObject{ID = 6, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM8", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
             new ProjectObject{ID = 7, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM3", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
             new ProjectObject{ID = 8, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM5", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
@@ -44,7 +44,7 @@ namespace DataAccess
             List<ProjectObject> projectList = new List<ProjectObject>();
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                projectList = (from a in _db where a.ProjectName == searchString select a).ToList();
+                projectList = (from a in _db where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
             }
             else
             {
@@ -141,7 +141,7 @@ namespace DataAccess
             List<ProjectObject> projectList = new List<ProjectObject>();
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                projectList = (from a in _db where a.ProjectName == searchString select a).ToList();
+                projectList = (from a in _db where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
             }
             else
             {

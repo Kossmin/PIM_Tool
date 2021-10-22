@@ -45,3 +45,6 @@ D:\PIMTool\SPK_PIM\DataAccess\obj\Debug\DataAccess.pdb
 D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Resources.dll
 D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Resources.pdb
 D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\en\Resources.resources.dll
+D:\PIMTool\SPK_PIM\DataAccess\bin\Debug\Resources.dll
+D:\PIMTool\SPK_PIM\DataAccess\bin\Debug\Resources.pdb
+D:\PIMTool\SPK_PIM\DataAccess\bin\Debug\en\Resources.resources.dll

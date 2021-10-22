@@ -167,3 +167,6 @@ D:\PIMTool\SPK_PIM\SPK_PIM\bin\DataAccess.pdb
 D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Resources.dll
 D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Resources.pdb
 D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\en\Resources.resources.dll
+D:\PIMTool\SPK_PIM\SPK_PIM\bin\Resources.dll
+D:\PIMTool\SPK_PIM\SPK_PIM\bin\Resources.pdb
+D:\PIMTool\SPK_PIM\SPK_PIM\bin\en\Resources.resources.dll

@@ -9,3 +9,14 @@ D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.pdb
 D:\Demo\PIM_Tool\PIM_Tool\Resources\bin\Debug\en\Resources.resources.dll
 D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\en\Resources.resources.dll
 D:\Demo\PIM_Tool\PIM_Tool\Resources\obj\Debug\Resources.Resources.en.resources
+D:\PIMTool\SPK_PIM\Resources\bin\Debug\Resources.dll
+D:\PIMTool\SPK_PIM\Resources\bin\Debug\Resources.pdb
+D:\PIMTool\SPK_PIM\Resources\bin\Debug\en\Resources.resources.dll
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\Resources.csproj.AssemblyReference.cache
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\Resources.Resources.resources
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\Resources.Resources.en.resources
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\Resources.csproj.GenerateResource.cache
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\Resources.csproj.CoreCompileInputs.cache
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\en\Resources.resources.dll
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\Resources.dll
+D:\PIMTool\SPK_PIM\Resources\obj\Debug\Resources.pdb

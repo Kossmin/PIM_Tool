@@ -5,6 +5,7 @@ using SPK_PIM.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -17,7 +18,9 @@ namespace SPK_PIM.Controllers
 
         public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1)
         {
-            if(_status == "null")
+            ViewBag.acceptLanguage = Request.Headers.Get("Accept-Language").Split(',')[0];
+
+            if (_status == "null")
             {
                 _status = null;
             }
