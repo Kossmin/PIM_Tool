@@ -11,18 +11,9 @@ namespace DataAccess
 {
     public class ProjectDAO
     {
-        private List<ProjectObject> _db = new List<ProjectObject>()
-        {
-            new ProjectObject{ID = 1, GroupID = 1, Customer="KimSon", ProjectNumber = "123", ProjectName="PIM", StartDate=DateTime.Parse("2/12/2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 2, GroupID = 2, Customer="KimSon", ProjectNumber = "321", ProjectName="App", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 3, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM4", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 4, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="App7", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 5, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="App1", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 6, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM8", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 7, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM3", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
-            new ProjectObject{ID = 8, GroupID = 1, Customer="KimSon", ProjectNumber = "132", ProjectName="PIM5", StartDate=DateTime.Parse("2-2-2021"), EndDate= DateTime.Parse("2-2-2021"), Version = 5,},
 
-        };
+        private List<ProjectObject> _db;
+
 
         private static ProjectDAO instance = null;
         private ProjectDAO() { }
@@ -41,14 +32,26 @@ namespace DataAccess
 
         public List<ProjectObject> GetProjectObjects(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
         {
-            List<ProjectObject> projectList = new List<ProjectObject>();
+            IList<ProjectObject> projectList;
+            using(var session = NHibernateHelper.OpenSession())
+            {
+                using(var tx = session.BeginTransaction())
+                {
+                    projectList = session.CreateCriteria<ProjectObject>().List<ProjectObject>();
+                    if(projectList == null)
+                    {
+                        projectList = new List<ProjectObject>();
+                    }
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 projectList = (from a in _db where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
             }
             else
             {
-                projectList = _db;
+                //projectList = _db;
             }
 
             switch (status)
@@ -145,7 +148,7 @@ namespace DataAccess
             }
             else
             {
-                projectList = _db;
+                //projectList = _db;
             }
 
             switch (status)
@@ -183,19 +186,31 @@ namespace DataAccess
 
         public bool Add(ProjectObject project)
         {
-            var proj = SearchByProjectNumber(project.ProjectNumber);
-            if ( proj != null)
+            //var proj = SearchByProjectNumber(project.ProjectNumber);
+            //if ( proj != null)
+            //{
+            //    return false;
+            //}
+            //else
+            //{
+            //    _db.Add(project);
+            //    return true;
+            //}
+
+            using (var session = NHibernateHelper.OpenSession())
             {
-                return false;
+
+                using (var transaction = session.BeginTransaction())
+                {
+                    session.Save(project);
+                    transaction.Commit();
+                }
             }
-            else
-            {
-                _db.Add(project);
-                return true;
-            }
+            return true;
+
         }
 
-        public bool Delete(IEnumerable<int> ids)
+            public bool Delete(IEnumerable<int> ids)
         {
             var projects = _db.Where(p => ids.Contains(p.ID)).ToList();
             for(int i = 0; i < projects.Count; i++)
