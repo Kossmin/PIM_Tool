@@ -167,3 +167,14 @@ D:\PIMTool\SPK_PIM\SPK_PIM\bin\DataAccess.pdb
 D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Resources.dll
 D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Resources.pdb
 D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\en\Resources.resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\FluentNHibernate.dll
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\NHibernate.dll
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Remotion.Linq.dll
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Remotion.Linq.EagerFetching.dll
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Iesi.Collections.dll
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\FluentNHibernate.pdb
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\FluentNHibernate.xml
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\NHibernate.xml
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Remotion.Linq.xml
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Remotion.Linq.EagerFetching.xml
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\bin\Iesi.Collections.xml

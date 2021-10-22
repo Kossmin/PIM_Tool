@@ -45,3 +45,16 @@ D:\PIMTool\SPK_PIM\DataAccess\obj\Debug\DataAccess.pdb
 D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Resources.dll
 D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Resources.pdb
 D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\en\Resources.resources.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Antlr3.Runtime.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Iesi.Collections.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\NHibernate.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Remotion.Linq.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Remotion.Linq.EagerFetching.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\FluentNHibernate.dll
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Antlr3.Runtime.xml
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Iesi.Collections.xml
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\NHibernate.xml
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Remotion.Linq.xml
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\Remotion.Linq.EagerFetching.xml
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\FluentNHibernate.pdb
+D:\Demo\PIM_Tool\PIM_Tool\DataAccess\bin\Debug\FluentNHibernate.xml
