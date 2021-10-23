@@ -9,11 +9,11 @@ namespace DataAccess.Repository
 {
     public interface IProjectRepository
     {
-        List<ProjectObject> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind);
-        bool Add(ProjectObject project);
-        void Update(ProjectObject project);
+        List<Project> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind);
+        bool Add(Project project);
+        void Update(Project project);
         int GetMaxPageNumber(string status, string searchString);
         bool Delete(IEnumerable<int> id);
-        List<ProjectObject> GetProjects(IEnumerable<int> ids);
+        List<Project> GetProjects(IEnumerable<int> ids);
     }
 }

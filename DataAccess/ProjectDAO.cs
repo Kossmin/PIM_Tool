@@ -12,7 +12,7 @@ namespace DataAccess
     public class ProjectDAO
     {
 
-        private List<ProjectObject> _db;
+        private List<Project> _db;
 
 
         private static ProjectDAO instance = null;
@@ -30,17 +30,17 @@ namespace DataAccess
             }
         }
 
-        public List<ProjectObject> GetProjectObjects(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
+        public List<Project> GetProjectObjects(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind)
         {
-            IList<ProjectObject> projectList;
+            IList<Project> projectList;
             using(var session = NHibernateHelper.OpenSession())
             {
                 using(var tx = session.BeginTransaction())
                 {
-                    projectList = session.CreateCriteria<ProjectObject>().List<ProjectObject>();
+                    projectList = session.CreateCriteria<Project>().List<Project>();
                     if(projectList == null)
                     {
-                        projectList = new List<ProjectObject>();
+                        projectList = new List<Project>();
                     }
                 }
             }
@@ -57,18 +57,18 @@ namespace DataAccess
             switch (status)
             {
                 case "0":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.NEW select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.NEW select a).ToList();
                     break;
                 case "1":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.PLA select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.PLA select a).ToList();
 
                     break;
                 case "2":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.INP select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.INP select a).ToList();
 
                     break;
                 case "3":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.FIN select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.FIN select a).ToList();
 
                     break;
                 default:
@@ -128,7 +128,7 @@ namespace DataAccess
                 projectList.Reverse();
             }
 
-            List<ProjectObject> resultList = new List<ProjectObject>();
+            List<Project> resultList = new List<Project>();
             int max;
             if (pageIndex * numberOfRow < projectList.Count) max = pageIndex * numberOfRow;
             else max = projectList.Count;
@@ -141,7 +141,7 @@ namespace DataAccess
 
         public int GetMaxPageNumber(string status, string searchString)
         {
-            List<ProjectObject> projectList = new List<ProjectObject>();
+            List<Project> projectList = new List<Project>();
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 projectList = (from a in _db where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
@@ -154,18 +154,18 @@ namespace DataAccess
             switch (status)
             {
                 case "0":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.NEW select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.NEW select a).ToList();
                     break;
                 case "1":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.PLA select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.PLA select a).ToList();
 
                     break;
                 case "2":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.INP select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.INP select a).ToList();
 
                     break;
                 case "3":
-                    projectList = (from a in projectList where a.Status == ProjectObject.ProjectStatus.FIN select a).ToList();
+                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.FIN select a).ToList();
 
                     break;
                 default:
@@ -174,29 +174,29 @@ namespace DataAccess
             return projectList.Count;
         }
 
-        private ProjectObject SearchByProjectNumber(string projectNumber)
+        private Project SearchByProjectNumber(string projectNumber)
         {
             using (var session = NHibernateHelper.OpenSession())
             {
                 using(var tx = session.BeginTransaction())
                 {
-                    return session.Query<ProjectObject>().FirstOrDefault(x => x.ProjectNumber == projectNumber);
+                    return session.Query<Project>().FirstOrDefault(x => x.ProjectNumber == projectNumber);
                 }
             }
         }
 
-        public List<ProjectObject> SearchByID(IEnumerable<int> ids)
+        public List<Project> SearchByID(IEnumerable<int> ids)
         {
             using (var session = NHibernateHelper.OpenSession())
             {
                 using (var tx = session.BeginTransaction())
                 {
-                    return session.Query<ProjectObject>().Where(x => ids.Contains(x.ID)).ToList();
+                    return session.Query<Project>().Where(x => ids.Contains(x.ID)).ToList();
                 }
             }
         }
 
-        public bool Add(ProjectObject project)
+        public bool Add(Project project)
         {
             //var proj = SearchByProjectNumber(project.ProjectNumber);
             //if ( proj != null)
@@ -228,7 +228,7 @@ namespace DataAccess
             {
                 using (var tx = session.BeginTransaction())
                 {
-                    var temp =  session.Query<ProjectObject>().Where(x => ids.Contains(x.ID)).ToList();
+                    var temp =  session.Query<Project>().Where(x => ids.Contains(x.ID)).ToList();
                     foreach (var item in temp)
                     {
                         session.Delete(item);
@@ -239,14 +239,14 @@ namespace DataAccess
             return true;
         }
 
-        public void Update(ProjectObject project)
+        public void Update(Project project)
         {
 
             using (var session = NHibernateHelper.OpenSession())
             {
                 using (var tx = session.BeginTransaction())
                 {
-                    var tmpProject = session.Query<ProjectObject>().FirstOrDefault(x => x.ID == project.ID);
+                    var tmpProject = session.Query<Project>().FirstOrDefault(x => x.ID == project.ID);
                     if (tmpProject != null)
                     {
                         tmpProject.ProjectName = project.ProjectName;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject
 {
-    public class EmployeeObject
+    public class Employee
     {
         public virtual int ID { get; set; }
         public virtual string Visa { get; set; }
@@ -32,7 +32,7 @@ namespace BusinessObject
         }
     }
 
-    public class EmployeeMapping: ClassMap<EmployeeObject>
+    public class EmployeeMapping: ClassMap<Employee>
     {
         public EmployeeMapping()
         {

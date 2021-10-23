@@ -63,10 +63,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmployeeObject.cs" />
+    <Compile Include="Employee.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="NHibernateHelper.cs" />
-    <Compile Include="ProjectObject.cs" />
+    <Compile Include="Project.cs" />
     <Compile Include="Project_Employee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
