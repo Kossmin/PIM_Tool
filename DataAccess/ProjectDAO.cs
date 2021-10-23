@@ -47,7 +47,7 @@ namespace DataAccess
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                projectList = (from a in _db where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
+                projectList = (from a in projectList where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
             }
             else
             {
@@ -176,12 +176,24 @@ namespace DataAccess
 
         private ProjectObject SearchByProjectNumber(string projectNumber)
         {
-            return _db.SingleOrDefault(p => p.ProjectNumber == projectNumber);
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using(var tx = session.BeginTransaction())
+                {
+                    return session.Query<ProjectObject>().FirstOrDefault(x => x.ProjectNumber == projectNumber);
+                }
+            }
         }
 
         public List<ProjectObject> SearchByID(IEnumerable<int> ids)
         {
-            return (from a in _db where ids.Contains(a.ID) select a).ToList();
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    return session.Query<ProjectObject>().Where(x => ids.Contains(x.ID)).ToList();
+                }
+            }
         }
 
         public bool Add(ProjectObject project)
@@ -210,27 +222,42 @@ namespace DataAccess
 
         }
 
-            public bool Delete(IEnumerable<int> ids)
+        public bool Delete(IEnumerable<int> ids)
         {
-            var projects = _db.Where(p => ids.Contains(p.ID)).ToList();
-            for(int i = 0; i < projects.Count; i++)
+            using (var session = NHibernateHelper.OpenSession())
             {
-                _db.Remove(projects[i]);
+                using (var tx = session.BeginTransaction())
+                {
+                    var temp =  session.Query<ProjectObject>().Where(x => ids.Contains(x.ID)).ToList();
+                    foreach (var item in temp)
+                    {
+                        session.Delete(item);
+                    }
+                    tx.Commit();
+                }
             }
             return true;
         }
 
         public void Update(ProjectObject project)
         {
-            var tmpProject = _db.Where(p => p.ID == project.ID).FirstOrDefault();
-            if(tmpProject != null)
+
+            using (var session = NHibernateHelper.OpenSession())
             {
-                tmpProject.ProjectName = project.ProjectName;
-                tmpProject.StartDate = project.StartDate;
-                tmpProject.EndDate = project.EndDate;
-                tmpProject.Status = project.Status;
-                tmpProject.Customer = project.Customer;
-                tmpProject.GroupID = project.GroupID;
+                using (var tx = session.BeginTransaction())
+                {
+                    var tmpProject = session.Query<ProjectObject>().FirstOrDefault(x => x.ID == project.ID);
+                    if (tmpProject != null)
+                    {
+                        tmpProject.ProjectName = project.ProjectName;
+                        tmpProject.StartDate = project.StartDate;
+                        tmpProject.EndDate = project.EndDate;
+                        tmpProject.Status = project.Status;
+                        tmpProject.Customer = project.Customer;
+                        tmpProject.Group = project.Group;
+                    }
+                    tx.Commit();
+                }
             }
         }
     }

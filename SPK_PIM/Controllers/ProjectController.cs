@@ -36,7 +36,7 @@ namespace SPK_PIM.Controllers
                  _NumberOfRows = _numberOfRows
             };
 
-            var EntityState = new SelectList(Enum.GetValues(typeof(ProjectObject.ProjectStatus)).Cast<ProjectObject.ProjectStatus>().Select(v => new SelectListItem
+            var EntityState = new SelectList(Enum.GetValues(typeof(Project.ProjectStatus)).Cast<Project.ProjectStatus>().Select(v => new SelectListItem
             {
                 Text = v.ToString(),
                 Value = ((int)v).ToString()

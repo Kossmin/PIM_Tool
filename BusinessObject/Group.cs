@@ -10,7 +10,7 @@ namespace BusinessObject
     public class Group
     {
         public virtual int ID { get; set; }
-        public virtual int LeaderID { get; set; }
+        //public virtual int LeaderID { get; set; }
         public virtual int Version { get; set; }
 
         public virtual EmployeeObject Employee { get; set; }
@@ -40,9 +40,10 @@ namespace BusinessObject
         {
             Id(x => x.ID);
             Map(x => x.Version).Length(10);
-            HasOne(x => x.Employee).Constrained().Cascade.None();
-            HasMany<ProjectObject>(x => x.projectObjects).Cascade.All();
-            Table("GroupObject");
+            References<EmployeeObject>(x => x.Employee).Column("LeaderID").Cascade.None();
+            //HasOne(x => x.Employee).Constrained().Cascade.None();
+            HasMany<ProjectObject>(x => x.projectObjects).Cascade.All().KeyColumn("GroupID");
+            Table("Groups");
         }
     }
 }

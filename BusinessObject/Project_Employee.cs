@@ -29,11 +29,11 @@ namespace BusinessObject
     {
         public Project_EmployeeMapping()
         {
-            Table("Project_Employee");
+            Table("ProjectEmployee");
             CompositeId()
                 .KeyProperty(x => x.EmployeeID)
                 .KeyProperty(x => x.ProjectID);
-           // References<int>(x => x.ProjectID).ForeignKey("ProjectID");
+            //References<int>(x => x.ProjectID).ForeignKey("ProjectID");
             //References<int>(x => x.EmployeeID).ForeignKey("EmployeeID");
         }
     }
