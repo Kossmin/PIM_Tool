@@ -73,10 +73,11 @@ namespace BusinessObject
 
     }
 
-    class ProjectMapping : ClassMapping<Project>
+    class ProjectMapping : ClassMap<Project>
     {
         public ProjectMapping()
         {
+            OptimisticLock.Version();
             Id(x => x.ID);
             //Map(x => x.GroupID).Not.Nullable().Length(19);
             Map(x => x.ProjectNumber).Not.Nullable().Length(4);
@@ -85,36 +86,35 @@ namespace BusinessObject
             Map(x => x.StartDate).Not.Nullable();
             Map(x => x.EndDate).Nullable();
             Map(x => x.Status).Not.Nullable().Length(3).CustomSqlType("char(3)");
-            Property(x => x.Status);
-            Property(x => x.Version,m => m.);
+            Version(x => x.Version);
             HasMany(x => x.ProjectEmployees).KeyColumn("ProjectID").Inverse().Cascade.All();
             References<Group>(x => x.Group).Cascade.None().Column("GroupID");
 
-            Property(x => x.ProjectNumber, m => {
-                m.NotNullable(true);
-                m.Length(19);
-            });
-            Property(x => x.ProjectName, m => {
-                m.NotNullable(true);
-                m.Length(19);
-            });
-            Property(x => x.Customer, m => {
-                m.NotNullable(true);
-                m.Length(19);
-            });
-            Property(x => x.StartDate, m => {
-                m.NotNullable(true);
-                m.Length(19);
-            });
-            Property(x => x.EndDate, m => {
-                m.NotNullable(true);
-                m.Length(19);
-            });
-            Property(x => x.Status, m => {
-                m.NotNullable(true);
-                m.Length(19);
-            });
-            Version(x => x.Version,);
+            //Property(x => x.ProjectNumber, m => {
+            //    m.NotNullable(true);
+            //    m.Length(19);
+            //});
+            //Property(x => x.ProjectName, m => {
+            //    m.NotNullable(true);
+            //    m.Length(19);
+            //});
+            //Property(x => x.Customer, m => {
+            //    m.NotNullable(true);
+            //    m.Length(19);
+            //});
+            //Property(x => x.StartDate, m => {
+            //    m.NotNullable(true);
+            //    m.Length(19);
+            //});
+            //Property(x => x.EndDate, m => {
+            //    m.NotNullable(true);
+            //    m.Length(19);
+            //});
+            //Property(x => x.Status, m => {
+            //    m.NotNullable(true);
+            //    m.Length(19);
+            //});
+            //Version(x => x.Version);
 
             Table("Project");
         }

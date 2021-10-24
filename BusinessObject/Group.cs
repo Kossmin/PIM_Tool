@@ -40,7 +40,7 @@ namespace BusinessObject
         {
             Id(x => x.ID);
             Map(x => x.Version).Length(10);
-            References<Employee>(x => x.Employee).Column("LeaderID").Cascade.None();
+            References<Employee>(x => x.Employee).Column("LeaderID").Cascade.None().Unique();
             //HasOne(x => x.Employee).Constrained().Cascade.None();
             HasMany<Project>(x => x.projectObjects).Cascade.All().KeyColumn("GroupID");
             Table("Groups");
