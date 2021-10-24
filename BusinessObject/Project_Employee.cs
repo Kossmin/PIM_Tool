@@ -9,20 +9,25 @@ namespace BusinessObject
 {
     public class Project_Employee
     {
-        public virtual int ProjectID { get; set; }
-        public virtual int EmployeeID { get; set; }
+        public virtual Project Project { get; set; }
+        public virtual Employee Employee { get; set; }
 
         public override bool Equals(object obj)
         {
             var emp = (Project_Employee)obj;
-            return emp.ProjectID == ProjectID && emp.EmployeeID == EmployeeID;
+            return emp.Project.ID == Project.ID && emp.Employee.ID == Employee.ID;
         }
 
         public override int GetHashCode()
         {
-            return Tuple.Create(ProjectID, EmployeeID).GetHashCode(); ;
+            return Tuple.Create(Project.ID, Employee.ID).GetHashCode(); ;
         }
 
+        public virtual void AddProject(Project project)
+        {
+            Project = project;
+            project.ProjectEmployees.Add(this);
+        }
     }
 
     class Project_EmployeeMapping : ClassMap<Project_Employee>
@@ -31,10 +36,9 @@ namespace BusinessObject
         {
             Table("ProjectEmployee");
             CompositeId()
-                .KeyProperty(x => x.EmployeeID)
-                .KeyProperty(x => x.ProjectID);
-            //References<int>(x => x.ProjectID).ForeignKey("ProjectID");
-            //References<int>(x => x.EmployeeID).ForeignKey("EmployeeID");
+                .KeyReference(x => x.Employee)
+                .KeyReference(x => x.Project);
+            
         }
     }
 }

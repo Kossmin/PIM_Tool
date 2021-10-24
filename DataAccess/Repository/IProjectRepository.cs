@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using DataAccess.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace DataAccess.Repository
 {
     public interface IProjectRepository
     {
-        List<Project> GetAllProjectObject(string status, string searchString, int pageIndex, int numberOfRow, string sortingKind);
+        List<Project> GetAllProjectObject(PageModel pageModel);
         bool Add(Project project);
         void Update(Project project);
         int GetMaxPageNumber(string status, string searchString);

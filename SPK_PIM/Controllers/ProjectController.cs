@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using DataAccess.Model;
 using DataAccess.Repository;
 using SPK_PIM.Helpers;
 using SPK_PIM.Models;
@@ -44,7 +45,7 @@ namespace SPK_PIM.Controllers
 
             ViewBag._status = EntityState;
 
-            indexPage._Projects =  _projectRepository.GetAllProjectObject(indexPage.Status, indexPage._SearchString, indexPage._PageIndex, indexPage._NumberOfRows, indexPage._SortingKind);
+            indexPage._Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status});
             var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
             indexPage._MaxPage = ( maxPage == 0) ? 1 : maxPage;
             return View(indexPage);

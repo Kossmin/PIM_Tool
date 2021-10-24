@@ -21,7 +21,7 @@ namespace BusinessObject
 
         public virtual void AddEmployyee(Project_Employee project_Employee)
         {
-            project_Employee.ProjectID = this.ID;
+            project_Employee.Employee = this;
             ProjectEmployees.Add(project_Employee);
         }
 

@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Create";
-    var actionName= "";
+    var actionName = "";
 }
 @Html.Hidden("returnUrl", ViewBag.ReturnUrl as string)
 
@@ -18,19 +18,26 @@ else
 }
 <hr>
 
-@using (Html.BeginForm(actionName,"Project"))
+<style>
+    .mul-select {
+        width: 100%;
+        padding: 6px 12px;
+    }
+</style>
+
+@using (Html.BeginForm(actionName, "Project"))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group" hidden>
-                @Html.LabelFor(model => model._Project.Group.ID, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-9">
-            <input class="form-control input text-box single-line" data-val="true" name="_Project.ID" style="width: 200px" type="number" value=@Model._Project.ID>
-                    @Html.ValidationMessageFor(model => model._Project.Group.ID, "", new { @class = "text-danger" })
-                </div>
+            @Html.LabelFor(model => model._Project.Group.ID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-9">
+                <input class="form-control input text-box single-line" data-val="true" name="_Project.ID" style="width: 200px" type="number" value=@Model._Project.ID>
+                @Html.ValidationMessageFor(model => model._Project.Group.ID, "", new { @class = "text-danger" })
             </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model._Project.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
@@ -73,10 +80,17 @@ else
 
         <div class="form-group">
             <label class="control-label col-md-2 aligned-label">Member</label>
-            <div class="col-md-9">
-                <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Member" type="text" value="">
+            <div class="col-md-4">
+                @*<input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Member" type="text" value="">*@
                 @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
                 @*@Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })*@
+                <select class="mul-select form-control" style="padding: 6px 12px;" multiple="true" name="_Project.ProjectEmployees">
+                @foreach(var item in Model.Members)
+                {
+                   <option value="@item.ID">@item.Visa : @item.FirstName @item.LastName</option>
+                }
+                    
+                </select>
             </div>
         </div>
 
@@ -91,7 +105,7 @@ else
             }
             else
             {
-                cookieValue =language[0];
+                cookieValue = language[0];
             }
             if (cookieValue == "en")
             {
@@ -103,7 +117,7 @@ else
             }
             var startDate = Model._Project.StartDate.ToString(dateFormat);
             var endDate = Model._Project.EndDate.ToString(dateFormat);
-                                }
+        }
 
         <div class="col-sm-6 form-group">
             <label class="control-label col-md-4 aligned-label">@Resources.Resources.StartDate</label>
@@ -163,8 +177,19 @@ else
     <script>
         $(document).ready(function () {
             const value = '@Model._Project.Status';
-           
+
             $('#' + value).attr("selected", "selected");
         })
+
     </script>
-    }
+
+    <script>
+        $(document).ready(function () {
+            $(".mul-select").select2({
+                placeholder: "select country", //placeholder
+                tags: true,
+                tokenSeparators: ['/', ',', ';', " "]
+            });
+        })
+    </script>
+}

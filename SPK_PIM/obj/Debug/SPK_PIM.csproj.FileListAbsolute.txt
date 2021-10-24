@@ -81,7 +81,6 @@ D:\PIMTool\SPK_PIM\SPK_PIM\bin\System.Web.WebPages.xml
 D:\PIMTool\SPK_PIM\SPK_PIM\bin\System.Web.WebPages.Deployment.xml
 D:\PIMTool\SPK_PIM\SPK_PIM\bin\System.Web.WebPages.Razor.xml
 D:\PIMTool\SPK_PIM\SPK_PIM\bin\Newtonsoft.Json.xml
-D:\PIMTool\SPK_PIM\SPK_PIM\bin\Antlr3.Runtime.pdb
 D:\PIMTool\SPK_PIM\SPK_PIM\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 D:\PIMTool\SPK_PIM\SPK_PIM\bin\FluentNHibernate.pdb
 D:\PIMTool\SPK_PIM\SPK_PIM\bin\FluentNHibernate.xml
@@ -95,3 +94,4 @@ D:\PIMTool\SPK_PIM\SPK_PIM\obj\Debug\SPK_PIM.csproj.CoreCompileInputs.cache
 D:\PIMTool\SPK_PIM\SPK_PIM\obj\Debug\SPK_PIM.csproj.CopyComplete
 D:\PIMTool\SPK_PIM\SPK_PIM\obj\Debug\SPK_PIM.dll
 D:\PIMTool\SPK_PIM\SPK_PIM\obj\Debug\SPK_PIM.pdb
+D:\PIMTool\SPK_PIM\SPK_PIM\bin\Antlr3.Runtime.xml

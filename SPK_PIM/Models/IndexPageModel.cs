@@ -16,5 +16,6 @@ namespace SPK_PIM.Models
         public List<Project> _Projects { get; set; }
         public int _MaxPage { get; set; }
         public Project _Project { get; set; } = new Project();
+        public IList<Employee> Members { get; set; }
     }
 }

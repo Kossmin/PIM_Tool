@@ -105,6 +105,11 @@
             the entity instance or returned to the client.
             </remarks>
         </member>
+        <member name="P:NHibernate.Action.DelayedPostInsertIdentifier.ActualId">
+            <summary>
+            The actual identifier value that has been generated.
+            </summary>
+        </member>
         <member name="T:NHibernate.Action.EntityAction">
             <summary>
             Base class for actions relating to insert/update/delete of an entity
@@ -444,6 +449,18 @@
             <see langword="false"/> otherwise.
             </summary>
         </member>
+        <member name="M:NHibernate.AdoNet.ConnectionManager.GetNewConnection">
+            <summary>
+            Get a new opened connection. The caller is responsible for closing it.
+            </summary>
+            <returns>An opened connection.</returns>
+        </member>
+        <member name="M:NHibernate.AdoNet.ConnectionManager.GetConnection">
+            <summary>
+            Get the managed connection.
+            </summary>
+            <returns>An opened connection.</returns>
+        </member>
         <member name="P:NHibernate.AdoNet.ConnectionManager.CurrentTransaction">
             <summary>
             The current transaction if any is ongoing, else <see langword="null" />.
@@ -464,6 +481,20 @@
             Do nothing in case an explicit transaction is ongoing.
             </summary>
             <param name="transaction">The transaction in which the connection should be enlisted.</param>
+        </member>
+        <member name="M:NHibernate.AdoNet.ConnectionManager.GetNewConnectionAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get a new opened connection. The caller is responsible for closing it.
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+            <returns>An opened connection.</returns>
+        </member>
+        <member name="M:NHibernate.AdoNet.ConnectionManager.GetConnectionAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get the managed connection.
+            </summary>
+            <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+            <returns>An opened connection.</returns>
         </member>
         <member name="T:NHibernate.AdoNet.GenericBatchingBatcher">
             <summary>
@@ -9142,6 +9173,11 @@
             Batches http://msdn.microsoft.com/en-us/library/ms175502.aspx
             </remarks>
         </member>
+        <member name="P:NHibernate.Dialect.Dialect.IsDecimalStoredAsFloatingPointNumber">
+            <summary>
+            Whether <see cref="T:System.Decimal"/> is stored as a floating point number.
+            </summary>
+        </member>
         <member name="M:NHibernate.Dialect.Dialect.RegisterHibernateType(System.Data.DbType,System.String)">
             <summary> 
             Registers a NHibernate <see cref="T:NHibernate.Type.IType"/> name for the given <see cref="T:System.Data.DbType"/> type code. 
@@ -11637,6 +11673,9 @@
             <summary>
             
             </summary>
+        </member>
+        <member name="P:NHibernate.Dialect.SQLiteDialect.IsDecimalStoredAsFloatingPointNumber">
+            <inheritdoc />
         </member>
         <member name="P:NHibernate.Dialect.SQLiteDialect.DisableForeignKeyConstraintsString">
             <summary>
@@ -24154,11 +24193,6 @@
         <member name="M:NHibernate.Impl.SessionImpl.Disconnect">
             <summary></summary>
         </member>
-        <member name="M:NHibernate.Impl.SessionImpl.Finalize">
-            <summary>
-            Finalizer that ensures the object is correctly disposed of.
-            </summary>
-        </member>
         <member name="M:NHibernate.Impl.SessionImpl.Dispose">
             <summary>
             Perform a soft (distributed transaction aware) close of the session
@@ -24170,10 +24204,6 @@
             this class is responsible for.
             </summary>
             <param name="isDisposing">Indicates if this Session is being Disposed of or Finalized.</param>
-            <remarks>
-            If this Session is being Finalized (<c>isDisposing==false</c>) then make sure not
-            to call any methods that could potentially bring this Session back to life.
-            </remarks>
         </member>
         <member name="M:NHibernate.Impl.SessionImpl.Evict(System.Object)">
             <summary>
@@ -24445,11 +24475,6 @@
             <param name="alias">The alias of the entity</param>
             <returns> The <see cref="T:NHibernate.ICriteria"/>. </returns>
             <remarks>Entities returned by the query are detached.</remarks>
-        </member>
-        <member name="M:NHibernate.Impl.StatelessSessionImpl.Finalize">
-            <summary>
-            Finalizer that ensures the object is correctly disposed of.
-            </summary>
         </member>
         <member name="M:NHibernate.Impl.StatelessSessionImpl.Dispose">
             <summary>

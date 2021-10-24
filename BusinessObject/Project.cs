@@ -65,9 +65,9 @@ namespace BusinessObject
             Version = 0;
         }
 
-        public virtual void AddEmployyee(Project_Employee project_Employee)
+        public virtual void AddProject(Project_Employee project_Employee)
         {
-            project_Employee.ProjectID = this.ID;
+            project_Employee.Project = this;
             ProjectEmployees.Add(project_Employee);
         }
 

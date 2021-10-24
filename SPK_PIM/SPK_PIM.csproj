@@ -154,6 +154,7 @@
     <Content Include="Images\images.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\css\StyleSheet1.css" />
     <Content Include="Scripts\jquery-3.4.1.js" />
