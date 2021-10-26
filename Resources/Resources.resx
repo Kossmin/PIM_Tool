@@ -123,6 +123,9 @@
   <data name="Customer" xml:space="preserve">
     <value>Khách hàng</value>
   </data>
+  <data name="DateTime" xml:space="preserve">
+    <value>Ngày kết thúc không thể trước ngày bắt đầu</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Xóa</value>
   </data>
@@ -155,5 +158,8 @@
   </data>
   <data name="Status" xml:space="preserve">
     <value>Tình trạng</value>
+  </data>
+  <data name="ValidLength{length}" xml:space="preserve">
+    <value>Độ dài cần ngắn hơn {length}</value>
   </data>
 </root>

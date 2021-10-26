@@ -11,10 +11,10 @@ namespace DataAccess.Repository
     public interface IProjectRepository
     {
         List<Project> GetAllProjectObject(PageModel pageModel);
-        bool Add(Project project);
-        void Update(Project project);
+        void Add(Project project, IEnumerable<int> empIds);
+        void Update(Project project, IEnumerable<int> empIds);
         int GetMaxPageNumber(string status, string searchString);
-        bool Delete(IEnumerable<int> id);
+        void Delete(IEnumerable<int> id);
         List<Project> GetProjects(IEnumerable<int> ids);
     }
 }

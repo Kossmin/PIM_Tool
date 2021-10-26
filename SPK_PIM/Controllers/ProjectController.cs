@@ -16,6 +16,7 @@ namespace SPK_PIM.Controllers
     public class ProjectController : BaseController
     {
         IProjectRepository _projectRepository = new ProjectRepository();
+        IEmployeeRepository _employeeRepository = new EmployeeRepository();
 
         public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1)
         {
@@ -54,7 +55,7 @@ namespace SPK_PIM.Controllers
         public ActionResult Create(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View(new IndexPageModel());
+            return View(new IndexPageModel { Members = _employeeRepository.GetEmployees()});
         }
 
         
@@ -71,11 +72,11 @@ namespace SPK_PIM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(IndexPageModel indexPage, string returnUrl=null)
+        public ActionResult Create(IndexPageModel indexPage, IEnumerable<int> projectEmployees, string returnUrl=null)
         {
             if (ModelState.IsValid)
             {
-                _projectRepository.Add(indexPage._Project);
+                _projectRepository.Add(indexPage._Project, projectEmployees);
                 if (returnUrl == null)
                 {
                     return RedirectToAction("Index");
@@ -93,17 +94,9 @@ namespace SPK_PIM.Controllers
             List<int> tmp = new List<int>();
             tmp.Add(id);
             var model = _projectRepository.GetProjects(tmp)[0];
-            IndexPageModel indexPageModel = new IndexPageModel { _Project = model };
+            IndexPageModel indexPageModel = new IndexPageModel { _Project = model, Members = _employeeRepository.GetEmployees() };
             ViewBag.Details = true;
             return View("Create", indexPageModel);
-        }
-
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
 
         public ActionResult Delete(IEnumerable<int> employeeIds, string returnUrl = null)
@@ -120,9 +113,9 @@ namespace SPK_PIM.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(IndexPageModel indexModel, string returnUrl)
+        public ActionResult Edit(IndexPageModel indexModel, IEnumerable<int> projectEmployees, string returnUrl)
         {
-            _projectRepository.Update(indexModel._Project);
+            _projectRepository.Update(indexModel._Project, projectEmployees);
             if(returnUrl == null)
             {
                 return RedirectToAction("Index");

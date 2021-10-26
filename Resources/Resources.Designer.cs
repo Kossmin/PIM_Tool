@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngày kết thúc không thể trước ngày bắt đầu.
+        /// </summary>
+        public static string DateTime {
+            get {
+                return ResourceManager.GetString("DateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xóa.
         /// </summary>
         public static string Delete {
@@ -174,6 +183,15 @@ namespace Resources {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Độ dài cần ngắn hơn {length}.
+        /// </summary>
+        public static string ValidLength_length_ {
+            get {
+                return ResourceManager.GetString("ValidLength{length}", resourceCulture);
             }
         }
     }

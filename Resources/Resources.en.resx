@@ -123,6 +123,9 @@
   <data name="Customer" xml:space="preserve">
     <value>Customer</value>
   </data>
+  <data name="DateTime" xml:space="preserve">
+    <value />
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -152,5 +155,8 @@
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
+  </data>
+  <data name="ValidLength{length}" xml:space="preserve">
+    <value>String must have less than {length} characters</value>
   </data>
 </root>

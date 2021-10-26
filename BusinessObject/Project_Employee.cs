@@ -38,7 +38,6 @@ namespace BusinessObject
             CompositeId()
                 .KeyReference(x => x.Employee)
                 .KeyReference(x => x.Project);
-            
         }
     }
 }

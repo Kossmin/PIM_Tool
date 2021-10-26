@@ -141,35 +141,22 @@ namespace DataAccess
 
         public int GetMaxPageNumber(string status, string searchString)
         {
-            List<Project> projectList = new List<Project>();
+            IList<Project> projectList;
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    projectList = session.CreateCriteria<Project>().List<Project>();
+                    if (projectList == null)
+                    {
+                        projectList = new List<Project>();
+                    }
+                }
+            }
+
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-                projectList = (from a in _db where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
-            }
-            else
-            {
-                //projectList = _db;
-            }
-
-            switch (status)
-            {
-                case "0":
-                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.NEW select a).ToList();
-                    break;
-                case "1":
-                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.PLA select a).ToList();
-
-                    break;
-                case "2":
-                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.INP select a).ToList();
-
-                    break;
-                case "3":
-                    projectList = (from a in projectList where a.Status == Project.ProjectStatus.FIN select a).ToList();
-
-                    break;
-                default:
-                    break;
+                projectList = (from a in projectList where a.ProjectName.ToLower().Contains(searchString.ToLower()) select a).ToList();
             }
             return projectList.Count;
         }

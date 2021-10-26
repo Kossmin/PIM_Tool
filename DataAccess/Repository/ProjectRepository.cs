@@ -5,28 +5,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DataAccess.Repository
 {
     public class ProjectRepository : IProjectRepository
     {
-        public bool Add(Project project)
+        IProjectEmployeeRepository _projectEmployeeRepository = new ProjectEmployeeRepository();
+        public void Add(Project project, IEnumerable<int> empIds)
         {
             using (var session = NHibernateHelper.OpenSession())
             {
-                
-                using (var transaction = session.BeginTransaction())
+                using(var transactionScope = new TransactionScope())
                 {
-                    var emp = session;
-                    session.Save(project);
-                    transaction.Commit();
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        session.Save(project);
+                        _projectEmployeeRepository.Add(project, empIds);
+                        transaction.Commit();
+                    }
+                    transactionScope.Complete();
                 }
             }
-            return true;
         }
 
-        public bool Delete(IEnumerable<int> id)
-        => ProjectDAO.Instance.Delete(id);
+        public void Delete(IEnumerable<int> id)
+        {
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using(var transactionScope = new TransactionScope())
+                {
+                    using (var tx = session.BeginTransaction())
+                    {
+                        var temp = session.Query<Project>().Where(x => id.Contains(x.ID)).ToList();
+                        foreach (var item in temp)
+                        {
+                            _projectEmployeeRepository.Delete(item.ID);
+                            session.Delete(item);
+                        }
+                        tx.Commit();
+                    }
+                    transactionScope.Complete();
+                }
+            }
+        }
 
         public List<Project> GetAllProjectObject(PageModel pageModel)
         {
@@ -48,8 +70,6 @@ namespace DataAccess.Repository
                     }
                 }
             }
-
-            
 
             var key = "";
             if (pageModel.SortingKind != null)
@@ -120,10 +140,53 @@ namespace DataAccess.Repository
         => ProjectDAO.Instance.GetMaxPageNumber(status, searchString);
 
         public List<Project> GetProjects(IEnumerable<int> id)
-        => ProjectDAO.Instance.SearchByID(id);
+        {
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    return session.Query<Project>().Where(x => id.Contains(x.ID)).ToList();
+                }
+            }
+        }
 
 
-        public void Update(Project project)
-        => ProjectDAO.Instance.Update(project);
+        public void Update(Project project, IEnumerable<int> empIds)
+        {
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using(var transactionScope = new TransactionScope())
+                {
+                    using (var tx = session.BeginTransaction())
+                    {
+                        var tmpProject = session.Query<Project>().FirstOrDefault(x => x.ID == project.ID);
+                        if (tmpProject != null)
+                        {
+                            _projectEmployeeRepository.Delete(project.ID);
+                            _projectEmployeeRepository.Add(project, empIds);
+                            tmpProject.ProjectName = project.ProjectName;
+                            tmpProject.StartDate = project.StartDate;
+                            tmpProject.EndDate = project.EndDate;
+                            tmpProject.Status = project.Status;
+                            tmpProject.Customer = project.Customer;
+                            tmpProject.Group = project.Group;
+                        }
+                        tx.Commit();
+                    }
+                    transactionScope.Complete();
+                }
+            }
+        }
+
+        private Project SearchByProjectNumber(string projectNumber)
+        {
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    return session.Query<Project>().FirstOrDefault(x => x.ProjectNumber == projectNumber);
+                }
+            }
+        }
     }
 }

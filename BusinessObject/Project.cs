@@ -14,12 +14,13 @@ namespace BusinessObject
     {
         //[MaxLength(19, ErrorMessageResourceName = "ValidLength19", ErrorMessageResourceType = typeof(Resources.Resources))]
         public virtual int ID { get; set; }
-        
+
         //[MaxLength(19, ErrorMessageResourceName = "ValidLength19", ErrorMessageResourceType = typeof(Resources.Resources))]
         //public virtual int GroupID { get; set; }
-       
+
         [Display(Name ="Number", ResourceType = typeof(Resources.Resources))]
-        [MaxLength(4, ErrorMessageResourceName = "ValidLength4", ErrorMessageResourceType = typeof(Resources.Resources))]
+        [StringLength(4, ErrorMessageResourceName = "ValidLength4", ErrorMessageResourceType = typeof(Resources.Resources))]
+        [Required(ErrorMessage ="Needed")]
         public virtual string ProjectNumber { get; set; }
         
         [Display(Name ="ProjectName", ResourceType = typeof(Resources.Resources))]
@@ -77,7 +78,6 @@ namespace BusinessObject
     {
         public ProjectMapping()
         {
-            OptimisticLock.Version();
             Id(x => x.ID);
             //Map(x => x.GroupID).Not.Nullable().Length(19);
             Map(x => x.ProjectNumber).Not.Nullable().Length(4);
@@ -89,6 +89,8 @@ namespace BusinessObject
             Version(x => x.Version);
             HasMany(x => x.ProjectEmployees).KeyColumn("ProjectID").Inverse().Cascade.All();
             References<Group>(x => x.Group).Cascade.None().Column("GroupID");
+            OptimisticLock.Version();
+
 
             //Property(x => x.ProjectNumber, m => {
             //    m.NotNullable(true);

@@ -35,7 +35,8 @@ else
             @Html.LabelFor(model => model._Project.Group.ID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-9">
                 <input class="form-control input text-box single-line" data-val="true" name="_Project.ID" style="width: 200px" type="number" value=@Model._Project.ID>
-                @Html.ValidationMessageFor(model => model._Project.Group.ID, "", new { @class = "text-danger" })
+                <input class="form-control input text-box single-line" data-val="true" name="_Project.Version" style="width: 200px" type="number" value=@Model._Project.Version>
+                @Html.ValidationMessageFor(model => model._Project.ID, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -50,8 +51,8 @@ else
 
         <div class="form-group">
             @Html.LabelFor(model => model._Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input class="form-control input text-box single-line" data-val="true" name="_Project.ProjectName" type="text" value=@Model._Project.ProjectName>
+            <div class="col-md-9">
+                <input required class="form-control input text-box single-line" data-val="true" name="_Project.ProjectName" type="text" value=@Model._Project.ProjectName>
                 @Html.ValidationMessageFor(model => model._Project.ProjectName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -59,7 +60,7 @@ else
         <div class="form-group">
             @Html.LabelFor(model => model._Project.Customer, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
             <div class="col-md-9">
-                <input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Customer" type="text" value=@Model._Project.Customer>
+                <input required class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Customer" type="text" value=@Model._Project.Customer>
                 @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
                 @Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })
             </div>
@@ -80,11 +81,11 @@ else
 
         <div class="form-group">
             <label class="control-label col-md-2 aligned-label">Member</label>
-            <div class="col-md-4">
+            <div class="col-md-9">
                 @*<input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Member" type="text" value="">*@
                 @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
                 @*@Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })*@
-                <select class="mul-select form-control" style="padding: 6px 12px;" multiple="true" name="_Project.ProjectEmployees">
+                <select required class="mul-select form-control" style="padding: 6px 12px; max-width: 100%" multiple="true" name="projectEmployees" id="projectEmployees">
                 @foreach(var item in Model.Members)
                 {
                    <option value="@item.ID">@item.Visa : @item.FirstName @item.LastName</option>
@@ -124,13 +125,13 @@ else
             <div class="col-md-8">
                 @if (ViewBag.Details != null)
                 {
-                    @Html.EditorFor(m => m._Project.StartDate, new { @Value = Model._Project.StartDate.ToString(dateFormat), @class = "form-control " })
+                    @Html.EditorFor(m => m._Project.StartDate, new { @Value = Model._Project.StartDate.ToString(dateFormat), @class = "form-control ", @required = "required"})
                     @*<input class="form-control input text-box" data-val="true" name="_Project.StartDate" type="date" value=@startDate>*@
                 }
                 else
                 {
                     @*@Html.EditorFor(m => m._Project.StartDate, new { @Value = DateTime.UtcNow, @class = "form-control " })*@
-                    <input class="input text-box" data-val="true" name="_Project.StartDate" type="date" value="">
+                    <input required class="input text-box" data-val="true" name="_Project.StartDate" type="date" value="">
                 }
 
                 @Html.ValidationMessageFor(model => model._Project.StartDate, "", new { @class = "text-danger" })
@@ -142,13 +143,13 @@ else
             <div class="col-md-8">
                 @if (ViewBag.Details != null)
                 {
-                    @Html.EditorFor(m => m._Project.EndDate, new { @Value = Model._Project.EndDate.ToString(dateFormat), @class = "form-control " })
+                    @Html.EditorFor(m => m._Project.EndDate, new { @Value = Model._Project.EndDate.ToString(dateFormat), @class = "form-control ", @required = "required"})
                     @*<input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value=@endDate>*@
                 }
                 else
                 {
                     @*@Html.EditorFor(m => m._Project.StartDate, new { @Value = "0", @class = "form-control " })*@
-                    <input class="input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
+                    <input required class="input text-box" data-val="true" name="_Project.EndDate" type="date" value="">
                 }
                 @Html.ValidationMessageFor(model => model._Project.EndDate, "", new { @class = "text-danger" })
             </div>
@@ -186,7 +187,7 @@ else
     <script>
         $(document).ready(function () {
             $(".mul-select").select2({
-                placeholder: "select country", //placeholder
+                placeholder: "Select employees", //placeholder
                 tags: true,
                 tokenSeparators: ['/', ',', ';', " "]
             });
