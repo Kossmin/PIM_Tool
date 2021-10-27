@@ -74,19 +74,20 @@ namespace SPK_PIM.Controllers
         [HttpPost]
         public ActionResult Create(IndexPageModel indexPage, IEnumerable<int> projectEmployees, string returnUrl=null)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _projectRepository.Add(indexPage._Project, projectEmployees);
-                if (returnUrl == null)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return Redirect(returnUrl);
-                }
+                indexPage.Members = _employeeRepository.GetEmployees();
+                return View(indexPage);
             }
-            return View();
+            _projectRepository.Add(indexPage._Project, projectEmployees);
+            if (returnUrl == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect(returnUrl);
+            }
         }
 
         public ActionResult Details(int id)

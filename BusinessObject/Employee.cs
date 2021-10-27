@@ -16,14 +16,8 @@ namespace BusinessObject
         public virtual DateTime BirthDate { get; set; }
         public virtual int Version { get; set; }
 
-        public virtual IList<Project_Employee> ProjectEmployees { get; set; }
+        public virtual IList<Project> Projects { get; set; }
         public virtual Group Group { get; set; }
-
-        public virtual void AddEmployyee(Project_Employee project_Employee)
-        {
-            project_Employee.Employee = this;
-            ProjectEmployees.Add(project_Employee);
-        }
 
         public virtual void AssignLeader(Group group)
         {
@@ -44,7 +38,10 @@ namespace BusinessObject
             Map(x => x.BirthDate).Not.Nullable();
             Map(x => x.Version).Not.Nullable().Length(10);
 
-            HasMany(x => x.ProjectEmployees).KeyColumn("EmployeeID").Inverse().Cascade.All();
+            HasManyToMany(x => x.Projects)
+                .Cascade.All()
+                .Access.Property()
+                .Table("ProjectEmployees");
             HasOne(x => x.Group).Cascade.All();
 
             Table("Employees");

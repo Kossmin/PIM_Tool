@@ -18,12 +18,6 @@ else
 }
 <hr>
 
-<style>
-    .mul-select {
-        width: 100%;
-        padding: 6px 12px;
-    }
-</style>
 
 @using (Html.BeginForm(actionName, "Project"))
 {
@@ -32,7 +26,6 @@ else
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group" hidden>
-            @Html.LabelFor(model => model._Project.Group.ID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-9">
                 <input class="form-control input text-box single-line" data-val="true" name="_Project.ID" style="width: 200px" type="number" value=@Model._Project.ID>
                 <input class="form-control input text-box single-line" data-val="true" name="_Project.Version" style="width: 200px" type="number" value=@Model._Project.Version>
@@ -85,12 +78,12 @@ else
                 @*<input class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Member" type="text" value="">*@
                 @*@Html.EditorFor(model => model._Project.Customer, new { htmlAttributes = new { @class = "form-control", style = "width: 500px" } })*@
                 @*@Html.ValidationMessageFor(model => model._Project.Customer, "", new { @class = "text-danger" })*@
-                <select required class="mul-select form-control" style="padding: 6px 12px; max-width: 100%" multiple="true" name="projectEmployees" id="projectEmployees">
-                @foreach(var item in Model.Members)
-                {
-                   <option value="@item.ID">@item.Visa : @item.FirstName @item.LastName</option>
-                }
-                    
+
+                <select required class="js-example-basic-multiple" style="max-width: 100%" name="projectEmployees" multiple="multiple">
+                    @foreach (var item in Model.Members)
+                    {
+                        <option value="@item.ID">@item.Visa : @item.FirstName @item.LastName</option>
+                    }
                 </select>
             </div>
         </div>
@@ -186,11 +179,7 @@ else
 
     <script>
         $(document).ready(function () {
-            $(".mul-select").select2({
-                placeholder: "Select employees", //placeholder
-                tags: true,
-                tokenSeparators: ['/', ',', ';', " "]
-            });
-        })
+            $('.js-example-basic-multiple').select2({width:'100%'});
+        });
     </script>
 }

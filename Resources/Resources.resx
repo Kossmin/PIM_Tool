@@ -159,7 +159,10 @@
   <data name="Status" xml:space="preserve">
     <value>Tình trạng</value>
   </data>
-  <data name="ValidLength{length}" xml:space="preserve">
-    <value>Độ dài cần ngắn hơn {length}</value>
+  <data name="Toolong" xml:space="preserve">
+    <value>Độ dài không hợp lệ </value>
+  </data>
+  <data name="ValidLength" xml:space="preserve">
+    <value>Độ dài cần ngắn hơn {0}</value>
   </data>
 </root>

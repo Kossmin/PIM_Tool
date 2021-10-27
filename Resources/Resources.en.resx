@@ -124,7 +124,7 @@
     <value>Customer</value>
   </data>
   <data name="DateTime" xml:space="preserve">
-    <value />
+    <value>End date can be less than start date</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -156,7 +156,10 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-  <data name="ValidLength{length}" xml:space="preserve">
-    <value>String must have less than {length} characters</value>
+  <data name="Toolong" xml:space="preserve">
+    <value>Invalid length</value>
+  </data>
+  <data name="ValidLength" xml:space="preserve">
+    <value>String must have less than {0} characters</value>
   </data>
 </root>

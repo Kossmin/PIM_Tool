@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.Mapping.ByCode.Conformist;
+using SPK_PIM;
+using BusinessObject.CustomAttribute;
 
 namespace BusinessObject
 {
@@ -15,11 +17,12 @@ namespace BusinessObject
         //[MaxLength(19, ErrorMessageResourceName = "ValidLength19", ErrorMessageResourceType = typeof(Resources.Resources))]
         public virtual int ID { get; set; }
 
+        
         //[MaxLength(19, ErrorMessageResourceName = "ValidLength19", ErrorMessageResourceType = typeof(Resources.Resources))]
         //public virtual int GroupID { get; set; }
 
         [Display(Name ="Number", ResourceType = typeof(Resources.Resources))]
-        [StringLength(4, ErrorMessageResourceName = "ValidLength4", ErrorMessageResourceType = typeof(Resources.Resources))]
+        [ValidLength(4)]
         [Required(ErrorMessage ="Needed")]
         public virtual string ProjectNumber { get; set; }
         
@@ -42,12 +45,13 @@ namespace BusinessObject
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "EndDate", ResourceType = typeof(Resources.Resources))]
         [DataType(DataType.Date)]
+        [EndDate("StartDate")]
         public virtual DateTime EndDate { get; set; }
 
         //[MaxLength(10, ErrorMessageResourceName = "ValidLength10", ErrorMessageResourceType = typeof(Resources.Resources))]
         public virtual int Version { get; set; }
 
-        public virtual IList<Project_Employee> ProjectEmployees { get; set; }
+        public virtual IList<Employee> Employees { get; set; }
         public virtual Group Group { get; set; }
 
         public enum ProjectStatus
@@ -60,18 +64,39 @@ namespace BusinessObject
 
         public Project()
         {
-            ProjectEmployees = new List<Project_Employee>();
+            Employees = new List<Employee>();
             Status = ProjectStatus.NEW;
             StartDate = DateTime.UtcNow;
             Version = 0;
         }
 
-        public virtual void AddProject(Project_Employee project_Employee)
+        public virtual void AddEmployee(IEnumerable<Employee> employee)
         {
-            project_Employee.Project = this;
-            ProjectEmployees.Add(project_Employee);
+            Employees = employee.ToList();
+            foreach (var item in employee)
+            {
+                item.Projects.Add(this);
+            }
+        }
+        public virtual void RemoveEmployee()
+        {
+            foreach (var item in Employees)
+            {
+                item.Projects.Remove(this);
+            }
         }
 
+        //public override bool Equals(object obj)
+        //{
+        //    var tmpProject = (Project)obj;
+        //    return ID ==  tmpProject.ID;
+        //}
+
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create<int, string>(ID, ProjectNumber).GetHashCode();
+        }
     }
 
     class ProjectMapping : ClassMap<Project>
@@ -87,7 +112,11 @@ namespace BusinessObject
             Map(x => x.EndDate).Nullable();
             Map(x => x.Status).Not.Nullable().Length(3).CustomSqlType("char(3)");
             Version(x => x.Version);
-            HasMany(x => x.ProjectEmployees).KeyColumn("ProjectID").Inverse().Cascade.All();
+            HasManyToMany(x => x.Employees)
+                .Inverse()
+                .Access.Property()
+                .Cascade.All()
+                .Table("ProjectEmployees");
             References<Group>(x => x.Group).Cascade.None().Column("GroupID");
             OptimisticLock.Version();
 

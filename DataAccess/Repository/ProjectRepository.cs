@@ -11,7 +11,6 @@ namespace DataAccess.Repository
 {
     public class ProjectRepository : IProjectRepository
     {
-        IProjectEmployeeRepository _projectEmployeeRepository = new ProjectEmployeeRepository();
         public void Add(Project project, IEnumerable<int> empIds)
         {
             using (var session = NHibernateHelper.OpenSession())
@@ -20,8 +19,8 @@ namespace DataAccess.Repository
                 {
                     using (var transaction = session.BeginTransaction())
                     {
+                        project.AddEmployee(session.CreateCriteria<Employee>().List<Employee>().Where(x => empIds.Contains(x.ID)));
                         session.Save(project);
-                        _projectEmployeeRepository.Add(project, empIds);
                         transaction.Commit();
                     }
                     transactionScope.Complete();
@@ -40,7 +39,6 @@ namespace DataAccess.Repository
                         var temp = session.Query<Project>().Where(x => id.Contains(x.ID)).ToList();
                         foreach (var item in temp)
                         {
-                            _projectEmployeeRepository.Delete(item.ID);
                             session.Delete(item);
                         }
                         tx.Commit();
@@ -62,7 +60,8 @@ namespace DataAccess.Repository
                         projectList = session.CreateCriteria<Project>().List<Project>();
                     }else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
                     {
-                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x=>x.Status.ToString() == pageModel.Status).ToList<Project>();
+                        var temp = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
+                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x=>x.Status.ToString() == temp).ToList<Project>();
                     }
                     else
                     {
@@ -136,8 +135,34 @@ namespace DataAccess.Repository
             return resultList;
         }
 
+
+
         public int GetMaxPageNumber(string status, string searchString)
-        => ProjectDAO.Instance.GetMaxPageNumber(status, searchString);
+        {
+            IList<Project> projectList;
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    if (String.IsNullOrWhiteSpace(searchString) && String.IsNullOrWhiteSpace(status))
+                    {
+                        projectList = session.CreateCriteria<Project>().List<Project>();
+                    }
+                    else if (String.IsNullOrWhiteSpace(searchString))
+                    {
+                        var temp = Enum.Parse(typeof(Project.ProjectStatus), status);
+                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x => x.Status.ToString() == temp).ToList<Project>();
+                    }
+                    else
+                    {
+                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x => x.ProjectName.Contains(searchString)).ToList<Project>();
+                    }
+                }
+            }
+            return projectList.Count();
+        }
+
+
 
         public List<Project> GetProjects(IEnumerable<int> id)
         {
@@ -160,17 +185,19 @@ namespace DataAccess.Repository
                     using (var tx = session.BeginTransaction())
                     {
                         var tmpProject = session.Query<Project>().FirstOrDefault(x => x.ID == project.ID);
+                        var tmpEmpList = session.Query<Employee>().Where(x => empIds.Contains(x.ID)).ToList();
                         if (tmpProject != null)
                         {
-                            _projectEmployeeRepository.Delete(project.ID);
-                            _projectEmployeeRepository.Add(project, empIds);
                             tmpProject.ProjectName = project.ProjectName;
                             tmpProject.StartDate = project.StartDate;
                             tmpProject.EndDate = project.EndDate;
                             tmpProject.Status = project.Status;
                             tmpProject.Customer = project.Customer;
                             tmpProject.Group = project.Group;
+                            tmpProject.Version = project.Version;
+                            tmpProject.AddEmployee(tmpEmpList);
                         }
+                        session.Update(tmpProject);
                         tx.Commit();
                     }
                     transactionScope.Complete();

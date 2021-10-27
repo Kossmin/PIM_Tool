@@ -187,11 +187,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Độ dài cần ngắn hơn {length}.
+        ///   Looks up a localized string similar to Độ dài không hợp lệ .
         /// </summary>
-        public static string ValidLength_length_ {
+        public static string Toolong {
             get {
-                return ResourceManager.GetString("ValidLength{length}", resourceCulture);
+                return ResourceManager.GetString("Toolong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Độ dài cần ngắn hơn {0}.
+        /// </summary>
+        public static string ValidLength {
+            get {
+                return ResourceManager.GetString("ValidLength", resourceCulture);
             }
         }
     }
