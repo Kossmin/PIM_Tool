@@ -1,5 +1,5 @@
 ﻿@model List<BusinessObject.Project>
-
+@using System.Globalization;
 @{
     ViewBag.Title = "Delete";
 }
@@ -49,16 +49,19 @@
                         @Html.DisplayFor(modelItem => item.Customer)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
+                        @{
+                            var date = item.StartDate.ToString("d", CultureInfo.CurrentCulture);
+                        }
+                        @Html.DisplayFor(modelItem => date)
                     </td>
                 </tr>
             }
         </table>
 
         @*@if (Model.Count > 1)
-        {
-        <input name="projectId" value=@Model.First().ID />
-        }*@
+            {
+            <input name="projectId" value=@Model.First().ID />
+            }*@
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Cancel", "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string })

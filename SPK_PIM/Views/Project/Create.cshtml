@@ -1,6 +1,6 @@
 ﻿@model SPK_PIM.Models.IndexPageModel
 @using BusinessObject;
-
+@using System.Globalization;
 @{
     ViewBag.Title = "Create";
     var actionName = "";
@@ -107,28 +107,8 @@ else
         </div>
 
         @{
-            var dateFormat = "";
-            HttpCookie cookie = Request.Cookies["_culture"];
-            var cookieValue = "vi";
-            var language = Request.UserLanguages;
-            if (cookie != null)
-            {
-                cookieValue = cookie.Value;
-            }
-            else
-            {
-                cookieValue = language[0];
-            }
-            if (cookieValue == "en")
-            {
-                dateFormat = "MM-dd-yyyy";
-            }
-            else
-            {
-                dateFormat = "dd-MM-yyyy";
-            }
-            var startDate = Model._Project.StartDate.ToString(dateFormat);
-            var endDate = Model._Project.EndDate.ToString(dateFormat);
+            var startDate = Model._Project.StartDate.ToString("d", CultureInfo.CurrentCulture);
+            var endDate = Model._Project.EndDate.ToString("d", CultureInfo.CurrentCulture);
         }
 
         <div class="col-sm-6 form-group">
@@ -136,7 +116,7 @@ else
             <div class="col-md-8">
                 @if (ViewBag.Details != null)
                 {
-                    @Html.EditorFor(m => m._Project.StartDate, new { @Value = Model._Project.StartDate.ToString(dateFormat), htmlAttributes = new {@class = "form-control" }, @required = "required" })
+                    @Html.EditorFor(m => m._Project.StartDate, new { @Value = startDate, htmlAttributes = new { @class = "form-control" }, @required = "required" })
                     @*<input class="form-control input text-box" data-val="true" name="_Project.StartDate" type="date" value=@startDate>*@
                     @*<input required class="input text-box form-control" data-val="true" name="_Project.StartDate" type="date" value=@Model._Project.StartDate.ToString(dateFormat)>*@
                 }
@@ -155,9 +135,9 @@ else
             <div class="col-md-8">
                 @if (ViewBag.Details != null)
                 {
-                    @Html.EditorFor(m => m._Project.EndDate, new { @Value = Model._Project.EndDate.ToString(dateFormat), @class = "form-control", @required = "required" })
+                    @Html.EditorFor(m => m._Project.EndDate, new { @Value = endDate, htmlAttributes = new { @class = "form-control" }, @required = "required" })
                     @*<input class="form-control input text-box" data-val="true" name="_Project.EndDate" type="date" value=@endDate>*@
-                    <input required class="input text-box form-control" data-val="true" name="_Project.EndDate" type="date" value=@Model._Project.EndDate.ToString(dateFormat)>
+                    
                 }
                 else
                 {
@@ -193,7 +173,7 @@ else
             const value = '@Model._Project.Status';
 
             $('#' + value).attr("selected", "selected");
-            var tmp = JSON.parse('@Html.Raw(Json.Encode(selectedEmp))');
+            const tmp = JSON.parse('@Html.Raw(Json.Encode(selectedEmp))');
             for (const item of tmp) {
                 $('#' + item).attr("selected", "selected");
             }

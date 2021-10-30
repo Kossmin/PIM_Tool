@@ -93,6 +93,10 @@
       <Project>{2518477E-BEEC-480F-8D2E-ABF0161DB657}</Project>
       <Name>BusinessObject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Resources\Resources.csproj">
+      <Project>{81C38000-7E17-415F-BE44-A7F35AFC3B37}</Project>
+      <Name>Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

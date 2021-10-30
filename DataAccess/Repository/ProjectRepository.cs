@@ -22,7 +22,7 @@ namespace DataAccess.Repository
                     {
                         List<int> projectIdList = new List<int>();
                         projectIdList.Add(project.ID);
-                        if (GetProjects(projectIdList).Count == 0)
+                        if (GetProjects(projectIdList).Count != 0)
                         {
                             throw new DuplicateProjectNumberException();
                         }
@@ -48,11 +48,31 @@ namespace DataAccess.Repository
                         foreach (var item in temp)
                         {
                             //item.DeleteEmployee();
-                            session.Delete(item);
+                            if (checkCanBeRemoved(item))
+                            {
+                                session.Delete(item);
+                            }
                         }
                         tx.Commit();
                     }
                     transactionScope.Complete();
+                }
+            }
+        }
+
+        public bool checkCanBeRemoved(Project project)
+        {
+            using(var session = NHibernateHelper.OpenSession())
+            {
+                var checkedProject = session.CreateCriteria<Project>().List<Project>().FirstOrDefault(x => x.ID == project.ID);
+                var status = (Project.ProjectStatus)0;
+                if (checkedProject.Status == status)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
         }
@@ -177,10 +197,10 @@ namespace DataAccess.Repository
         {
             using (var session = NHibernateHelper.OpenSession())
             {
-                using (var tx = session.BeginTransaction())
-                {
+                //using (var tx = session.BeginTransaction())
+                //{
                     return session.Query<Project>().Where(x => id.Contains(x.ID)).ToList();
-                }
+                //}
             }
         }
 

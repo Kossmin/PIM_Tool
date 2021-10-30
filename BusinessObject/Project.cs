@@ -128,7 +128,6 @@ namespace BusinessObject
             Version(x => x.Version);
             HasManyToMany(x => x.Employees)
                 .Access.Property()
-                .LazyLoad()
                 .Cascade.SaveUpdate()
                 .Table("ProjectEmployees");
             References<Group>(x => x.Group).Cascade.None().Column("GroupID");

@@ -41,7 +41,6 @@ namespace BusinessObject
             HasManyToMany(x => x.Projects)
                 .Cascade.SaveUpdate()
                 .Access.Property()
-                .LazyLoad()
                 .Inverse()
                 .Table("ProjectEmployees");
             HasOne(x => x.Group).Cascade.All();

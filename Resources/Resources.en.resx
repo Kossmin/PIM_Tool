@@ -129,6 +129,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Your project number is duplicated</value>
+  </data>
   <data name="EndDate" xml:space="preserve">
     <value>End Date</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="isRemoved" xml:space="preserve">
+    <value>Your project does not exist, it could be deleted or updated</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Log out</value>

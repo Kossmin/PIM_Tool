@@ -80,21 +80,24 @@ namespace SPK_PIM.Controllers
         [HttpPost]
         public ActionResult Create(IndexPageModel indexPage, IEnumerable<int> projectEmployees, string returnUrl=null)
         {
+            try
+            {
+                _projectRepository.Add(indexPage._Project, projectEmployees);
+            }
+            catch (DuplicateProjectNumberException e)
+            {
+                ModelState.AddModelError("_Project.ProjectNumber", e.Message);
+            }
             if (!ModelState.IsValid)
             {
                 indexPage.Members = _employeeRepository.GetEmployees();
                 return View(indexPage);
             }
-            if(_projectRepository.SearchByProjectNumber(indexPage._Project.ProjectNumber) == null)
-            {
-                _projectRepository.Add(indexPage._Project, projectEmployees);
-            }
-            try
-            {
-                _projectRepository.Add(indexPage._Project, projectEmployees);
-            }
-            catch (DuplicateProjectNumberException) { 
-            }
+            //if(_projectRepository.SearchByProjectNumber(indexPage._Project.ProjectNumber) == null)
+            //{
+            //    _projectRepository.Add(indexPage._Project, projectEmployees);
+            //}
+            
             if (returnUrl == null)
             {
                 return RedirectToAction("Index");
@@ -113,7 +116,7 @@ namespace SPK_PIM.Controllers
             var model = _projectRepository.GetProjects(tmp).FirstOrDefault();
             if(model == null)
             {
-                return RedirectToAction("Index", new { isRemove = true });
+                return RedirectToAction("Index", new { isRemoved = true });
             }
             var tmpEmp = _employeeRepository.GetEmployeesIDInProject(id).ToList<int>();
             IndexPageModel indexPageModel = new IndexPageModel { _Project = model, Members = _employeeRepository.GetEmployees() };

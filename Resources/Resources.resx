@@ -129,6 +129,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Xóa</value>
   </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Mã dự án hiện đang trùng</value>
+  </data>
   <data name="EndDate" xml:space="preserve">
     <value>Ngày kết thúc</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="isRemoved" xml:space="preserve">
+    <value>Dự án không tồn tại, có thể đã được xóa hoặc cập nhật</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Thoát</value>

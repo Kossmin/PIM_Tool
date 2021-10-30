@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã dự án hiện đang trùng.
+        /// </summary>
+        public static string Duplicate {
+            get {
+                return ResourceManager.GetString("Duplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ngày kết thúc.
         /// </summary>
         public static string EndDate {
@@ -120,6 +129,15 @@ namespace Resources {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dự án không tồn tại, có thể đã được xóa hoặc cập nhật.
+        /// </summary>
+        public static string isRemoved {
+            get {
+                return ResourceManager.GetString("isRemoved", resourceCulture);
             }
         }
         
