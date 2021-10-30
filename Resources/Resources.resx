@@ -153,6 +153,9 @@
   <data name="ResetSearch" xml:space="preserve">
     <value>Đặt lại</value>
   </data>
+  <data name="SearchStringPlaceHolder" xml:space="preserve">
+    <value>Mã dự án, tên dự án, tên khách hàng</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Ngày bắt đầu</value>
   </data>

@@ -11,6 +11,7 @@ namespace DataAccess.Repository
     {
         IList<Employee> GetEmployees();
         IList<Employee> GetEmployeesInProject(int projId);
+        IList<int> GetEmployeesIDInProject(int proId);
         //IList<Employee> GetEmployeesNotInProject(int projId);
     }
 }

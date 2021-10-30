@@ -39,8 +39,10 @@ namespace BusinessObject
             Map(x => x.Version).Not.Nullable().Length(10);
 
             HasManyToMany(x => x.Projects)
-                .Cascade.All()
+                .Cascade.SaveUpdate()
                 .Access.Property()
+                .LazyLoad()
+                .Inverse()
                 .Table("ProjectEmployees");
             HasOne(x => x.Group).Cascade.All();
 

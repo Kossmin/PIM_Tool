@@ -5,147 +5,177 @@
     var url = "/Project/Index?_pageindex=";
 }
 
+@if(ViewBag.isRemoved != null)        
+{
+    <p class="text-danger">The project has been removed</p>
+}
+
 <div class="container-fluid">
     
     <div>
         <h2>Project List</h2>
-
+        <hr />
         <p>
-            @Html.ActionLink(Resources.Resources.CreateNew, "Create", new { returnUrl = Request.RawUrl })
+            
             @using (Html.BeginForm("Index", "Project", FormMethod.Get))
             {
-            <p>
-                Genre: @Html.DropDownList("_status", "All")
-                Title: @Html.TextBox("_searchstring")
-                <input type="submit" value="@Resources.Resources.Filter" />
-                <input type="button" value="@Resources.Resources.ResetSearch" onclick="Reset()" />
-            </p>
-        }
-            </p>
-            <form action="~/project/Delete" method="get">
-                <table class="table table-bordered">
-                    <tr>
-                        <th></th>
-                        <th>
-                            @Html.ActionLink(Resources.Resources.Number, "Index", new
-                            {
-                           _status = (Model.Status != null) ? Model.Status : "",
-                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnumberup") ? "projectnumberup" : "projectnumber",
-                           _pageIndex = Model._PageIndex,
-                           _numberOfRows = Model._NumberOfRows
-                            })
-                            @if (Model._SortingKind == "projectnumberup")
-                            {
-                                <i class="fas fa-sort-up"></i>
-                            }
-                            else if (Model._SortingKind == "projectnumber")
-                            {
-                                <i class="fas fa-sort-down"></i>
-                            }
-                        </th>
-                        <th>
-                            @Html.ActionLink(Resources.Resources.ProjectName, "Index", new
-                            {
-                           _status = (Model.Status != null) ? Model.Status : "",
-                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnameup") ? "projectnameup" : "projectname",
-                           _pageIndex = Model._PageIndex,
-                           _numberOfRows = Model._NumberOfRows
-                            })
-                            @if (Model._SortingKind == "projectnameup")
-                            {
-                                <i class="fas fa-sort-up"></i>
-                            }
-                            else if (Model._SortingKind == "projectname")
-                            {
-                                <i class="fas fa-sort-down"></i>
-                            }
-                        </th>
-                        <th>
-                            @Html.ActionLink(Resources.Resources.Status, "Index", new
-                            {
-                           _status = (Model.Status != null) ? Model.Status : "",
-                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "statusup") ? "statusup" : "status",
-                           _pageIndex = Model._PageIndex,
-                           _numberOfRows = Model._NumberOfRows
-                            })
-                            @if (Model._SortingKind == "statusup")
-                            {
-                                <i class="fas fa-sort-up"></i>
-                            }
-                            else if (Model._SortingKind == "status")
-                            {
-                                <i class="fas fa-sort-down"></i>
-                            }
-                        </th>
-                        <th>
-                            @Html.ActionLink(Resources.Resources.Customer, "Index", new
-                            {
-                           _status = (Model.Status != null) ? Model.Status : "",
-                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "customerup") ? "customerup" : "customer",
-                           _pageIndex = Model._PageIndex,
-                           _numberOfRows = Model._NumberOfRows
-                            })
-                            @if (Model._SortingKind == "customerup")
-                            {
-                                <i class="fas fa-sort-up"></i>
-                            }
-                            else if (Model._SortingKind == "customer")
-                            {
-                                <i class="fas fa-sort-down"></i>
-                            }
-                        </th>
-                        <th>
-                            @Html.ActionLink(Resources.Resources.StartDate, "Index", new
-                            {
-                           _status = (Model.Status != null) ? Model.Status : "",
-                           _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                           _sortingKind = (Model._SortingKind == null || Model._SortingKind != "startdateup") ? "startdateup" : "startdate",
-                           _pageIndex = Model._PageIndex,
-                           _numberOfRows = Model._NumberOfRows
-                            })
-                            @if (Model._SortingKind == "startdateup")
-                            {
-                               <i class="fas fa-sort-up"></i>
-                            }
-                            else if (Model._SortingKind == "startdate")
-                            {
-                                <i class="fas fa-sort-down"></i>
-                            }
-                        </th>
-                        <th>
-                            @Resources.Resources.Delete
-                        </th>
-                    </tr>
+            <div class="row" style="display: flex">
 
-                    @foreach (var item in Model._Projects)
-                    {
+                <div class="form-group col-md-4">
+                    <input class="form-control" placeholder=@Resources.Resources.SearchStringPlaceHolder name="_searchstring" type="text" value="">
+                </div>
+
+                <div class="form-group col-md-2" >
+                    <div class="">
+                        <select id="statusDropdown" class="form-control dropdown setwidth" name="_status">
+                            <option value="">All</option>
+                            <option value="0">NEW</option>
+                            <option value="1">PLA</option>
+                            <option value="2">INP</option>
+                            <option value="3">FIN</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <input class="btn btn-primary btn-block" type="submit" value="@Resources.Resources.Filter" />
+                </div>
+                <div class="form-group col-md-3" style="display: flex; ">
+                    <span style="align-self: center; text-align: center; margin: auto;" class="setwidth" onclick="Reset()">@Resources.Resources.ResetSearch</span>
+                </div>
+            </div>
+        }
+        </p>
+            <form style="margin-top: 5px" action="~/project/Delete" method="get">
+                <input hidden name="returnUrl" value=@Request.RawUrl>
+
+                </input>
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>
-                                <input type="checkbox" name="employeeIds" id="employeeIds" onchange="ToggleDeleteButton()" value=@item.ID />
-                            </td>
-                            <td>
-                                @Html.ActionLink(item.ProjectNumber, "Details", new { id = item.ID })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ProjectName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Customer)
-                            </td>
-                            <td>
-                                @{
-                                    var dateFormat = "";
-                                    HttpCookie cookie = Request.Cookies["_culture"];
-                                    var cookieValue = "vi";
-                                    var language = "";
-                                    <script>
+                            <th></th>
+                            <th>
+                                @Html.ActionLink(Resources.Resources.Number, "Index", new
+                                {
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnumberup") ? "projectnumberup" : "projectnumber",
+                               _pageIndex = Model._PageIndex,
+                               _numberOfRows = Model._NumberOfRows
+                                })
+                                @if (Model._SortingKind == "projectnumberup")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (Model._SortingKind == "projectnumber")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                            </th>
+                            <th>
+                                @Html.ActionLink(Resources.Resources.ProjectName, "Index", new
+                                {
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnameup") ? "projectnameup" : "projectname",
+                               _pageIndex = Model._PageIndex,
+                               _numberOfRows = Model._NumberOfRows
+                                })
+                                @if (Model._SortingKind == "projectnameup")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (Model._SortingKind == "projectname")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                            </th>
+                            <th>
+                                @Html.ActionLink(Resources.Resources.Status, "Index", new
+                                {
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "statusup") ? "statusup" : "status",
+                               _pageIndex = Model._PageIndex,
+                               _numberOfRows = Model._NumberOfRows
+                                })
+                                @if (Model._SortingKind == "statusup")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (Model._SortingKind == "status")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                            </th>
+                            <th>
+                                @Html.ActionLink(Resources.Resources.Customer, "Index", new
+                                {
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "customerup") ? "customerup" : "customer",
+                               _pageIndex = Model._PageIndex,
+                               _numberOfRows = Model._NumberOfRows
+                                })
+                                @if (Model._SortingKind == "customerup")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (Model._SortingKind == "customer")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                            </th>
+                            <th>
+                                @Html.ActionLink(Resources.Resources.StartDate, "Index", new
+                                {
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "startdateup") ? "startdateup" : "startdate",
+                               _pageIndex = Model._PageIndex,
+                               _numberOfRows = Model._NumberOfRows
+                                })
+                                @if (Model._SortingKind == "startdateup")
+                                {
+                                    <i class="fas fa-sort-up"></i>
+                                }
+                                else if (Model._SortingKind == "startdate")
+                                {
+                                    <i class="fas fa-sort-down"></i>
+                                }
+                            </th>
+                            <th>
+                                @Resources.Resources.Delete
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model._Projects)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="projectIds" id="projectIds" value=@item.ID />
+                                </td>
+                                <td>
+                                    @Html.ActionLink(item.ProjectNumber, "Details", new { id = item.ID, returnUrl = Request.RawUrl })
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProjectName)
+                                </td>
+                                <td id=@String.Format("Status{0}", item.ID)>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Customer)
+                                </td>
+                                <td>
+                                    @{
+                                        var dateFormat = "";
+                                        HttpCookie cookie = Request.Cookies["_culture"];
+                                        var cookieValue = "vi";
+                                        var language = "";
+                                        <script>
                                         $.ajax({
                                             url: "http://ajaxhttpheaders.appspot.com",
                                             dataType: 'jsonp',
@@ -154,36 +184,53 @@
                                                 @language = language;
                                             }
                                         });
-                                    </script>
-                                    if (cookie != null)
-                                    {
-                                        cookieValue = cookie.Value;
+                                        </script>
+                                        if (cookie != null)
+                                        {
+                                            cookieValue = cookie.Value;
+                                        }
+                                        else
+                                        {
+                                            cookieValue = language;
+                                        }
+                                        if (cookieValue == "vi")
+                                        {
+                                            dateFormat = "dd-MM-yyyy";
+                                        }
+                                        else
+                                        {
+                                            dateFormat = "MM-dd-yyyy";
+                                        }
+                                        var date = item.StartDate.ToString(dateFormat);
                                     }
-                                    else
-                                    {
-                                        cookieValue = language;
+                                    @Html.DisplayFor(modelItem => date)
+                                </td>
+                                <td>
+                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+        @Html.ActionLink("Details", "Details", new { id = item.ID }) |*@
+                                    @*@Html.ActionLink(Resources.Resources.Delete, "DeleteOne", new { id = item.ID, returnUrl = Request.RawUrl })*@
+                                    @{ 
+                                        var Deleteurl = "/Project/DeleteOne/" + item.ID + "?returnUrl=" + Request.RawUrl;
                                     }
-                                    if (cookieValue == "vi")
-                                    {
-                                        dateFormat = "dd-MM-yyyy";
-                                    }
-                                    else
-                                    {
-                                        dateFormat = "MM-dd-yyyy";
-                                    }
-                                    var date = item.StartDate.ToString(dateFormat);
-                                }
-                                @Html.DisplayFor(modelItem => date)
+                                    <a hidden href=@Deleteurl id="@item.ID" data-id="@item.ID" data-returnUrl=@Request.RawUrl>
+                                        <i class="fas fa-trash-alt" style="color: orangered"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot hidden id="footer">
+                        <tr>
+                            <td colspan="6" id="SelectedCheckbox">
+
                             </td>
                             <td>
-                                @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.ID }) |*@
-                                <a onclick="$(this).closest('form').submit()" hidden id=@item.ID>
+                                <a onclick="$(this).closest('form').submit()" id="MultiDelete">
                                     <i class="fas fa-trash-alt" style="color: orangered"></i>
                                 </a>
                             </td>
                         </tr>
-                    }
+                    </tfoot>
                 </table>
             </form>
 
@@ -241,22 +288,38 @@
             $('input[type="checkbox"]').click(function () {
                 if ($(this).prop("checked") == true) {
                     let id = $(this).prop("value");
-                    $("a#" + id).show();
+                    let statusID = "Status" + id;
+                    let statusValue = document.getElementById(statusID).textContent.trim();
+                    if (statusValue == 'NEW') {
+                        $("a#" + id).show();
+                    }
                 }
                 else if ($(this).prop("checked") == false) {
                     let id = $(this).prop("value");
                     $("a#" + id).hide();
                 }
+                var count = $("input[type='checkbox']:checked").length;
+                var node = document.getElementById("SelectedCheckbox");
+                debugger;
+                if (count > 0) {
+                    $("#footer").show();
+                } else {
+                    $("#footer").hide();
+                }
+                node.textContent = "Selected " + count;
             });
+            
         });
+
+        $(document).ready(function () {
+
+        })
 
         function Reset() {
             const txtSearchString = document.getElementsByName("_searchstring")[0];
             txtSearchString.value = '';
-            debugger;
-            const sltStatus = document.getElementsByName("_status")[0];
-            $("[selected]").removeAttr("selected");
-            sltStatus.firstChild.setAttribute("selected", "selected");
+            var dropDown = document.getElementById("statusDropdown");
+            dropDown.selectedIndex = 0;
         }
     </script>
     }

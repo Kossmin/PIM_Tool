@@ -24,7 +24,7 @@ hr{
 
 .input{
     max-width:100% !important;
-    width: 100%;
+    width: 100% !important;
 }
 
 .inline-div{
@@ -37,4 +37,9 @@ hr{
 
 .select2{
     width: 100% !important;
+}
+
+
+a.nohover:hover {
+    text-decoration: none;
 }

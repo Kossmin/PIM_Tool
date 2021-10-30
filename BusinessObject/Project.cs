@@ -78,8 +78,22 @@ namespace BusinessObject
                 item.Projects.Add(this);
             }
         }
-        public virtual void RemoveEmployee()
+        public virtual void UpdateEmployee(IEnumerable<Employee> employee)
         {
+            Employees = employee.ToList();
+            foreach (var item in Employees)
+            {
+                item.Projects.Remove(this);
+            }
+            foreach (var item in employee)
+            {
+                item.Projects.Add(this);
+            }
+        }
+
+        public virtual void DeleteEmployee()
+        {
+            Employees = new List<Employee>();
             foreach (var item in Employees)
             {
                 item.Projects.Remove(this);
@@ -93,10 +107,10 @@ namespace BusinessObject
         //}
 
 
-        public override int GetHashCode()
-        {
-            return Tuple.Create<int, string>(ID, ProjectNumber).GetHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    return Tuple.Create<int, string>(ID, ProjectNumber).GetHashCode();
+        //}
     }
 
     class ProjectMapping : ClassMap<Project>
@@ -113,9 +127,9 @@ namespace BusinessObject
             Map(x => x.Status).Not.Nullable().Length(3).CustomSqlType("char(3)");
             Version(x => x.Version);
             HasManyToMany(x => x.Employees)
-                .Inverse()
                 .Access.Property()
-                .Cascade.All()
+                .LazyLoad()
+                .Cascade.SaveUpdate()
                 .Table("ProjectEmployees");
             References<Group>(x => x.Group).Cascade.None().Column("GroupID");
             OptimisticLock.Version();

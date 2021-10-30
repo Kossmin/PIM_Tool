@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã dự án, tên dự án, tên khách hàng.
+        /// </summary>
+        public static string SearchStringPlaceHolder {
+            get {
+                return ResourceManager.GetString("SearchStringPlaceHolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ngày bắt đầu.
         /// </summary>
         public static string StartDate {

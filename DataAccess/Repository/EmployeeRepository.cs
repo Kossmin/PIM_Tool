@@ -27,8 +27,22 @@ namespace DataAccess.Repository
             {
                 using (var tx = session.BeginTransaction())
                 {
-                    var project = session.CreateCriteria<Project>().List<Project>().First(p => p.ID == projectId);
-                    emp = project.Employees;
+                    var project = session.CreateCriteria<Project>().List<Project>().First(x => x.ID == projectId);
+                    emp = session.CreateCriteria<Employee>().List<Employee>().Where(x => x.Projects.Contains(project)).ToList<Employee>();
+                }
+            }
+            return emp;
+        }
+
+        public IList<int> GetEmployeesIDInProject(int projectId)
+        {
+            IList<int> emp = new List<int>();
+            using (var session = NHibernateHelper.OpenSession())
+            {
+                using (var tx = session.BeginTransaction())
+                {
+                    var project = session.CreateCriteria<Project>().List<Project>().First(x => x.ID == projectId);
+                    emp = session.CreateCriteria<Employee>().List<Employee>().Where(x => x.Projects.Contains(project)).Select(x=>x.ID).ToList();
                 }
             }
             return emp;

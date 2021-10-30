@@ -10,53 +10,58 @@
 <div>
     <h4>ProjectObject</h4>
     <hr />
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().ProjectNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().ProjectName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Customer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().StartDate)
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProjectName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Customer)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-            </tr>
-        }
-    </table>
-
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm("Delete", "Project", FormMethod.Post))
+    {
         @Html.AntiForgeryToken()
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ProjectNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ProjectName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Customer)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().StartDate)
+                </th>
+            </tr>
 
+            @foreach (var item in Model)
+            {
+                <input hidden name="projectIds" value=@item.ID />
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProjectName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                </tr>
+            }
+        </table>
+
+        @*@if (Model.Count > 1)
+        {
+        <input name="projectId" value=@Model.First().ID />
+        }*@
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Cancel", "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string })
         </div>
     }
 </div>
