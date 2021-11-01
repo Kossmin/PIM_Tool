@@ -63,11 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomAttribute\ValidLengthAttribute.cs" />
     <Compile Include="Employee.cs" />
+    <Compile Include="CustomAttribute\EndDateAttribute.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Project.cs" />
-    <Compile Include="Project_Employee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using DataAccess.CustomException;
 using DataAccess.Model;
 using DataAccess.Repository;
 using SPK_PIM.Helpers;
@@ -18,7 +19,7 @@ namespace SPK_PIM.Controllers
         IProjectRepository _projectRepository = new ProjectRepository();
         IEmployeeRepository _employeeRepository = new EmployeeRepository();
 
-        public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1)
+        public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1, bool isRemoved = false)
         {
             ViewBag.acceptLanguage = Request.Headers.Get("Accept-Language").Split(',')[0];
 
@@ -45,6 +46,11 @@ namespace SPK_PIM.Controllers
             }).ToList(), "Value", "Text");
 
             ViewBag._status = EntityState;
+
+            if (isRemoved)
+            {
+                ViewBag.isRemoved = true;
+            }
 
             indexPage._Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status});
             var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
@@ -74,49 +80,90 @@ namespace SPK_PIM.Controllers
         [HttpPost]
         public ActionResult Create(IndexPageModel indexPage, IEnumerable<int> projectEmployees, string returnUrl=null)
         {
-            if (ModelState.IsValid)
+            try
             {
                 _projectRepository.Add(indexPage._Project, projectEmployees);
-                if (returnUrl == null)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return Redirect(returnUrl);
-                }
             }
-            return View();
+            catch (DuplicateProjectNumberException e)
+            {
+                ModelState.AddModelError("_Project.ProjectNumber", e.Message);
+            }
+            if (!ModelState.IsValid)
+            {
+                indexPage.Members = _employeeRepository.GetEmployees();
+                return View(indexPage);
+            }
+            //if(_projectRepository.SearchByProjectNumber(indexPage._Project.ProjectNumber) == null)
+            //{
+            //    _projectRepository.Add(indexPage._Project, projectEmployees);
+            //}
+            
+            if (returnUrl == null)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect(returnUrl);
+            }
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, bool checkConcurrent = false, string returnUrl = null)
         {
+            ViewBag.ReturnUrl = returnUrl;
             List<int> tmp = new List<int>();
             tmp.Add(id);
-            var model = _projectRepository.GetProjects(tmp)[0];
+            var model = _projectRepository.GetProjects(tmp).FirstOrDefault();
+            if(model == null)
+            {
+                return RedirectToAction("Index", new { isRemoved = true });
+            }
+            var tmpEmp = _employeeRepository.GetEmployeesIDInProject(id).ToList<int>();
             IndexPageModel indexPageModel = new IndexPageModel { _Project = model, Members = _employeeRepository.GetEmployees() };
+            if (checkConcurrent)
+            {
+                ViewBag.Concurrent = true;
+            }
             ViewBag.Details = true;
+            ViewData["SelectedEmployee"] = tmpEmp;
             return View("Create", indexPageModel);
         }
 
-        public ActionResult Delete(IEnumerable<int> employeeIds, string returnUrl = null)
+        public ActionResult DeleteOne(int id, string returnUrl = null)
         {
-            var projects = _projectRepository.GetProjects(employeeIds);
+            ViewBag.ReturnUrl = returnUrl;
+            List<int> projectId = new List<int>();
+            projectId.Add(id);
+            var projects = _projectRepository.GetProjects(projectId);
+            return View("Delete", projects);
+        }
+
+        public ActionResult Delete(IEnumerable<int> projectIds, string returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            var projects = _projectRepository.GetProjects(projectIds);
             return View(projects);
         }
 
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(IEnumerable<int> employeeIds, string returnUrl = null)
+        public ActionResult DeleteConfirmed(IEnumerable<int> projectIds, string returnUrl = null, int projectId = -1)
         {
-            _projectRepository.Delete(employeeIds);
+            if(projectId != -1)
+            {
+                projectIds.ToList().Add(projectId);
+            }
+            _projectRepository.Delete(projectIds);
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult Edit(IndexPageModel indexModel, IEnumerable<int> projectEmployees, string returnUrl)
+        public ActionResult Edit(IndexPageModel indexModel, IEnumerable<int> projectEmployees, string returnUrl = null)
         {
-            _projectRepository.Update(indexModel._Project, projectEmployees);
-            if(returnUrl == null)
+            if(!_projectRepository.Update(indexModel._Project, projectEmployees))
+            {
+                return RedirectToAction("Index", new { id = indexModel._Project.ID, checkConcurrent = true });
+            }
+            if (returnUrl == null)
             {
                 return RedirectToAction("Index");
             }

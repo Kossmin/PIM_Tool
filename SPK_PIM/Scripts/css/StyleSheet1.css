@@ -24,7 +24,7 @@ hr{
 
 .input{
     max-width:100% !important;
-    width: 100%;
+    width: 100% !important;
 }
 
 .inline-div{
@@ -35,14 +35,11 @@ hr{
     text-align: left;
 }
 
-
-.form-input {
-    display: block !important;
+.select2{
     width: 100% !important;
-    height: 34px !important;
-    font-size: 14px !important;
-    line-height: 1.42857143 !important;
-    color: white !important;
-    background-image: none !important;
-    border-radius: 4px !important;
+}
+
+
+a.nohover:hover {
+    text-decoration: none;
 }

@@ -129,6 +129,9 @@
   <data name="Delete" xml:space="preserve">
     <value>Xóa</value>
   </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Mã dự án hiện đang trùng</value>
+  </data>
   <data name="EndDate" xml:space="preserve">
     <value>Ngày kết thúc</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="isRemoved" xml:space="preserve">
+    <value>Dự án không tồn tại, có thể đã được xóa hoặc cập nhật</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Thoát</value>
@@ -153,13 +159,19 @@
   <data name="ResetSearch" xml:space="preserve">
     <value>Đặt lại</value>
   </data>
+  <data name="SearchStringPlaceHolder" xml:space="preserve">
+    <value>Mã dự án, tên dự án, tên khách hàng</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Ngày bắt đầu</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Tình trạng</value>
   </data>
-  <data name="ValidLength{length}" xml:space="preserve">
-    <value>Độ dài cần ngắn hơn {length}</value>
+  <data name="Toolong" xml:space="preserve">
+    <value>Độ dài không hợp lệ </value>
+  </data>
+  <data name="ValidLength" xml:space="preserve">
+    <value>Độ dài cần ngắn hơn {0}</value>
   </data>
 </root>

@@ -32,7 +32,6 @@ namespace BusinessObject
 
          .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Project>())
          .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Group>())
-         .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Project_Employee>())
          .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Employee>())
          .ExposeConfiguration(cfg => new SchemaExport(cfg).Create(false, false))
          .BuildSessionFactory();

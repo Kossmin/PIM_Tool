@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã dự án hiện đang trùng.
+        /// </summary>
+        public static string Duplicate {
+            get {
+                return ResourceManager.GetString("Duplicate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ngày kết thúc.
         /// </summary>
         public static string EndDate {
@@ -120,6 +129,15 @@ namespace Resources {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dự án không tồn tại, có thể đã được xóa hoặc cập nhật.
+        /// </summary>
+        public static string isRemoved {
+            get {
+                return ResourceManager.GetString("isRemoved", resourceCulture);
             }
         }
         
@@ -169,6 +187,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã dự án, tên dự án, tên khách hàng.
+        /// </summary>
+        public static string SearchStringPlaceHolder {
+            get {
+                return ResourceManager.GetString("SearchStringPlaceHolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ngày bắt đầu.
         /// </summary>
         public static string StartDate {
@@ -187,11 +214,20 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Độ dài cần ngắn hơn {length}.
+        ///   Looks up a localized string similar to Độ dài không hợp lệ .
         /// </summary>
-        public static string ValidLength_length_ {
+        public static string Toolong {
             get {
-                return ResourceManager.GetString("ValidLength{length}", resourceCulture);
+                return ResourceManager.GetString("Toolong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Độ dài cần ngắn hơn {0}.
+        /// </summary>
+        public static string ValidLength {
+            get {
+                return ResourceManager.GetString("ValidLength", resourceCulture);
             }
         }
     }

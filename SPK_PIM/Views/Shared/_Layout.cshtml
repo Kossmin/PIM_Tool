@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization;
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -12,24 +13,35 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
     <script src="https://kit.fontawesome.com/f58c939b44.js" crossorigin="anonymous"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+
+    <style>
+        .selected {
+            font-weight:bold;
+        }
+
+    </style>
+
 </head>
 <body>
     <header>
         <div class="topnav">
             <div class="container" style="align-items: center; display: flex">
                 <div class="col-md-8">
-                    <a href="~/Project/Index" style="width: 100%; ">
-                        <img src="~/Images/images.jpg" style="width: 30px; display: inline-block; margin-right: 5px" />
-                        <span>Project Information Management</span>
+                    <a class="" href="~/Project/Index" style="width: 100%; ">
+                        <img src="~/Images/images.jpg" style="width: 30px; display: inline-block; margin-right: 5px; pointer-events:none;" />
+                        <span style="font-size: 1.5em; pointer-events: none;">Project Information Management</span>
                     </a>
                 </div>
                 <div class="flex-container col-md-4">
                     <div style="flex-grow: 4">
-                        @Html.ActionLink("En", "SetCulture", "Project", new { culture = "en", returnUrl = Request.RawUrl }, null)|
-                        @Html.ActionLink("Vi", "SetCulture", "Project", new { culture = "vi", returnUrl = Request.RawUrl }, null)
+                            @Html.ActionLink("En", "SetCulture", "Project", new { culture = "en", returnUrl = Request.RawUrl }, new { @class="language", id="en" })
+                        |
+                            @Html.ActionLink("Vi", "SetCulture", "Project", new { culture = "vi", returnUrl = Request.RawUrl }, new { @class = "language", id="vi" })
+                        
                     </div>
                     <div style="flex-grow :2">
                         <a>@Resources.Resources.Help</a>
@@ -45,10 +57,10 @@
 
     <div class="container body-content">
         <div class="col-md-3">
-            
+
             <ul>
                 <strong>Projects List</strong>
-                <li>New</li>
+                <li>@Html.ActionLink(Resources.Resources.CreateNew, "Create", new { returnUrl = Request.RawUrl })</li>
                 <li>Project</li>
                 <li>Customer</li>
                 <li>Supplier</li>
@@ -59,7 +71,31 @@
         </div>
     </div>
 
-    
+    @{
+        HttpCookie cookie = null;
+        var culture = "";
+        if (cookie != null)
+        {
+            culture = cookie.Value;
+        }
+        else
+        {
+            culture = CultureInfo.CurrentCulture.Name;
+        }
+    }
+
     @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $("a.language.selected").removeClass("selected");
+            let culture = @culture;
+            addSelected(culture.id);
+            debugger;
+        });
+
+        function addSelected(culture) {
+            $(`#` + culture).addClass("selected");
+        }
+    </script>
 </body>
 </html>
