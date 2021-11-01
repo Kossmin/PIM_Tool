@@ -5,7 +5,7 @@
     var url = "/Project/Index?_pageindex=";
 }
 
-@if(ViewBag.isRemoved != null)        
+@if(ViewBag.isRemoved == true)        
 {
     <div class="alert alert-warning alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -284,7 +284,6 @@
                 }
                 var count = $("input[type='checkbox']:checked").length;
                 var node = document.getElementById("SelectedCheckbox");
-                debugger;
                 if (count > 0) {
                     $("#footer").show();
                 } else {
@@ -296,7 +295,8 @@
         });
 
         $(document).ready(function () {
-
+            var dropDown = document.getElementById("statusDropdown");
+            dropDown.selectedIndex = 1 + @Model.Status;
         })
 
         function Reset() {

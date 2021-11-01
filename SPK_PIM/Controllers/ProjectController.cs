@@ -1,4 +1,5 @@
-﻿using BusinessObject;
+﻿using Autofac;
+using BusinessObject;
 using DataAccess.CustomException;
 using DataAccess.Model;
 using DataAccess.Repository;
@@ -16,21 +17,21 @@ namespace SPK_PIM.Controllers
 {
     public class ProjectController : BaseController
     {
-        IProjectRepository _projectRepository = new ProjectRepository();
-        IEmployeeRepository _employeeRepository = new EmployeeRepository();
+        private IProjectRepository _projectRepository;
+        private IEmployeeRepository _employeeRepository;
+        IContainer container = ContainerConfig.Configure();
+        
+
+        public ProjectController() 
+        {
+            _projectRepository = container.Resolve<IProjectRepository>();
+            _employeeRepository = container.Resolve<IEmployeeRepository>();
+        }
 
         public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1, bool isRemoved = false)
         {
             ViewBag.acceptLanguage = Request.Headers.Get("Accept-Language").Split(',')[0];
 
-            if (_status == "null")
-            {
-                _status = null;
-            }
-            if(_searchString == "null")
-            {
-                _searchString = null;
-            }
             IndexPageModel indexPage = new IndexPageModel() {
                 Status = _status,
                 _SearchString = _searchString,
@@ -46,11 +47,9 @@ namespace SPK_PIM.Controllers
             }).ToList(), "Value", "Text");
 
             ViewBag._status = EntityState;
+            ViewBag.isRemoved = isRemoved;
 
-            if (isRemoved)
-            {
-                ViewBag.isRemoved = true;
-            }
+            
 
             indexPage._Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status});
             var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
