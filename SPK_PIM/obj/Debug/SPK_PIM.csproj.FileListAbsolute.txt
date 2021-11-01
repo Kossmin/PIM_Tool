@@ -95,3 +95,7 @@ D:\PIMTool\SPK_PIM\SPK_PIM\obj\Debug\SPK_PIM.csproj.CopyComplete
 D:\PIMTool\SPK_PIM\SPK_PIM\obj\Debug\SPK_PIM.dll
 D:\PIMTool\SPK_PIM\SPK_PIM\obj\Debug\SPK_PIM.pdb
 D:\PIMTool\SPK_PIM\SPK_PIM\bin\Antlr3.Runtime.xml
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\obj\Debug\SPK_PIM.csprojAssemblyReference.cache
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\obj\Debug\SPK_PIM.csproj.CoreCompileInputs.cache
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\obj\Debug\SPK_PIM.dll
+D:\Demo\PIM_Tool\PIM_Tool\SPK_PIM\obj\Debug\SPK_PIM.pdb
