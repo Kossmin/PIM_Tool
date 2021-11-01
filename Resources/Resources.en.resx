@@ -157,7 +157,7 @@
     <value>Reset Search</value>
   </data>
   <data name="SearchStringPlaceHolder" xml:space="preserve">
-    <value>Project number, project name, customer name</value>
+    <value>Project number, name, customer </value>
   </data>
   <data name="StartDate" xml:space="preserve">
     <value>Start Date</value>

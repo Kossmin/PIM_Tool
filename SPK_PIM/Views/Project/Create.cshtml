@@ -100,7 +100,7 @@ else
                 <select required class="js-example-basic-multiple" style="max-width: 100%" name="projectEmployees" multiple="multiple">
                     @foreach (var item in Model.Members)
                     {
-                        <option value="@item.ID" id=@item.ID>@item.Visa : @item.FirstName @item.LastName</option>
+                        <option value="@item.ID" id=@item.ID> @item.LastName</option>
                     }
                 </select>
             </div>
