@@ -15,6 +15,6 @@ namespace DataAccess.Model
         public string SortingKind { get; set; }
         public int PageIndex { get; set; }
         public int NumberOfRow { get; set; }
-
+        public bool IsAcsending { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace SPK_PIM.Controllers
             _employeeRepository = container.Resolve<IEmployeeRepository>();
         }
 
-        public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1, bool isRemoved = false)
+        public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1, bool isRemoved = false, bool _acsending = true)
         {
             ViewBag.acceptLanguage = Request.Headers.Get("Accept-Language").Split(',')[0];
 
@@ -37,7 +37,8 @@ namespace SPK_PIM.Controllers
                 _SearchString = _searchString,
                 _PageIndex = _pageIndex,
                 _SortingKind = _sortingKind,
-                 _NumberOfRows = _numberOfRows
+                _NumberOfRows = _numberOfRows,
+                _Acsending = _acsending,
             };
 
             var EntityState = new SelectList(Enum.GetValues(typeof(Project.ProjectStatus)).Cast<Project.ProjectStatus>().Select(v => new SelectListItem
@@ -51,7 +52,7 @@ namespace SPK_PIM.Controllers
 
             
 
-            indexPage._Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status});
+            indexPage._Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending});
             var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
             indexPage._MaxPage = ( maxPage == 0) ? 1 : maxPage;
             return View(indexPage);

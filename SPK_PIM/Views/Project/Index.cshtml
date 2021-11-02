@@ -50,99 +50,102 @@
         }
         </p>
             <form style="margin-top: 5px" action="~/project/Delete" method="get">
-                <input hidden name="returnUrl" value=@Request.RawUrl>
-
-                </input>
+                <input hidden name="returnUrl" value=@Request.RawUrl />
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th></th>
                             <th>
                                 @Html.ActionLink(Resources.Resources.Number, "Index", new
-                                {
+                           {
                                _status = (Model.Status != null) ? Model.Status : "",
                                _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnumberup") ? "projectnumberup" : "projectnumber",
+                               _sortingKind = "projectnumber",
                                _pageIndex = Model._PageIndex,
-                               _numberOfRows = Model._NumberOfRows
-                                })
-                                @if (Model._SortingKind == "projectnumberup")
+                               _numberOfRows = Model._NumberOfRows,
+                               _acsending = (Model._SortingKind == "projectnumber" && Model._Acsending == true)? false : true
+                           })
+                                @if (Model._Acsending == true && Model._SortingKind == "projectnumber")
                                 {
                                     <i class="fas fa-sort-up"></i>
                                 }
-                                else if (Model._SortingKind == "projectnumber")
+                                else if (Model._Acsending == false && Model._SortingKind == "projectnumber")
                                 {
                                     <i class="fas fa-sort-down"></i>
                                 }
                             </th>
                             <th>
                                 @Html.ActionLink(Resources.Resources.ProjectName, "Index", new
-                                {
+                           {
                                _status = (Model.Status != null) ? Model.Status : "",
                                _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "projectnameup") ? "projectnameup" : "projectname",
+                               _sortingKind = "projectname",
                                _pageIndex = Model._PageIndex,
-                               _numberOfRows = Model._NumberOfRows
-                                })
-                                @if (Model._SortingKind == "projectnameup")
+                               _numberOfRows = Model._NumberOfRows,
+                               _acsending = (Model._SortingKind == "projectname" && Model._Acsending == true) ? false : true,
+                           })
+                                @if (Model._SortingKind == "projectname" && Model._Acsending == true)
                                 {
                                     <i class="fas fa-sort-up"></i>
                                 }
-                                else if (Model._SortingKind == "projectname")
+                                else if (Model._SortingKind == "projectname" && Model._Acsending == false)
                                 {
                                     <i class="fas fa-sort-down"></i>
                                 }
                             </th>
                             <th>
                                 @Html.ActionLink(Resources.Resources.Status, "Index", new
-                                {
+                           {
                                _status = (Model.Status != null) ? Model.Status : "",
                                _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "statusup") ? "statusup" : "status",
+                               _sortingKind = "status",
                                _pageIndex = Model._PageIndex,
-                               _numberOfRows = Model._NumberOfRows
-                                })
-                                @if (Model._SortingKind == "statusup")
+                               _numberOfRows = Model._NumberOfRows,
+                               _acsending = (Model._SortingKind == "status" && Model._Acsending == true) ? false : true,
+                           })
+                                @if (Model._SortingKind == "status" && Model._Acsending == true)
                                 {
                                     <i class="fas fa-sort-up"></i>
                                 }
-                                else if (Model._SortingKind == "status")
+                                else if (Model._SortingKind == "status" && Model._Acsending == false)
                                 {
                                     <i class="fas fa-sort-down"></i>
                                 }
                             </th>
                             <th>
                                 @Html.ActionLink(Resources.Resources.Customer, "Index", new
-                                {
+                           {
                                _status = (Model.Status != null) ? Model.Status : "",
                                _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "customerup") ? "customerup" : "customer",
+                               _sortingKind = "customer",
                                _pageIndex = Model._PageIndex,
-                               _numberOfRows = Model._NumberOfRows
-                                })
-                                @if (Model._SortingKind == "customerup")
+                               _numberOfRows = Model._NumberOfRows,
+                               _acsending = (Model._SortingKind == "customer" && Model._Acsending == true) ? false : true,
+                           })
+                                @if (Model._SortingKind == "customer" && Model._Acsending == true)
                                 {
                                     <i class="fas fa-sort-up"></i>
                                 }
-                                else if (Model._SortingKind == "customer")
+                                else if (Model._SortingKind == "customer" && Model._Acsending == false)
                                 {
                                     <i class="fas fa-sort-down"></i>
                                 }
                             </th>
                             <th>
                                 @Html.ActionLink(Resources.Resources.StartDate, "Index", new
-                                {
+                           {
                                _status = (Model.Status != null) ? Model.Status : "",
                                _searchString = (Model._SearchString != null) ? Model._SearchString : "",
-                               _sortingKind = (Model._SortingKind == null || Model._SortingKind != "startdateup") ? "startdateup" : "startdate",
+                               _sortingKind = "startdate",
                                _pageIndex = Model._PageIndex,
-                               _numberOfRows = Model._NumberOfRows
-                                })
-                                @if (Model._SortingKind == "startdateup")
+                               _numberOfRows = Model._NumberOfRows,
+                               _acsending = (Model._SortingKind == "startdate" && Model._Acsending == true) ? false : true,
+                           })
+                                @if (Model._SortingKind == "startdate" && Model._Acsending == true)
                                 {
                                     <i class="fas fa-sort-up"></i>
                                 }
-                                else if (Model._SortingKind == "startdate")
+                                else if (Model._SortingKind == "startdate" && Model._Acsending == false)
                                 {
                                     <i class="fas fa-sort-down"></i>
                                 }
@@ -179,9 +182,6 @@
                                     @Html.DisplayFor(modelItem => date)
                                 </td>
                                 <td>
-                                    @*@Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-        @Html.ActionLink("Details", "Details", new { id = item.ID }) |*@
-                                    @*@Html.ActionLink(Resources.Resources.Delete, "DeleteOne", new { id = item.ID, returnUrl = Request.RawUrl })*@
                                     @{ 
                                         var Deleteurl = "/Project/DeleteOne/" + item.ID + "?returnUrl=" + Request.RawUrl;
                                     }
@@ -211,37 +211,49 @@
                 <ul class="pagination">
                     @if (Model._PageIndex != 1)
                     {
-                        var Furl = url+(Model._PageIndex -1).ToString();
                         <li>
-                            <a href=@Furl aria-label="Previous">
+                            <a href=@Url.Action("Index", "Project",  new{
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                               _sortingKind = Model._SortingKind,
+                               _pageIndex = Model._PageIndex - 1,
+                               _numberOfRows = Model._NumberOfRows
+                            }) aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                     }
                     @{
-                        var tmp = Model._MaxPage / Model._NumberOfRows;
+                        var maxPage = Model._MaxPage / Model._NumberOfRows;
                         if ((Model._MaxPage % Model._NumberOfRows) != 0)
                         {
-                            tmp += 1;
+                            maxPage += 1;
                         }
                     }
-                    @for (int i = 1; i <= tmp; i++)
+                    @for (int i = 1; i <= maxPage; i++)
                     {
-                        var Furl = url + i;
-
-                        <li>@Html.ActionLink(i.ToString(), "Index", new {
+                        <li>
+                            @Html.ActionLink(i.ToString(), "Index", new
+                            {
                            _status = (Model.Status != null) ? Model.Status : "",
                            _searchString = (Model._SearchString != null) ? Model._SearchString : "",
                            _sortingKind = Model._SortingKind,
                            _pageIndex = i,
                            _numberOfRows = Model._NumberOfRows
-                       })</li>
+                        })
+                    </li>
                     }
-                    @if (Model._PageIndex != tmp)
+                    
+                    @if (Model._PageIndex != maxPage)
                     {
-                        var Furl = url + (Model._PageIndex + 1).ToString();
                         <li>
-                            <a href=@Furl aria-label="Next">
+                            <a href=@Url.Action("Index", "Project",  new{
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model._SearchString != null) ? Model._SearchString : "",
+                               _sortingKind = Model._SortingKind,
+                               _pageIndex = Model._PageIndex + 1,
+                               _numberOfRows = Model._NumberOfRows
+                            }) aria-label="Previous">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -259,14 +271,14 @@
     <script>
         $(document).ready(function () {
 
-            //$(":checkbox").each(function () {
-            //    let id = $(this).prop("value");
-            //    let statusID = "Status" + id;
-            //    let statusValue = document.getElementById(statusID).textContent.trim();
-            //    if (statusValue != 'NEW') {
-            //        this.disabled = true;
-            //    }
-            //})
+            $(":checkbox").each(function () {
+                let id = $(this).prop("value");
+                let statusID = "Status" + id;
+                let statusValue = document.getElementById(statusID).textContent.trim();
+                if (statusValue != 'NEW') {
+                    this.disabled = true;
+                }
+            })
 
             $('input[type="checkbox"]').click(function () {
                 let id = $(this).prop("value");
@@ -284,6 +296,7 @@
                 }
                 var count = $("input[type='checkbox']:checked").length;
                 var node = document.getElementById("SelectedCheckbox");
+                debugger;
                 if (count > 0) {
                     $("#footer").show();
                 } else {
@@ -293,11 +306,6 @@
             });
 
         });
-
-        $(document).ready(function () {
-            var dropDown = document.getElementById("statusDropdown");
-            dropDown.selectedIndex = 1 + @Model.Status;
-        })
 
         function Reset() {
             const txtSearchString = document.getElementsByName("_searchstring")[0];
@@ -313,5 +321,12 @@
         function backColor(text) {
             text.style.color = "black";
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            var dropDown = document.getElementById("statusDropdown");
+            dropDown.selectedIndex = 1 + @Model.Status;
+        })
     </script>
     }

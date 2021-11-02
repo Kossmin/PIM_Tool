@@ -1,6 +1,7 @@
 ﻿using BusinessObject;
 using DataAccess.CustomException;
 using DataAccess.Model;
+using NHibernate.Criterion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,16 +21,16 @@ namespace DataAccess.Repository
                 {
                     using (var transaction = session.BeginTransaction())
                     {
-                        List<int> projectIdList = new List<int>();
-                        projectIdList.Add(project.ID);
-                        if (GetProjects(projectIdList).Count != 0)
+                        if (SearchByProjectNumber(project.ProjectNumber) != null)
                         {
                             throw new DuplicateProjectNumberException();
                         }
-                            project.AddEmployee(session.CreateCriteria<Employee>().List<Employee>().Where(x => empIds.Contains(x.ID)));
-                            session.Save(project);
-                        //}
+                        project.AddEmployee(session.CreateCriteria<Employee>().List<Employee>().Where(x => empIds.Contains(x.ID)));
+                        session.Save(project);
+                        
                         transaction.Commit();
+
+                        
                     }
                     transactionScope.Complete();
                 }
@@ -84,49 +85,72 @@ namespace DataAccess.Repository
             {
                 using (var tx = session.BeginTransaction())
                 {
-                    if(String.IsNullOrWhiteSpace(pageModel.SearchString) && String.IsNullOrWhiteSpace(pageModel.Status))
+                    
+                    if(pageModel.IsAcsending == true)
                     {
-                        projectList = session.CreateCriteria<Project>().List<Project>();
-                    }else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
-                    {
-                        var temp = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
-                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x=>x.Status.ToString() == temp).ToList<Project>();
+                        if (String.IsNullOrWhiteSpace(pageModel.SearchString) && String.IsNullOrWhiteSpace(pageModel.Status))
+                        {
+                            projectList = session.CreateCriteria<Project>()
+                                 .SetFirstResult(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
+                                 .SetMaxResults(pageModel.NumberOfRow)
+                                 .AddOrder(Order.Asc("Status"))
+                                 .List<Project>();
+                                
+                        }
+                        else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
+                        {
+                            var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
+                            projectList = session.CreateCriteria<Project>().List<Project>()
+                                .Where(x => x.Status.ToString() == searchString)
+                                .OrderBy(x => x.ID)
+                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
+                                .Take(pageModel.NumberOfRow)
+                                .ToList();
+                        }
+                        else
+                        {
+                            projectList = session.CreateCriteria<Project>().List<Project>()
+                                .Where(x => x.ProjectName.Contains(pageModel.SearchString) && x.ProjectName.Contains(pageModel.SearchString) && x.Customer.Contains(pageModel.SearchString))
+                                .OrderBy(x => x.ID)
+                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
+                                .Take(pageModel.NumberOfRow)
+                                .ToList<Project>();
+                        }
                     }
                     else
                     {
-                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x => x.ProjectName.Contains(pageModel.SearchString) && x.ProjectName.Contains(pageModel.SearchString) && x.Customer.Contains(pageModel.SearchString)).ToList<Project>();
+                        if (String.IsNullOrWhiteSpace(pageModel.SearchString) && String.IsNullOrWhiteSpace(pageModel.Status))
+                        {
+                            projectList = session.CreateCriteria<Project>().List<Project>()
+                                .OrderByDescending(x => x.ID)
+                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
+                                .Take(pageModel.NumberOfRow)
+                                .ToList();
+                        }
+                        else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
+                        {
+                            var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
+                            projectList = session.CreateCriteria<Project>().List<Project>().Where(x => x.Status.ToString() == searchString)
+                                .OrderByDescending(x => x.ID)
+                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
+                                .Take(pageModel.NumberOfRow)
+                                .ToList();
+                        }
+                        else
+                        {
+                            projectList = session.CreateCriteria<Project>().List<Project>()
+                                .Where(x => x.ProjectName.Contains(pageModel.SearchString) && x.ProjectName.Contains(pageModel.SearchString) && x.Customer.Contains(pageModel.SearchString))
+                                .OrderByDescending(x => x.ID)
+                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
+                                .Take(pageModel.NumberOfRow)
+                                .ToList();
+                        }
                     }
                 }
             }
 
-            var key = "";
-            if (pageModel.SortingKind != null)
-            {
-                pageModel.SortingKind = pageModel.SortingKind.ToLower();
 
-                if (pageModel.SortingKind.Contains("projectnumber"))
-                {
-                    key = "projectnumber";
-                }
-                else if (pageModel.SortingKind.Contains("status"))
-                {
-                    key = "status";
-                }
-                else if (pageModel.SortingKind.Contains("customer"))
-                {
-                    key = "customer";
-                }
-                else if (pageModel.SortingKind.Contains("startdate"))
-                {
-                    key = "startdate";
-                }
-                else if (pageModel.SortingKind.Contains("projectname"))
-                {
-                    key = "projectname";
-                }
-            }
-
-            switch (key)
+            switch (pageModel.SortingKind)
             {
                 case "projectnumber":
                     projectList = projectList.OrderBy(p => p.ProjectNumber).ToList();
@@ -148,20 +172,12 @@ namespace DataAccess.Repository
                     break;
             }
 
-            if (pageModel.SortingKind != null && !pageModel.SortingKind.Contains("up"))
+            if (pageModel.IsAcsending == false)
             {
                 projectList = projectList.Reverse().ToList();
             }
 
-            List<Project> resultList = new List<Project>();
-            int max;
-            if (pageModel.PageIndex * pageModel.NumberOfRow < projectList.Count) max = pageModel.PageIndex * pageModel.NumberOfRow;
-            else max = projectList.Count;
-            for (int i = (pageModel.PageIndex - 1) * pageModel.NumberOfRow; i < max; i++)
-            {
-                resultList.Add(projectList.ElementAt(i));
-            }
-            return resultList;
+            return projectList.ToList();
         }
 
 
@@ -243,10 +259,7 @@ namespace DataAccess.Repository
         {
             using (var session = NHibernateHelper.OpenSession())
             {
-                using (var tx = session.BeginTransaction())
-                {
-                    return session.Query<Project>().FirstOrDefault(x => x.ProjectNumber == projectNumber);
-                }
+                return session.Query<Project>().FirstOrDefault(x => x.ProjectNumber == projectNumber);
             }
         }
     }

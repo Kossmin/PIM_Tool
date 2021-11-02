@@ -17,5 +17,6 @@ namespace SPK_PIM.Models
         public int _MaxPage { get; set; }
         public Project _Project { get; set; } = new Project();
         public IList<Employee> Members { get; set; }
+        public bool _Acsending { get; set; } = true;
     }
 }
