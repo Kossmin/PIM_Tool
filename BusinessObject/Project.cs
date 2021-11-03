@@ -14,12 +14,7 @@ namespace BusinessObject
 {
     public class Project
     {
-        //[MaxLength(19, ErrorMessageResourceName = "ValidLength19", ErrorMessageResourceType = typeof(Resources.Resources))]
         public virtual int ID { get; set; }
-
-        
-        //[MaxLength(19, ErrorMessageResourceName = "ValidLength19", ErrorMessageResourceType = typeof(Resources.Resources))]
-        //public virtual int GroupID { get; set; }
 
         [Display(Name ="Number", ResourceType = typeof(Resources.Resources))]
         [ValidLength(4)]
@@ -47,8 +42,8 @@ namespace BusinessObject
         [DataType(DataType.Date)]
         [EndDate("StartDate")]
         public virtual DateTime EndDate { get; set; }
+        
 
-        //[MaxLength(10, ErrorMessageResourceName = "ValidLength10", ErrorMessageResourceType = typeof(Resources.Resources))]
         public virtual int Version { get; set; }
 
         public virtual IList<Employee> Employees { get; set; }
@@ -70,7 +65,7 @@ namespace BusinessObject
             Version = 0;
         }
 
-        public virtual void AddEmployees(IEnumerable<Employee> employee)
+        public virtual void SetEmployees(IEnumerable<Employee> employee)
         {
             Employees = employee.ToList();
             foreach (var item in employee)
@@ -78,6 +73,7 @@ namespace BusinessObject
                 item.Projects.Add(this);
             }
         }
+
         public virtual void UpdateEmployee(IEnumerable<Employee> employee)
         {
             Employees = employee.ToList();
@@ -100,67 +96,5 @@ namespace BusinessObject
             }
         }
 
-        //public override bool Equals(object obj)
-        //{
-        //    var tmpProject = (Project)obj;
-        //    return ID ==  tmpProject.ID;
-        //}
-
-
-        //public override int GetHashCode()
-        //{
-        //    return Tuple.Create<int, string>(ID, ProjectNumber).GetHashCode();
-        //}
-    }
-
-    class ProjectMapping : ClassMap<Project>
-    {
-        public ProjectMapping()
-        {
-            Id(x => x.ID);
-            //Map(x => x.GroupID).Not.Nullable().Length(19);
-            Map(x => x.ProjectNumber).Not.Nullable().Length(4);
-            Map(x => x.ProjectName).Not.Nullable().Length(50);
-            Map(x => x.Customer).Not.Nullable().Length(50);
-            Map(x => x.StartDate).Not.Nullable();
-            Map(x => x.EndDate).Nullable();
-            Map(x => x.Status).Not.Nullable().Length(3).CustomSqlType("char(3)");
-            Version(x => x.Version);
-            HasManyToMany(x => x.Employees)
-                .Access.Property()
-                .Cascade.SaveUpdate()
-                .Table("ProjectEmployees");
-            References<Group>(x => x.Group).Cascade.None().Column("GroupID");
-            OptimisticLock.Version();
-
-
-            //Property(x => x.ProjectNumber, m => {
-            //    m.NotNullable(true);
-            //    m.Length(19);
-            //});
-            //Property(x => x.ProjectName, m => {
-            //    m.NotNullable(true);
-            //    m.Length(19);
-            //});
-            //Property(x => x.Customer, m => {
-            //    m.NotNullable(true);
-            //    m.Length(19);
-            //});
-            //Property(x => x.StartDate, m => {
-            //    m.NotNullable(true);
-            //    m.Length(19);
-            //});
-            //Property(x => x.EndDate, m => {
-            //    m.NotNullable(true);
-            //    m.Length(19);
-            //});
-            //Property(x => x.Status, m => {
-            //    m.NotNullable(true);
-            //    m.Length(19);
-            //});
-            //Version(x => x.Version);
-
-            Table("Project");
-        }
     }
 }

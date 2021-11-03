@@ -50,10 +50,24 @@ namespace SPK_PIM.Controllers
             ViewBag._status = EntityState;
             ViewBag.isRemoved = isRemoved;
 
-            
+            var numberOfRecords = _projectRepository.GetNumberOfRecords(indexPage.Status, indexPage.SearchString);
+            var maxPage = numberOfRecords / _numberOfRows;
+            if(numberOfRecords % _numberOfRows != 0)
+            {
+                maxPage = maxPage + 1;
+            }
 
-            indexPage.Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending});
-            var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage.SearchString);
+            if (_pageIndex > maxPage)
+            {
+                indexPage.Projects = _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = maxPage, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
+                indexPage.PageIndex = maxPage;
+            }
+            else
+            {
+                indexPage.Projects = _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
+            }
+
+
             indexPage.MaxPage = ( maxPage == 0) ? 1 : maxPage;
             return View(indexPage);
         }

@@ -13,7 +13,7 @@ namespace DataAccess.Repository
         List<Project> GetAllProjectObject(PageModel pageModel);
         void Add(Project project, IEnumerable<int> empIds);
         void Update(Project project, IEnumerable<int> empIds);
-        int GetMaxPageNumber(string status, string searchString);
+        int GetNumberOfRecords(string status, string searchString);
         void Delete(IEnumerable<int> id);
         List<Project> GetProjects(IEnumerable<int> ids);
         Project SearchByProjectNumber(string projectNumber);

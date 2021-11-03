@@ -27,7 +27,7 @@ namespace DataAccess.Repository
                         {
                             throw new DuplicateProjectNumberException();
                         }
-                        project.AddEmployees(session.CreateCriteria<Employee>().Add(Expression.In(nameof(Project.ID), empIds.ToArray())).List<Employee>());
+                        project.SetEmployees(session.CreateCriteria<Employee>().Add(Expression.In(nameof(Project.ID), empIds.ToArray())).List<Employee>());
                         session.Save(project);
                         
                         transaction.Commit();
@@ -62,7 +62,64 @@ namespace DataAccess.Repository
             }
         }
 
-       
+        public string Sorting(string sortingKind)
+        {
+            switch (sortingKind)
+            {
+                case "projectnumber":
+                    return nameof(Project.ProjectNumber);
+                    break;
+                case "projectname":
+                    return nameof(Project.ProjectName);
+                    break;
+                case "status":
+                    return nameof(Project.Status);
+                    break;
+                case "customer":
+                    return nameof(Project.Customer);
+                    break;
+                case "startdate":
+                    return nameof(Project.StartDate);
+                    break;
+                default:
+                    return nameof(Project.ProjectNumber);
+                    break;
+            }
+        }
+
+        public ICriteria Filtering(ICriteria projectList, string status, string searchString)
+        {
+            if (String.IsNullOrWhiteSpace(searchString) && String.IsNullOrWhiteSpace(status))
+            {
+                projectList = projectList;
+
+            }
+            else if (String.IsNullOrWhiteSpace(searchString))
+            {
+                var castedStatus = Enum.Parse(typeof(Project.ProjectStatus), status);
+                projectList = projectList
+                    .Add(Expression.Eq(nameof(Project.Status), castedStatus));
+            }
+            else if (String.IsNullOrWhiteSpace(status))
+            {
+                projectList = projectList
+                    .Add(Expression.Or(Expression.Or(
+                        Expression.Like(nameof(Project.ProjectNumber), "%" + searchString + "%"),
+                        Expression.Like(nameof(Project.Customer), "%" + searchString + "%")
+                        ), Expression.Like(nameof(Project.ProjectName), "%" + searchString + "%")));
+            }
+            else
+            {
+                var castedStatus = Enum.Parse(typeof(Project.ProjectStatus), status);
+                projectList = projectList
+                    .Add(Expression.Or(Expression.Or(
+                        Expression.Like(nameof(Project.ProjectNumber), "%" + searchString + "%"),
+                        Expression.Like(nameof(Project.Customer), "%" + searchString + "%")
+                        ), Expression.Like(nameof(Project.ProjectName), "%" + searchString + "%")))
+                    .Add(Expression.Eq(nameof(Project.Status), castedStatus));
+            }
+            return projectList;
+        }
 
         public List<Project> GetAllProjectObject(PageModel pageModel)
         {
@@ -70,82 +127,27 @@ namespace DataAccess.Repository
             using (var session = NHibernateHelper.OpenSession())
             {
                 projectList = session.CreateCriteria<Project>();
-                var sortWord = "";
-                
-
-                switch (pageModel.SortingKind)
-                {
-                    case "projectnumber":
-                        sortWord = nameof(Project.ProjectNumber);
-                        break;
-                    case "projectname":
-                        sortWord = nameof(Project.ProjectName);
-                        break;
-                    case "status":
-                        sortWord = nameof(Project.Status);
-                        break;
-                    case "customer":
-                        sortWord = nameof(Project.Customer);
-                        break;
-                    case "startdate":
-                        sortWord = nameof(Project.StartDate);
-                        break;
-                    default:
-                        sortWord = nameof(Project.ProjectNumber);
-                        break;
-                }
+                var sortWord = Sorting(pageModel.SortingKind);
 
                 var orderDirection = new Order(sortWord, pageModel.IsAcsending);
                 projectList.AddOrder(orderDirection);
 
-                if (String.IsNullOrWhiteSpace(pageModel.SearchString) && String.IsNullOrWhiteSpace(pageModel.Status))
-                {
-                    projectList = projectList;
+                projectList = Filtering(projectList, pageModel.Status, pageModel.SearchString);
 
-                }
-                else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
-                {
-                    var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
-                    projectList = projectList
-                        .Add(Expression.Eq(nameof(Project.Status), searchString));
-                }
-                else if (String.IsNullOrWhiteSpace(pageModel.Status))
-                {
-                    projectList = projectList
-                        .Add(Expression.Or(Expression.Or(
-                            Expression.Like(nameof(Project.ProjectNumber), "%" + pageModel.SearchString + "%"),
-                            Expression.Like(nameof(Project.Customer), "%" + pageModel.SearchString + "%")
-                            ), Expression.Like(nameof(Project.ProjectName), "%" + pageModel.SearchString + "%")));
-                }
-                else
-                {
-                    var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
-                    projectList = projectList
-                        .Add(Expression.Or(Expression.Or(
-                            Expression.Like(nameof(Project.ProjectNumber), "%" + pageModel.SearchString + "%"),
-                            Expression.Like(nameof(Project.Customer), "%" + pageModel.SearchString + "%")
-                            ), Expression.Like(nameof(Project.ProjectName), "%" + pageModel.SearchString + "%")))
-                        .Add(Expression.Eq(nameof(Project.Status), searchString));
-                }
-                if(pageModel.SortingKind == "max")
-                {
-                    return projectList.List<Project>().ToList();
-                }
-                projectList = projectList
+
+                return projectList
                          .SetFirstResult(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
-                         .SetMaxResults(pageModel.NumberOfRow);
-
-                return projectList.List<Project>().ToList();
+                         .SetMaxResults(pageModel.NumberOfRow).List<Project>().ToList();
             }
-
-            
         }
 
 
-
-        public int GetMaxPageNumber(string status, string searchString)
+        public int GetNumberOfRecords(string status, string searchString)
         {
-            return GetAllProjectObject(new PageModel { Status = status, SearchString = searchString, SortingKind = "max" }).Count();
+            using(var session = NHibernateHelper.OpenSession())
+            {
+                return (int)Filtering(session.CreateCriteria<Project>(), status, searchString).SetProjection(Projections.RowCount()).UniqueResult();
+            }
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using BusinessLogic.BusinessLogic;
 using DataAccess.Repository;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace SPK_PIM
             builder.RegisterType<ProjectRepository>().As<IProjectRepository>();
             builder.RegisterType<EmployeeRepository>().As<IEmployeeRepository>();
 
+            //builder.RegisterType<ProjectService>().As<>
 
             return builder.Build();
         }
