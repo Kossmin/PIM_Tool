@@ -19,24 +19,18 @@ namespace BusinessObject
         public virtual IList<Project> Projects { get; set; }
         public virtual Group Group { get; set; }
 
-        public virtual void AssignLeader(Group group)
-        {
-            Group = group;
-            group.Employee = this;
-        }
     }
 
     public class EmployeeMapping: ClassMap<Employee>
     {
         public EmployeeMapping()
         {
-            //LazyLoad();
             Id(x => x.ID);
             Map(x => x.Visa).Not.Nullable().CustomSqlType("Char(3)");
             Map(x => x.FirstName).Not.Nullable().CustomSqlType("nvarchar(50)");
             Map(x => x.LastName).Not.Nullable().CustomSqlType("nvarchar(50)");
             Map(x => x.BirthDate).Not.Nullable();
-            Map(x => x.Version).Not.Nullable().Length(10);
+            Version(x => x.Version).Not.Nullable().Length(10);
 
             HasManyToMany(x => x.Projects)
                 .Cascade.SaveUpdate()

@@ -1,6 +1,7 @@
 ﻿using BusinessObject;
 using DataAccess.CustomException;
 using DataAccess.Model;
+using NHibernate;
 using NHibernate.Criterion;
 using System;
 using System.Collections.Generic;
@@ -21,11 +22,12 @@ namespace DataAccess.Repository
                 {
                     using (var transaction = session.BeginTransaction())
                     {
-                        if (SearchByProjectNumber(project.ProjectNumber) != null)
+                        var duplicateProject = SearchByProjectNumber(project.ProjectNumber);
+                        if (duplicateProject != null)
                         {
                             throw new DuplicateProjectNumberException();
                         }
-                        project.AddEmployee(session.CreateCriteria<Employee>().List<Employee>().Where(x => empIds.Contains(x.ID)));
+                        project.AddEmployees(session.CreateCriteria<Employee>().Add(Expression.In(nameof(Project.ID), empIds.ToArray())).List<Employee>());
                         session.Save(project);
                         
                         transaction.Commit();
@@ -37,7 +39,7 @@ namespace DataAccess.Repository
             }
         }
 
-        public void Delete(IEnumerable<int> id)
+        public void Delete(IEnumerable<int> projectIds)
         {
             using (var session = NHibernateHelper.OpenSession())
             {
@@ -45,14 +47,13 @@ namespace DataAccess.Repository
                 {
                     using (var tx = session.BeginTransaction())
                     {
-                        var temp = session.Query<Project>().Where(x => id.Contains(x.ID)).ToList();
-                        foreach (var item in temp)
+                        var deleteList = session.CreateCriteria<Project>()
+                            .Add(Expression.In(nameof(Project.ID), projectIds.ToArray()))
+                            .Add(Expression.Eq(nameof(Project.Status), Project.ProjectStatus.NEW))
+                            .List();
+                        foreach (var item in deleteList)
                         {
-                            //item.DeleteEmployee();
-                            if (checkCanBeRemoved(item))
-                            {
-                                session.Delete(item);
-                            }
+                            session.Delete(item);
                         }
                         tx.Commit();
                     }
@@ -61,150 +62,90 @@ namespace DataAccess.Repository
             }
         }
 
-        public bool checkCanBeRemoved(Project project)
-        {
-            using(var session = NHibernateHelper.OpenSession())
-            {
-                var checkedProject = session.CreateCriteria<Project>().List<Project>().FirstOrDefault(x => x.ID == project.ID);
-                var status = (Project.ProjectStatus)0;
-                if (checkedProject.Status == status)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+       
 
         public List<Project> GetAllProjectObject(PageModel pageModel)
         {
-            IList<Project> projectList;
+            ICriteria projectList;
             using (var session = NHibernateHelper.OpenSession())
             {
-                using (var tx = session.BeginTransaction())
+                projectList = session.CreateCriteria<Project>();
+                var sortWord = "";
+                
+
+                switch (pageModel.SortingKind)
                 {
-                    
-                    if(pageModel.IsAcsending == true)
-                    {
-                        if (String.IsNullOrWhiteSpace(pageModel.SearchString) && String.IsNullOrWhiteSpace(pageModel.Status))
-                        {
-                            projectList = session.CreateCriteria<Project>()
-                                 .SetFirstResult(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
-                                 .SetMaxResults(pageModel.NumberOfRow)
-                                 .AddOrder(Order.Asc("Status"))
-                                 .List<Project>();
-                                
-                        }
-                        else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
-                        {
-                            var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
-                            projectList = session.CreateCriteria<Project>().List<Project>()
-                                .Where(x => x.Status.ToString() == searchString)
-                                .OrderBy(x => x.ID)
-                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
-                                .Take(pageModel.NumberOfRow)
-                                .ToList();
-                        }
-                        else
-                        {
-                            projectList = session.CreateCriteria<Project>().List<Project>()
-                                .Where(x => x.ProjectName.Contains(pageModel.SearchString) && x.ProjectName.Contains(pageModel.SearchString) && x.Customer.Contains(pageModel.SearchString))
-                                .OrderBy(x => x.ID)
-                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
-                                .Take(pageModel.NumberOfRow)
-                                .ToList<Project>();
-                        }
-                    }
-                    else
-                    {
-                        if (String.IsNullOrWhiteSpace(pageModel.SearchString) && String.IsNullOrWhiteSpace(pageModel.Status))
-                        {
-                            projectList = session.CreateCriteria<Project>().List<Project>()
-                                .OrderByDescending(x => x.ID)
-                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
-                                .Take(pageModel.NumberOfRow)
-                                .ToList();
-                        }
-                        else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
-                        {
-                            var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
-                            projectList = session.CreateCriteria<Project>().List<Project>().Where(x => x.Status.ToString() == searchString)
-                                .OrderByDescending(x => x.ID)
-                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
-                                .Take(pageModel.NumberOfRow)
-                                .ToList();
-                        }
-                        else
-                        {
-                            projectList = session.CreateCriteria<Project>().List<Project>()
-                                .Where(x => x.ProjectName.Contains(pageModel.SearchString) && x.ProjectName.Contains(pageModel.SearchString) && x.Customer.Contains(pageModel.SearchString))
-                                .OrderByDescending(x => x.ID)
-                                .Skip(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
-                                .Take(pageModel.NumberOfRow)
-                                .ToList();
-                        }
-                    }
+                    case "projectnumber":
+                        sortWord = nameof(Project.ProjectNumber);
+                        break;
+                    case "projectname":
+                        sortWord = nameof(Project.ProjectName);
+                        break;
+                    case "status":
+                        sortWord = nameof(Project.Status);
+                        break;
+                    case "customer":
+                        sortWord = nameof(Project.Customer);
+                        break;
+                    case "startdate":
+                        sortWord = nameof(Project.StartDate);
+                        break;
+                    default:
+                        sortWord = nameof(Project.ProjectNumber);
+                        break;
                 }
+
+                var orderDirection = new Order(sortWord, pageModel.IsAcsending);
+                projectList.AddOrder(orderDirection);
+
+                if (String.IsNullOrWhiteSpace(pageModel.SearchString) && String.IsNullOrWhiteSpace(pageModel.Status))
+                {
+                    projectList = projectList;
+
+                }
+                else if (String.IsNullOrWhiteSpace(pageModel.SearchString))
+                {
+                    var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
+                    projectList = projectList
+                        .Add(Expression.Eq(nameof(Project.Status), searchString));
+                }
+                else if (String.IsNullOrWhiteSpace(pageModel.Status))
+                {
+                    projectList = projectList
+                        .Add(Expression.Or(Expression.Or(
+                            Expression.Like(nameof(Project.ProjectNumber), "%" + pageModel.SearchString + "%"),
+                            Expression.Like(nameof(Project.Customer), "%" + pageModel.SearchString + "%")
+                            ), Expression.Like(nameof(Project.ProjectName), "%" + pageModel.SearchString + "%")));
+                }
+                else
+                {
+                    var searchString = Enum.Parse(typeof(Project.ProjectStatus), pageModel.Status);
+                    projectList = projectList
+                        .Add(Expression.Or(Expression.Or(
+                            Expression.Like(nameof(Project.ProjectNumber), "%" + pageModel.SearchString + "%"),
+                            Expression.Like(nameof(Project.Customer), "%" + pageModel.SearchString + "%")
+                            ), Expression.Like(nameof(Project.ProjectName), "%" + pageModel.SearchString + "%")))
+                        .Add(Expression.Eq(nameof(Project.Status), searchString));
+                }
+                if(pageModel.SortingKind == "max")
+                {
+                    return projectList.List<Project>().ToList();
+                }
+                projectList = projectList
+                         .SetFirstResult(pageModel.NumberOfRow * (pageModel.PageIndex - 1))
+                         .SetMaxResults(pageModel.NumberOfRow);
+
+                return projectList.List<Project>().ToList();
             }
 
-
-            switch (pageModel.SortingKind)
-            {
-                case "projectnumber":
-                    projectList = projectList.OrderBy(p => p.ProjectNumber).ToList();
-                    break;
-                case "status":
-                    projectList = projectList.OrderBy(p => p.Status).ToList();
-                    break;
-                case "customer":
-                    projectList = projectList.OrderBy(p => p.Customer).ToList();
-                    break;
-                case "startdate":
-                    projectList = projectList.OrderBy(p => p.StartDate).ToList();
-                    break;
-                case "projectname":
-                    projectList = projectList.OrderBy(p => p.ProjectName).ToList();
-                    break;
-                default:
-                    projectList = projectList.OrderBy(p => p.ID).ToList();
-                    break;
-            }
-
-            if (pageModel.IsAcsending == false)
-            {
-                projectList = projectList.Reverse().ToList();
-            }
-
-            return projectList.ToList();
+            
         }
 
 
 
         public int GetMaxPageNumber(string status, string searchString)
         {
-            IList<Project> projectList;
-            using (var session = NHibernateHelper.OpenSession())
-            {
-                using (var tx = session.BeginTransaction())
-                {
-                    if (String.IsNullOrWhiteSpace(searchString) && String.IsNullOrWhiteSpace(status))
-                    {
-                        projectList = session.CreateCriteria<Project>().List<Project>();
-                    }
-                    else if (String.IsNullOrWhiteSpace(searchString))
-                    {
-                        var temp = Enum.Parse(typeof(Project.ProjectStatus), status);
-                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x => x.Status.ToString() == temp).ToList<Project>();
-                    }
-                    else
-                    {
-                        projectList = session.CreateCriteria<Project>().List<Project>().Where(x => x.ProjectName.Contains(searchString)).ToList<Project>();
-                    }
-                }
-            }
-            return projectList.Count();
+            return GetAllProjectObject(new PageModel { Status = status, SearchString = searchString, SortingKind = "max" }).Count();
         }
 
 
@@ -213,15 +154,12 @@ namespace DataAccess.Repository
         {
             using (var session = NHibernateHelper.OpenSession())
             {
-                //using (var tx = session.BeginTransaction())
-                //{
-                    return session.Query<Project>().Where(x => id.Contains(x.ID)).ToList();
-                //}
+                return session.Query<Project>().Where(x => id.Contains(x.ID)).ToList();
             }
         }
 
 
-        public bool Update(Project project, IEnumerable<int> empIds)
+        public void Update(Project project, IEnumerable<int> empIds)
         {
             using (var session = NHibernateHelper.OpenSession())
             {
@@ -229,28 +167,27 @@ namespace DataAccess.Repository
                 {
                     using (var tx = session.BeginTransaction())
                     {
-                        var tmpProject = session.Query<Project>().FirstOrDefault(x => x.ID == project.ID && x.Version == project.Version);
-                        var tmpEmpList = session.Query<Employee>().Where(x => empIds.Contains(x.ID)).ToList();
-                        if (tmpProject != null)
+                        var Project = session.Query<Project>().FirstOrDefault(x => x.ID == project.ID && x.Version == project.Version);
+                        if (Project != null)
                         {
-                            tmpProject.ProjectName = project.ProjectName;
-                            tmpProject.StartDate = project.StartDate;
-                            tmpProject.EndDate = project.EndDate;
-                            tmpProject.Status = project.Status;
-                            tmpProject.Customer = project.Customer;
-                            tmpProject.Group = project.Group;
-                            tmpProject.Version = project.Version;
-                            tmpProject.UpdateEmployee(tmpEmpList);
+                            var EmpList = session.Query<Employee>().Where(x => empIds.Contains(x.ID)).ToList();
+                            Project.ProjectName = project.ProjectName;
+                            Project.StartDate = project.StartDate;
+                            Project.EndDate = project.EndDate;
+                            Project.Status = project.Status;
+                            Project.Customer = project.Customer;
+                            Project.Group = project.Group;
+                            Project.Version = project.Version;
+                            Project.UpdateEmployee(EmpList);
                         }
                         else
                         {
-                            return false;
+                            throw new Exception("Concurrent Update");
                         }
-                        session.Update(tmpProject);
+                        session.Update(Project);
                         tx.Commit();
                     }
                     transactionScope.Complete();
-                    return true;
                 }
             }
         }

@@ -17,11 +17,15 @@ namespace SPK_PIM.Controllers
             // Attempt to read the culture cookie from Request
             HttpCookie cultureCookie = Request.Cookies["_culture"];
             if (cultureCookie != null)
+            {
                 cultureName = cultureCookie.Value;
+            }
             else
+            {
                 cultureName = Request.UserLanguages != null && Request.UserLanguages.Length > 0 ?
                         Request.UserLanguages[0] :  // obtain it from HTTP header AcceptLanguages
                         null;
+            }
             // Validate culture name
             cultureName = CultureHelper.GetImplementedCulture(cultureName); // This is safe
 

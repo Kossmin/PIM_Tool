@@ -34,11 +34,11 @@ namespace SPK_PIM.Controllers
 
             IndexPageModel indexPage = new IndexPageModel() {
                 Status = _status,
-                _SearchString = _searchString,
-                _PageIndex = _pageIndex,
-                _SortingKind = _sortingKind,
-                _NumberOfRows = _numberOfRows,
-                _Acsending = _acsending,
+                SearchString = _searchString,
+                PageIndex = _pageIndex,
+                SortingKind = _sortingKind,
+                NumberOfRows = _numberOfRows,
+                Acsending = _acsending,
             };
 
             var EntityState = new SelectList(Enum.GetValues(typeof(Project.ProjectStatus)).Cast<Project.ProjectStatus>().Select(v => new SelectListItem
@@ -52,9 +52,9 @@ namespace SPK_PIM.Controllers
 
             
 
-            indexPage._Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending});
-            var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage._SearchString);
-            indexPage._MaxPage = ( maxPage == 0) ? 1 : maxPage;
+            indexPage.Projects =  _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending});
+            var maxPage = _projectRepository.GetMaxPageNumber(indexPage.Status, indexPage.SearchString);
+            indexPage.MaxPage = ( maxPage == 0) ? 1 : maxPage;
             return View(indexPage);
         }
 
@@ -82,22 +82,28 @@ namespace SPK_PIM.Controllers
         {
             try
             {
-                _projectRepository.Add(indexPage._Project, projectEmployees);
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception();
+                }
+                try
+                {
+                    _projectRepository.Add(indexPage.Project, projectEmployees);
+                }
+                catch (DuplicateProjectNumberException e)
+                {
+                    ModelState.AddModelError("Project.ProjectNumber", e.Message);
+                    throw new Exception();
+                }
+                
             }
-            catch (DuplicateProjectNumberException e)
-            {
-                ModelState.AddModelError("_Project.ProjectNumber", e.Message);
-            }
-            if (!ModelState.IsValid)
+            catch (Exception)
             {
                 indexPage.Members = _employeeRepository.GetEmployees();
                 return View(indexPage);
             }
-            //if(_projectRepository.SearchByProjectNumber(indexPage._Project.ProjectNumber) == null)
-            //{
-            //    _projectRepository.Add(indexPage._Project, projectEmployees);
-            //}
             
+
             if (returnUrl == null)
             {
                 return RedirectToAction("Index");
@@ -111,21 +117,20 @@ namespace SPK_PIM.Controllers
         public ActionResult Details(int id, bool checkConcurrent = false, string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
-            List<int> tmp = new List<int>();
-            tmp.Add(id);
-            var model = _projectRepository.GetProjects(tmp).FirstOrDefault();
+            List<int> projectID = new List<int>() { id};
+            var model = _projectRepository.GetProjects(projectID).FirstOrDefault();
             if(model == null)
             {
                 return RedirectToAction("Index", new { isRemoved = true });
             }
-            var tmpEmp = _employeeRepository.GetEmployeesIDInProject(id).ToList<int>();
-            IndexPageModel indexPageModel = new IndexPageModel { _Project = model, Members = _employeeRepository.GetEmployees() };
+            var empInProject = _employeeRepository.GetEmployeesIDInProject(id).ToList<int>();
+            IndexPageModel indexPageModel = new IndexPageModel { Project = model, Members = _employeeRepository.GetEmployees() };
             if (checkConcurrent)
             {
                 ViewBag.Concurrent = true;
             }
             ViewBag.Details = true;
-            ViewData["SelectedEmployee"] = tmpEmp;
+            ViewData["SelectedEmployee"] = empInProject;
             return View("Create", indexPageModel);
         }
 
@@ -159,10 +164,16 @@ namespace SPK_PIM.Controllers
         [HttpPost]
         public ActionResult Edit(IndexPageModel indexModel, IEnumerable<int> projectEmployees, string returnUrl = null)
         {
-            if(!_projectRepository.Update(indexModel._Project, projectEmployees))
+            try
             {
-                return RedirectToAction("Index", new { id = indexModel._Project.ID, checkConcurrent = true });
+                _projectRepository.Update(indexModel.Project, projectEmployees);
             }
+            catch (Exception)
+            {
+                return RedirectToAction("Details", new { id = indexModel.Project.ID, checkConcurrent = true });
+                throw;
+            }
+
             if (returnUrl == null)
             {
                 return RedirectToAction("Index");

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject.CustomAttribute
 {
-    class ValidLengthAttribute : StringLengthAttribute
+    public class ValidLengthAttribute : StringLengthAttribute
     {
         private int _maximumLength;
         public ValidLengthAttribute(int maximumLength) :base(maximumLength)
@@ -17,8 +17,8 @@ namespace BusinessObject.CustomAttribute
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var temp = value.ToString().Length;
-            if(temp > _maximumLength)
+            var valueLength = value.ToString().Length;
+            if(valueLength > _maximumLength)
             {
                 var errorMessage = String.Format(Resources.Resources.ValidLength, _maximumLength.ToString());
                 return new ValidationResult(errorMessage);

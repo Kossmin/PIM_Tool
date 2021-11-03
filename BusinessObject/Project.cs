@@ -70,7 +70,7 @@ namespace BusinessObject
             Version = 0;
         }
 
-        public virtual void AddEmployee(IEnumerable<Employee> employee)
+        public virtual void AddEmployees(IEnumerable<Employee> employee)
         {
             Employees = employee.ToList();
             foreach (var item in employee)
