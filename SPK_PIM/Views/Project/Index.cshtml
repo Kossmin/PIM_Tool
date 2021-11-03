@@ -226,18 +226,34 @@
                     }
                     @for (int i = 1; i <= Model.MaxPage; i++)
                     {
-                        <li>
-                            @Html.ActionLink(i.ToString(), "Index", new
-                            {
-                           _status = (Model.Status != null) ? Model.Status : "",
-                           _searchString = (Model.SearchString != null) ? Model.SearchString : "",
-                           _sortingKind = Model.SortingKind,
-                           _pageIndex = i,
-                           _numberOfRows = Model.NumberOfRows
-                        })
-                    </li>
+                        if (i == Model.PageIndex)
+                        {
+                            <li>
+                                @Html.ActionLink(i.ToString(), "Index", new
+                                {
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model.SearchString != null) ? Model.SearchString : "",
+                               _sortingKind = Model.SortingKind,
+                               _pageIndex = i,
+                               _numberOfRows = Model.NumberOfRows
+                                }, new{ @class = "selected"})
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.ActionLink(i.ToString(), "Index", new
+                                {
+                               _status = (Model.Status != null) ? Model.Status : "",
+                               _searchString = (Model.SearchString != null) ? Model.SearchString : "",
+                               _sortingKind = Model.SortingKind,
+                               _pageIndex = i,
+                               _numberOfRows = Model.NumberOfRows
+                                })
+                            </li>
+                        }
                     }
-                    
+
                     @if (Model.PageIndex != Model.MaxPage)
                     {
                         <li>
