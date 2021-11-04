@@ -23,14 +23,7 @@ namespace BusinessLogic.BusinessLogic
 
         public void AddNewProject(Project project, IEnumerable<int> projectEmployees)
         {
-            try
-            {
                 _projectRepository.Add(project, projectEmployees);
-            }
-            catch (DuplicateProjectNumberException e)
-            {
-                throw new Exception(e.Message, e);
-            }
         }
 
 

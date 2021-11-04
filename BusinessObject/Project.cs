@@ -41,7 +41,7 @@ namespace BusinessObject
         [Display(Name = "EndDate", ResourceType = typeof(Resources.Resources))]
         [DataType(DataType.Date)]
         [EndDate("StartDate")]
-        public virtual DateTime EndDate { get; set; }
+        public virtual DateTime? EndDate { get; set; }
         
 
         public virtual int Version { get; set; }

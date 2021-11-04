@@ -27,7 +27,8 @@ namespace DataAccess.Repository
                         {
                             throw new DuplicateProjectNumberException();
                         }
-                        project.SetEmployees(session.CreateCriteria<Employee>().Add(Expression.In(nameof(Project.ID), empIds.ToArray())).List<Employee>());
+                        var employeeInProject = session.CreateCriteria<Employee>().Add(Expression.In(nameof(Project.ID), empIds.ToArray())).List<Employee>();
+                        project.SetEmployees(employeeInProject);
                         session.Save(project);
                         
                         transaction.Commit();

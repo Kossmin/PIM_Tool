@@ -18,6 +18,10 @@ namespace SPK_PIM
         {
             var property = validationContext.ObjectType.GetProperty(_startDate);
             var startDate = (DateTime)property.GetValue(validationContext.ObjectInstance);
+            if(value == null)
+            {
+                return ValidationResult.Success;
+            }
             if(DateTime.Compare((DateTime)value, startDate) < 0)
             {
                 var errorMessage = Resources.Resources.DateTime;

@@ -36,8 +36,8 @@ else
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group" hidden>
             <div class="col-md-9">
-                <input class="form-control input text-box single-line" data-val="true" name="_Project.ID" style="width: 200px" type="number" value=@Model.Project.ID>
-                <input class="form-control input text-box single-line" data-val="true" name="_Project.Version" style="width: 200px" type="number" value=@Model.Project.Version>
+                <input class="form-control input text-box single-line" data-val="true" name="Project.ID" style="width: 200px" type="number" value=@Model.Project.ID>
+                <input class="form-control input text-box single-line" data-val="true" name="Project.Version" style="width: 200px" type="number" value=@Model.Project.Version>
                 @Html.ValidationMessageFor(model => model.Project.ID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -47,13 +47,12 @@ else
             <div class="col-md-4">
                 @if (ViewBag.Details != null)
                 {
-                    <input disabled class="form-control input text-box single-line" data-val="true" name="_Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
-                    <input type="hidden" class="form-control input text-box single-line" data-val="true" name="_Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
+                    <input disabled class="form-control input text-box single-line" data-val="true" name="Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
+                    <input type="hidden" class="form-control input text-box single-line" data-val="true" name="Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
                 }
                 else
                 {
                     @Html.EditorFor(model => model.Project.ProjectNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    <span id="validation"></span>
                 }
                 @Html.ValidationMessageFor(model => model.Project.ProjectNumber, "", new { @class = "text-danger" })
             </div>
@@ -62,7 +61,7 @@ else
         <div class="form-group">
             @Html.LabelFor(model => model.Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-9">
-                <input required class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.ProjectName" type="text" value=@Model.Project.ProjectName>
+                <input required class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="Project.ProjectName" type="text" value=@Model.Project.ProjectName>
                 @Html.ValidationMessageFor(model => model.Project.ProjectName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -70,7 +69,7 @@ else
         <div class="form-group">
             @Html.LabelFor(model => model.Project.Customer, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
             <div class="col-md-9">
-                <input required class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="_Project.Customer" type="text" value=@Model.Project.Customer>
+                <input required class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="Project.Customer" type="text" value=@Model.Project.Customer>
                 @Html.ValidationMessageFor(model => model.Project.Customer, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -78,7 +77,7 @@ else
         <div class="form-group">
             @Html.LabelFor(model => model.Project.Status, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
             <div class="col-md-4">
-                <select class="dropdown form-control" name="_Project.Status">
+                <select class="dropdown form-control" name="Project.Status">
                     <option value="0" id="NEW">NEW</option>
                     <option value="1" id="PLA">PLA</option>
                     <option value="2" id="INP">INP</option>
@@ -103,7 +102,7 @@ else
 
         @{
             var startDate = Model.Project.StartDate.ToString("d", CultureInfo.CurrentCulture);
-            var endDate = Model.Project.EndDate.ToString("d", CultureInfo.CurrentCulture);
+            var endDate = Model.Project.EndDate?.ToString("d", CultureInfo.CurrentCulture);
         }
 
         <div class="col-sm-6 form-group">

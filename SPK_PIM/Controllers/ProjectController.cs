@@ -89,15 +89,14 @@ namespace SPK_PIM.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
-                    throw new Exception();
+                    _businessService.AddNewProject(indexPage.Project, projectEmployees);
                 }
-
-                _businessService.AddNewProject(indexPage.Project, projectEmployees);
             }
-            catch (Exception)
+            catch (DuplicateProjectNumberException e)
             {
+                ModelState.AddModelError("Project.ProjectNumber", e.Message);
                 indexPage.Members = _businessService.GetEmployees();
                 return View(indexPage);
             }
