@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic
 {
-    public class BusinessService
+    public class temp
     {
     }
 }
