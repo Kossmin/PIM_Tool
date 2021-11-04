@@ -31,8 +31,6 @@ namespace DataAccess.Repository
                         session.Save(project);
                         
                         transaction.Commit();
-
-                        
                     }
                     transactionScope.Complete();
                 }

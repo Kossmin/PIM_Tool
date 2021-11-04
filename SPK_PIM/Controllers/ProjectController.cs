@@ -19,12 +19,8 @@ namespace SPK_PIM.Controllers
 {
     public class ProjectController : BaseController
     {
-        //private IProjectRepository _projectRepository;
-        //private IEmployeeRepository _employeeRepository;
-
         private IBusinessService _businessService;
         
-
         public ProjectController(IBusinessService businessService) 
         {
             _businessService = businessService;
@@ -167,7 +163,6 @@ namespace SPK_PIM.Controllers
             catch (Exception)
             {
                 return RedirectToAction("Details", new { id = indexModel.Project.ID, checkConcurrent = true });
-                throw;
             }
 
             if (returnUrl == null)
