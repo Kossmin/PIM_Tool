@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\ProjectService.cs" />
+    <Compile Include="BusinessLogic\BusinessService.cs" />
+    <Compile Include="BusinessLogic\IBusinessService.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -49,6 +50,10 @@
     <Folder Include="DTOs\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessObject\BusinessObject.csproj">
+      <Project>{2518477E-BEEC-480F-8D2E-ABF0161DB657}</Project>
+      <Name>BusinessObject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{13120797-7900-4A11-B3F0-72ED5BA004D3}</Project>
       <Name>DataAccess</Name>

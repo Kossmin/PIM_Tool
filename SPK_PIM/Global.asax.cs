@@ -12,6 +12,7 @@ namespace SPK_PIM
     {
         protected void Application_Start()
         {
+            ContainerConfig.Configure();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

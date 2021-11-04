@@ -183,8 +183,8 @@
                                     @Html.DisplayFor(modelItem => date)
                                 </td>
                                 <td>
-                                    @{ 
-                                        var deleteUrl = "/Project/DeleteOne/" + item.ID + "?returnUrl=" + Request.RawUrl;
+                                    @{
+                                        var deleteUrl = "/Project/DeleteOne?projectId=" + item.ID + "&returnUrl=" + Request.RawUrl;
                                     }
                                     <a hidden href=@deleteUrl id="@item.ID" data-id="@item.ID" data-returnUrl=@Request.RawUrl>
                                         <i class="fas fa-trash-alt" style="color: orangered"></i>

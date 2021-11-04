@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using BusinessLogic;
+using BusinessLogic.BusinessLogic;
 using BusinessObject;
 using DataAccess.CustomException;
 using DataAccess.Model;
@@ -17,15 +19,15 @@ namespace SPK_PIM.Controllers
 {
     public class ProjectController : BaseController
     {
-        private IProjectRepository _projectRepository;
-        private IEmployeeRepository _employeeRepository;
-        IContainer container = ContainerConfig.Configure();
+        //private IProjectRepository _projectRepository;
+        //private IEmployeeRepository _employeeRepository;
+
+        private IBusinessService _businessService;
         
 
-        public ProjectController() 
+        public ProjectController(IBusinessService businessService) 
         {
-            _projectRepository = container.Resolve<IProjectRepository>();
-            _employeeRepository = container.Resolve<IEmployeeRepository>();
+            _businessService = businessService;
         }
 
         public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1, bool isRemoved = false, bool _acsending = true)
@@ -50,21 +52,16 @@ namespace SPK_PIM.Controllers
             ViewBag._status = EntityState;
             ViewBag.isRemoved = isRemoved;
 
-            var numberOfRecords = _projectRepository.GetNumberOfRecords(indexPage.Status, indexPage.SearchString);
-            var maxPage = numberOfRecords / _numberOfRows;
-            if(numberOfRecords % _numberOfRows != 0)
-            {
-                maxPage = maxPage + 1;
-            }
+            var maxPage = _businessService.CountMaxPage(_status, _searchString, _numberOfRows);
 
             if (_pageIndex > maxPage)
             {
-                indexPage.Projects = _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = maxPage, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
+                indexPage.Projects = _businessService.GetProjects(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = maxPage, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
                 indexPage.PageIndex = maxPage;
             }
             else
             {
-                indexPage.Projects = _projectRepository.GetAllProjectObject(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
+                indexPage.Projects = _businessService.GetProjects(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = _pageIndex, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
             }
 
 
@@ -75,7 +72,7 @@ namespace SPK_PIM.Controllers
         public ActionResult Create(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View(new IndexPageModel { Members = _employeeRepository.GetEmployees()});
+            return View(new IndexPageModel { Members = _businessService.GetEmployees()});
         }
 
         
@@ -100,20 +97,12 @@ namespace SPK_PIM.Controllers
                 {
                     throw new Exception();
                 }
-                try
-                {
-                    _projectRepository.Add(indexPage.Project, projectEmployees);
-                }
-                catch (DuplicateProjectNumberException e)
-                {
-                    ModelState.AddModelError("Project.ProjectNumber", e.Message);
-                    throw new Exception();
-                }
-                
+
+                _businessService.AddNewProject(indexPage.Project, projectEmployees);
             }
             catch (Exception)
             {
-                indexPage.Members = _employeeRepository.GetEmployees();
+                indexPage.Members = _businessService.GetEmployees();
                 return View(indexPage);
             }
             
@@ -128,50 +117,43 @@ namespace SPK_PIM.Controllers
             }
         }
 
-        public ActionResult Details(int id, bool checkConcurrent = false, string returnUrl = null)
+        public ActionResult Details(int projectId, bool checkConcurrent = false, string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
-            List<int> projectID = new List<int>() { id};
-            var model = _projectRepository.GetProjects(projectID).FirstOrDefault();
+            var model = _businessService.SearchProjectById(projectId);
             if(model == null)
             {
                 return RedirectToAction("Index", new { isRemoved = true });
             }
-            var empInProject = _employeeRepository.GetEmployeesIDInProject(id).ToList<int>();
-            IndexPageModel indexPageModel = new IndexPageModel { Project = model, Members = _employeeRepository.GetEmployees() };
-            if (checkConcurrent)
-            {
-                ViewBag.Concurrent = true;
-            }
+            var empInProject = _businessService.GetEmployeesIDInProject(projectId);
+            IndexPageModel indexPageModel = new IndexPageModel { Project = model, Members = _businessService.GetEmployees() };
+           
+            ViewBag.Concurrent = checkConcurrent;     
             ViewBag.Details = true;
             ViewData["SelectedEmployee"] = empInProject;
             return View("Create", indexPageModel);
         }
 
-        public ActionResult DeleteOne(int id, string returnUrl = null)
+        public ActionResult DeleteOne(int projectId, string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
-            List<int> projectId = new List<int>();
-            projectId.Add(id);
-            var projects = _projectRepository.GetProjects(projectId);
-            return View("Delete", projects);
+            List<int> projectIdList = new List<int>();
+            projectIdList.Add(projectId);
+            var project = _businessService.SearchProjectById(projectId);
+            return View("Delete", new List<Project>() { project});
         }
 
         public ActionResult Delete(IEnumerable<int> projectIds, string returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
-            var projects = _projectRepository.GetProjects(projectIds);
+            var projects = _businessService.GetDetailOfSelectedProjects(projectIds);
             return View(projects);
         }
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(IEnumerable<int> projectIds, string returnUrl = null, int projectId = -1)
         {
-            if(projectId != -1)
-            {
-                projectIds.ToList().Add(projectId);
-            }
-            _projectRepository.Delete(projectIds);
+            _businessService.DeleteProjects(projectIds);
             return RedirectToAction("Index");
         }
 
@@ -180,7 +162,7 @@ namespace SPK_PIM.Controllers
         {
             try
             {
-                _projectRepository.Update(indexModel.Project, projectEmployees);
+               _businessService.Update(projectEmployees, indexModel.Project);
             }
             catch (Exception)
             {
@@ -202,7 +184,9 @@ namespace SPK_PIM.Controllers
             // Save culture in a cookie
             HttpCookie cookie = Request.Cookies["_culture"];
             if (cookie != null)
-                cookie.Value = culture;   // update cookie value
+            {
+                cookie.Value = culture; // update cookie value
+            }
             else
             {
                 cookie = new HttpCookie("_culture");
