@@ -4,11 +4,10 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>@Resources.Resources.Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>@Resources.Resources.CheckDelete</h3>
 <div>
-    <h4>ProjectObject</h4>
     <hr />
     @using (Html.BeginForm("Delete", "Project", FormMethod.Post))
     {

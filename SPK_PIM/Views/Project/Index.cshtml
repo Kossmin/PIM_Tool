@@ -16,7 +16,7 @@
 <div class="container-fluid">
     
     <div>
-        <h2>Project List</h2>
+        <h2>@Resources.Resources.ProjectList</h2>
         <hr />
         
             
@@ -165,7 +165,7 @@
                                     <input type="checkbox" name="projectIds" id="projectIds" value=@item.ID />
                                 </td>
                                 <td>
-                                    @Html.ActionLink(item.ProjectNumber, "Details", new { id = item.ID, returnUrl = Request.RawUrl })
+                                    @Html.ActionLink(item.ProjectNumber, "Details", new { projectId = item.ID, returnUrl = Request.RawUrl })
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ProjectName)

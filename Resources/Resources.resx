@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="CheckDelete" xml:space="preserve">
+    <value>Xác nhận xóa dự án?</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Tạo mới</value>
+  </data>
   <data name="CreateNew" xml:space="preserve">
     <value>Tạo mới</value>
   </data>
@@ -128,6 +137,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Xóa</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Thông tin dự án</value>
   </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Mã dự án hiện đang trùng</value>
@@ -150,14 +162,20 @@
   <data name="Number" xml:space="preserve">
     <value>Mã dự án</value>
   </data>
+  <data name="Project" xml:space="preserve">
+    <value>Dự án</value>
+  </data>
+  <data name="ProjectList" xml:space="preserve">
+    <value>Danh sách dự án</value>
+  </data>
   <data name="ProjectName" xml:space="preserve">
     <value>Tên dự án</value>
   </data>
-  <data name="ProjectNumber" xml:space="preserve">
-    <value />
-  </data>
   <data name="ResetSearch" xml:space="preserve">
     <value>Đặt lại</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Lưu thay đổi</value>
   </data>
   <data name="SearchStringPlaceHolder" xml:space="preserve">
     <value>Mã dự án, tên dự án, tên khách hàng</value>
@@ -167,6 +185,9 @@
   </data>
   <data name="Status" xml:space="preserve">
     <value>Tình trạng</value>
+  </data>
+  <data name="Supplier" xml:space="preserve">
+    <value>Nhà phân phối</value>
   </data>
   <data name="Toolong" xml:space="preserve">
     <value>Độ dài không hợp lệ </value>

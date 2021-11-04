@@ -10,16 +10,16 @@
 
 @if (ViewBag.Details != null)
 {
-    <h2>Details</h2>
+    <h2>@Resources.Resources.Detail</h2>
     actionName = "Edit";
 }
 else
 {
-    <h2>Create</h2>
+    <h2>@Resources.Resources.Create</h2>
     actionName = "Create";
 }
 
-@if (ViewBag.Concurrent != null)
+@if (ViewBag.Concurrent == true)
 {
     <p class="text-danger">The version of this product is old</p>
 }
@@ -139,20 +139,17 @@ else
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-offset-2 col-md-5">
                 @if (ViewBag.Details != null)
                 {
-                    <input type="submit" id="submitButton" value="Save Changes" class="btn btn-default" />
+                    <input type="submit" id="submitButton" value=@Resources.Resources.SaveChanges class="btn btn-default" />
                 }
                 else
                 {
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value=@Resources.Resources.Create class="btn btn-default" />
                 }
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                @Html.ActionLink("Cancel", "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string })
+                 | 
+                @Html.ActionLink(Resources.Resources.Cancel, "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string })
             </div>
         </div>
     </div>

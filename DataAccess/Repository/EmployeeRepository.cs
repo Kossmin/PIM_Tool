@@ -43,7 +43,12 @@ namespace DataAccess.Repository
                 using (var tx = session.BeginTransaction())
                 {
                     var project = session.CreateCriteria<Project>().Add(Expression.Eq(nameof(Project.ID), projectId)).List<Project>().First();
-                    emp = session.CreateCriteria<Employee>().Add(Expression.In(nameof(Employee.ID), project.Employees.ToArray())).List<Employee>().Select(x=>x.ID).ToList();
+                    var employeeIdList = new List<int>();
+                    foreach (var item in project.Employees)
+                    {
+                        employeeIdList.Add(item.ID);
+                    }
+                    emp = session.CreateCriteria<Employee>().Add(Expression.In(nameof(Employee.ID), employeeIdList)).List<Employee>().Select(x=>x.ID).ToList();
                 }
             }
             return emp;
