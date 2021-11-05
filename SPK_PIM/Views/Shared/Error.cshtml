@@ -1,0 +1,10 @@
+﻿@model HandleErrorInfo
+
+@if (Model != null)
+{
+    <h1 class="text-danger">
+        Unexpected error occured. <br />
+        @Model.Exception.Message <br />
+        Please contact your admin
+    </h1>
+}

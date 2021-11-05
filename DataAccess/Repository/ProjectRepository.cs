@@ -27,8 +27,11 @@ namespace DataAccess.Repository
                         {
                             throw new DuplicateProjectNumberException();
                         }
-                        var employeeInProject = session.CreateCriteria<Employee>().Add(Expression.In(nameof(Project.ID), empIds.ToArray())).List<Employee>();
-                        project.SetEmployees(employeeInProject);
+                        if(empIds != null)
+                        {
+                            var employeeInProject = session.CreateCriteria<Employee>().Add(Expression.In(nameof(Project.ID), empIds.ToArray())).List<Employee>();
+                            project.SetEmployees(employeeInProject);
+                        }
                         session.Save(project);
                         
                         transaction.Commit();
@@ -171,7 +174,7 @@ namespace DataAccess.Repository
                         var Project = session.Query<Project>().FirstOrDefault(x => x.ID == project.ID && x.Version == project.Version);
                         if (Project != null)
                         {
-                            var EmpList = session.Query<Employee>().Where(x => empIds.Contains(x.ID)).ToList();
+                            var EmpList = (empIds != null) ? session.Query<Employee>().Where(x => empIds.Contains(x.ID)).ToList() : new List<Employee>();
                             Project.ProjectName = project.ProjectName;
                             Project.StartDate = project.StartDate;
                             Project.EndDate = project.EndDate;
@@ -183,7 +186,7 @@ namespace DataAccess.Repository
                         }
                         else
                         {
-                            throw new Exception("Concurrent Update");
+                            throw new ConcurrentUpdateException();
                         }
                         session.Update(Project);
                         tx.Commit();

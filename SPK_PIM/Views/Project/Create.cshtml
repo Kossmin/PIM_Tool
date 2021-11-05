@@ -19,139 +19,160 @@ else
     actionName = "Create";
 }
 
+@if (ViewBag.NullValue == true)
+{
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Resources.Resources.NullValue
+    </div>
+}
+
 @if (ViewBag.Concurrent == true)
 {
-    <p class="text-danger">The version of this product is old</p>
+    <p class="text-danger">
+        @Resources.Resources.OldVersion
+    </p>
 }
 
 
 <hr>
 
-
 @using (Html.BeginForm(actionName, "Project"))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group" hidden>
-            <div class="col-md-9">
-                <input class="form-control input text-box single-line" data-val="true" name="Project.ID" style="width: 200px" type="number" value=@Model.Project.ID>
-                <input class="form-control input text-box single-line" data-val="true" name="Project.Version" style="width: 200px" type="number" value=@Model.Project.Version>
-                @Html.ValidationMessageFor(model => model.Project.ID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Project.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-            <div class="col-md-4">
-                @if (ViewBag.Details != null)
-                {
-                    <input disabled class="form-control input text-box single-line" data-val="true" name="Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
-                    <input type="hidden" class="form-control input text-box single-line" data-val="true" name="Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
-                }
-                else
-                {
-                    @Html.EditorFor(model => model.Project.ProjectNumber, new { htmlAttributes = new { @class = "form-control" } })
-                }
-                @Html.ValidationMessageFor(model => model.Project.ProjectNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-9">
-                <input required class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="Project.ProjectName" type="text" value=@Model.Project.ProjectName>
-                @Html.ValidationMessageFor(model => model.Project.ProjectName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Project.Customer, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-            <div class="col-md-9">
-                <input required class="form-control input text-box single-line" style="max-width: 100%" data-val="true" name="Project.Customer" type="text" value=@Model.Project.Customer>
-                @Html.ValidationMessageFor(model => model.Project.Customer, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Project.Status, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
-            <div class="col-md-4">
-                <select class="dropdown form-control" name="Project.Status">
-                    <option value="0" id="NEW">NEW</option>
-                    <option value="1" id="PLA">PLA</option>
-                    <option value="2" id="INP">INP</option>
-                    <option value="3" id="FIN">FIN</option>
-                </select>
-                @Html.ValidationMessageFor(model => model.Project.Status, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2 aligned-label">Member</label>
-            <div class="col-md-9">
-
-                <select required class="js-example-basic-multiple" style="max-width: 100%" name="projectEmployees" multiple="multiple">
-                    @foreach (var item in Model.Members)
-                    {
-                        <option value="@item.ID" id=@item.ID> @item.LastName</option>
-                    }
-                </select>
-            </div>
-        </div>
-
-        @{
-            var startDate = Model.Project.StartDate.ToString("d", CultureInfo.CurrentCulture);
-            var endDate = Model.Project.EndDate?.ToString("d", CultureInfo.CurrentCulture);
-        }
-
-        <div class="col-sm-6 form-group">
-            <label class="control-label col-md-4 aligned-label">@Resources.Resources.StartDate</label>
-            <div class="col-md-8">
-                @if (ViewBag.Details != null)
-                {
-                    @Html.EditorFor(m => m.Project.StartDate, new { @Value = startDate, htmlAttributes = new { @class = "form-control" }, @required = "required" })
-                }
-                else
-                {
-                    @Html.EditorFor(m => m.Project.StartDate, new { htmlAttributes = new { @class = "form-control" }, @required = "required" })
-                }
-
-                @Html.ValidationMessageFor(model => model.Project.StartDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="col-sm-6 form-group">
-            <label class="control-label col-md-4 aligned-label">@Resources.Resources.EndDate</label>
-            <div class="col-md-8">
-                @if (ViewBag.Details != null)
-                {
-                    @Html.EditorFor(m => m.Project.EndDate, new { @Value = endDate, htmlAttributes = new { @class = "form-control" }, @required = "required" })
-
-                }
-                else
-                {
-                    @Html.EditorFor(m => m.Project.EndDate, new {htmlAttributes = new { @class = "form-control" }, @required = "required" })
-                }
-                @Html.ValidationMessageFor(model => model.Project.EndDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-5">
-                @if (ViewBag.Details != null)
-                {
-                    <input type="submit" id="submitButton" value=@Resources.Resources.SaveChanges class="btn btn-default" />
-                }
-                else
-                {
-                    <input type="submit" value=@Resources.Resources.Create class="btn btn-default" />
-                }
-                 | 
-                @Html.ActionLink(Resources.Resources.Cancel, "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string })
-            </div>
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group" hidden>
+        <div class="col-md-9">
+            <input class="form-control input text-box single-line" data-val="true" name="Project.ID" style="width: 200px" type="number" value=@Model.Project.ID>
+            <input class="form-control input text-box single-line" data-val="true" name="Project.Version" style="width: 200px" type="number" value=@Model.Project.Version>
+            @Html.ValidationMessageFor(model => model.Project.ID, "", new { @class = "text-danger" })
         </div>
     </div>
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Project.ProjectNumber, htmlAttributes: new { @class = "control-label col-md-2 aligned-label required" })
+        <div class="col-md-4">
+            @if (ViewBag.Details != null)
+            {
+                <input disabled class="form-control input text-box single-line" data-val="true" name="Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
+                <input type="hidden" class="form-control input text-box single-line" data-val="true" name="Project.ProjectNumber" type="text" value=@Model.Project.ProjectNumber>
+            }
+            else
+            {
+                @Html.EditorFor(model => model.Project.ProjectNumber, new { htmlAttributes = new { @class = "form-control" } })
+            }
+            @Html.ValidationMessageFor(model => model.Project.ProjectNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Project.ProjectName, htmlAttributes: new { @class = "control-label col-md-2 required" })
+        <div class="col-md-9">
+            @Html.EditorFor(model => model.Project.ProjectName, new { htmlAttributes = new { @class = "form-control input text-box single-line" }, @required = "required" })
+            @Html.ValidationMessageFor(model => model.Project.ProjectName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Project.Customer, htmlAttributes: new { @class = "control-label col-md-2 aligned-label required" })
+        <div class="col-md-9">
+            @Html.EditorFor(model => model.Project.Customer, new { htmlAttributes = new { @class = "form-control input text-box single-line" }, @required = "required" })
+
+            @Html.ValidationMessageFor(model => model.Project.Customer, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Project.Group, htmlAttributes: new { @class = "control-label col-md-2 aligned-label required" })
+        <div class="col-md-4">
+            <select class="dropdown form-control" name="Group">
+                <option selected value="NEW" id="NewGroup">NEW</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.Project.Status, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Project.Employees, htmlAttributes: new { @class = "control-label col-md-2 aligned-label" })
+        <div class="col-md-9">
+
+            <select class="js-example-basic-multiple" style="max-width: 100%" name="projectEmployees" multiple="multiple">
+                @foreach (var item in Model.Members)
+                {
+                    <option value="@item.ID" id=@item.ID>@item.Visa: @item.LastName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Project.Status, htmlAttributes: new { @class = "control-label col-md-2 aligned-label required" })
+        <div class="col-md-4">
+            <select class="dropdown form-control" name="Project.Status">
+                <option value="0" id="NEW">NEW</option>
+                <option value="1" id="PLA">PLA</option>
+                <option value="2" id="INP">INP</option>
+                <option value="3" id="FIN">FIN</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.Project.Status, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @{
+        var startDate = Model.Project.StartDate.ToString("d", CultureInfo.CurrentCulture);
+        var endDate = Model.Project.EndDate?.ToString("d", CultureInfo.CurrentCulture);
+    }
+
+    <div class="col-md-6 form-group">
+        @Html.LabelFor(model => model.Project.StartDate, htmlAttributes: new { @class = "control-label col-md-4 aligned-label required" })
+        <div class="col-md-8">
+            @if (ViewBag.Details != null)
+            {
+                @Html.EditorFor(m => m.Project.StartDate, new { @Value = startDate, htmlAttributes = new { @class = "form-control" }, @required = "required" })
+            }
+            else
+            {
+                @Html.EditorFor(m => m.Project.StartDate, new { htmlAttributes = new { @class = "form-control" }, @required = "required" })
+            }
+
+            @Html.ValidationMessageFor(model => model.Project.StartDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="col-md-6 form-group">
+        @Html.LabelFor(model => model.Project.EndDate, htmlAttributes: new { @class = "control-label col-md-4 aligned-label" })
+        <div class="col-md-8">
+            @if (ViewBag.Details != null)
+            {
+                @Html.EditorFor(m => m.Project.EndDate, new { @Value = endDate, htmlAttributes = new { @class = "form-control" }, @required = "required" })
+
+            }
+            else
+            {
+                @Html.EditorFor(m => m.Project.EndDate, new { htmlAttributes = new { @class = "form-control" }, @required = "required" })
+            }
+            @Html.ValidationMessageFor(model => model.Project.EndDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @Html.ActionLink(Resources.Resources.Cancel, "BackToHome", new { returnUrl = ViewBag.ReturnUrl as string }, new { @class = "btn btn-default col-md-3" })
+
+            @if (ViewBag.Details != null)
+            {
+                <input type="submit" id="submitButton" value=@Resources.Resources.SaveChanges class="btn btn-primary col-md-3 col-md-offset-1" />
+            }
+            else
+            {
+                <input type="submit" value=@Resources.Resources.Create class="btn btn-primary col-md-3 col-md-offset-1" />
+            }
+        </div>
+    </div>
+</div>
 }
 @section Scripts{
     <script>

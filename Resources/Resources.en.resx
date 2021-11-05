@@ -127,7 +127,7 @@
     <value>Create</value>
   </data>
   <data name="CreateNew" xml:space="preserve">
-    <value>Create New</value>
+    <value>New</value>
   </data>
   <data name="Customer" xml:space="preserve">
     <value>Customer</value>
@@ -159,8 +159,17 @@
   <data name="Logout" xml:space="preserve">
     <value>Log out</value>
   </data>
+  <data name="Member" xml:space="preserve">
+    <value>Member</value>
+  </data>
+  <data name="NullValue" xml:space="preserve">
+    <value>Please enter all the mandatory fields (*)</value>
+  </data>
   <data name="Number" xml:space="preserve">
     <value>Project Number</value>
+  </data>
+  <data name="OldVersion" xml:space="preserve">
+    <value>The version of this project is old.</value>
   </data>
   <data name="Project" xml:space="preserve">
     <value>Project</value>

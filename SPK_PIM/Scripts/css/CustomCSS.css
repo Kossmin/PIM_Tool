@@ -45,3 +45,17 @@ a.nohover:hover {
     align-items: center; 
     display: flex;
 }
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.col-md-2 {
+    padding-right: 13px;
+}

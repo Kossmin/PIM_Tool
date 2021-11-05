@@ -18,23 +18,25 @@ namespace BusinessObject
 
         [Display(Name ="Number", ResourceType = typeof(Resources.Resources))]
         [ValidLength(4)]
-        [Required(ErrorMessage ="Needed")]
+        [NotNullable]
         public virtual string ProjectNumber { get; set; }
         
         [Display(Name ="ProjectName", ResourceType = typeof(Resources.Resources))]
-        [MaxLength(50, ErrorMessageResourceName = "ValidLength50", ErrorMessageResourceType = typeof(Resources.Resources))]
+        [NotNullable]
         public virtual string ProjectName { get; set; }
         
         [Display(Name = "Customer", ResourceType = typeof(Resources.Resources))]
-        [MaxLength(50, ErrorMessageResourceName = "ValidLength50", ErrorMessageResourceType = typeof(Resources.Resources))]
+        [NotNullable]
         public virtual string Customer { get; set; }
         
         [Display(Name = "Status", ResourceType = typeof(Resources.Resources))]
-        public virtual ProjectStatus? Status { get; set; }
+        [NotNullable]
+        public virtual ProjectStatus Status { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "StartDate", ResourceType = typeof(Resources.Resources))]
         [DataType(DataType.Date)]
+        [NotNullable]
         public virtual DateTime StartDate { get; set; }
        
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -45,7 +47,7 @@ namespace BusinessObject
         
 
         public virtual int Version { get; set; }
-
+        [Display(Name = "Member", ResourceType = typeof(Resources.Resources))]
         public virtual IList<Employee> Employees { get; set; }
         public virtual Group Group { get; set; }
 

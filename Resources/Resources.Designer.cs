@@ -169,7 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dự án không tồn tại, có thể đã được xóa hoặc cập nhật.
+        ///   Looks up a localized string similar to Dự án không tồn tại, có thể đã được xóa..
         /// </summary>
         public static string isRemoved {
             get {
@@ -187,11 +187,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thành viên.
+        /// </summary>
+        public static string Member {
+            get {
+                return ResourceManager.GetString("Member", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thông tin còn đang thiếu.
+        /// </summary>
+        public static string NullValue {
+            get {
+                return ResourceManager.GetString("NullValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã dự án.
         /// </summary>
         public static string Number {
             get {
                 return ResourceManager.GetString("Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dự án đã được ai đó cập nhật.
+        /// </summary>
+        public static string OldVersion {
+            get {
+                return ResourceManager.GetString("OldVersion", resourceCulture);
             }
         }
         

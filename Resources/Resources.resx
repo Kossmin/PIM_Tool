@@ -154,13 +154,22 @@
     <value>Help</value>
   </data>
   <data name="isRemoved" xml:space="preserve">
-    <value>Dự án không tồn tại, có thể đã được xóa hoặc cập nhật</value>
+    <value>Dự án không tồn tại, có thể đã được xóa.</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Thoát</value>
   </data>
+  <data name="Member" xml:space="preserve">
+    <value>Thành viên</value>
+  </data>
+  <data name="NullValue" xml:space="preserve">
+    <value>Thông tin còn đang thiếu</value>
+  </data>
   <data name="Number" xml:space="preserve">
     <value>Mã dự án</value>
+  </data>
+  <data name="OldVersion" xml:space="preserve">
+    <value>Dự án đã được ai đó cập nhật</value>
   </data>
   <data name="Project" xml:space="preserve">
     <value>Dự án</value>

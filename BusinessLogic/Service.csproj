@@ -109,13 +109,12 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\BusinessService.cs" />
     <Compile Include="BusinessLogic\IBusinessService.cs" />
+    <Compile Include="DTOs\ProjectDTO.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test\BusinessServiceTest.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DTOs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BusinessObject\BusinessObject.csproj">
       <Project>{2518477E-BEEC-480F-8D2E-ABF0161DB657}</Project>

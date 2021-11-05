@@ -144,6 +144,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomException\ConcurrentUpdateException.cs" />
     <Compile Include="CustomException\DuplicateProjectNumberException.cs" />
     <Compile Include="Model\PageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

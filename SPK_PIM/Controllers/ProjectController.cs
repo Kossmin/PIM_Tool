@@ -5,6 +5,7 @@ using BusinessObject;
 using DataAccess.CustomException;
 using DataAccess.Model;
 using DataAccess.Repository;
+using SPK_PIM.Filters;
 using SPK_PIM.Helpers;
 using SPK_PIM.Models;
 using System;
@@ -17,6 +18,7 @@ using System.Web.Mvc;
 
 namespace SPK_PIM.Controllers
 {
+    [HandleError]
     public class ProjectController : BaseController
     {
         private IBusinessService _businessService;
@@ -29,7 +31,6 @@ namespace SPK_PIM.Controllers
         public ActionResult Index(string _status, string _searchString, string _sortingKind, int _numberOfRows = 5, int _pageIndex = 1, bool isRemoved = false, bool _acsending = true)
         {
             ViewBag.acceptLanguage = Request.Headers.Get("Accept-Language").Split(',')[0];
-
             IndexPageModel indexPage = new IndexPageModel() {
                 Status = _status,
                 SearchString = _searchString,
@@ -50,10 +51,14 @@ namespace SPK_PIM.Controllers
 
             var maxPage = _businessService.CountMaxPage(_status, _searchString, _numberOfRows);
 
-            if (_pageIndex > maxPage)
+            if (_pageIndex >= maxPage)
             {
                 indexPage.Projects = _businessService.GetProjects(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = maxPage, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
                 indexPage.PageIndex = maxPage;
+            }else if (_pageIndex <= 1)
+            {
+                indexPage.Projects = _businessService.GetProjects(new PageModel { SearchString = _searchString, NumberOfRow = _numberOfRows, PageIndex = 1, SortingKind = _sortingKind, Status = _status, IsAcsending = _acsending });
+                indexPage.PageIndex = 1;
             }
             else
             {
@@ -100,6 +105,12 @@ namespace SPK_PIM.Controllers
                 indexPage.Members = _businessService.GetEmployees();
                 return View(indexPage);
             }
+            catch(ArgumentNullException ae)
+            {
+                ViewBag.NullValue = true;
+                indexPage.Members = _businessService.GetEmployees();
+                return View(indexPage);
+            }
             
 
             if (returnUrl == null)
@@ -122,7 +133,8 @@ namespace SPK_PIM.Controllers
             }
             var empInProject = _businessService.GetEmployeesIDInProject(projectId);
             IndexPageModel indexPageModel = new IndexPageModel { Project = model, Members = _businessService.GetEmployees() };
-           
+
+            ViewBag.NullValue = TempData["NullValue"];
             ViewBag.Concurrent = checkConcurrent;     
             ViewBag.Details = true;
             ViewData["SelectedEmployee"] = empInProject;
@@ -155,14 +167,40 @@ namespace SPK_PIM.Controllers
         [HttpPost]
         public ActionResult Edit(IndexPageModel indexModel, IEnumerable<int> projectEmployees, string returnUrl = null)
         {
+            
             try
             {
-               _businessService.Update(projectEmployees, indexModel.Project);
+                var modelStates = ModelState.Values.Where(x => x.Errors.Count > 0).ToList();
+                foreach (var item in modelStates)
+                {
+                    var errors = item.Errors;
+                    foreach (var error in errors)
+                    {
+                        if (error.ErrorMessage.ToLower().Contains("required"))
+                        {
+                            throw new ArgumentNullException();
+                        }
+                    }
+                }
+
+                if (ModelState.IsValid)
+                {
+                    
+                    _businessService.Update(projectEmployees, indexModel.Project);
+                }
+                
             }
-            catch (Exception)
+            catch (ConcurrentUpdateException)
             {
-                return RedirectToAction("Details", new { id = indexModel.Project.ID, checkConcurrent = true });
+                return RedirectToAction("Details", new { projectId = indexModel.Project.ID, checkConcurrent = true, returnUrl = returnUrl });
             }
+            catch (ArgumentNullException)
+            {
+               TempData["NullValue"] = true;
+                return RedirectToAction("Details", new { projectId = indexModel.Project.ID, returnUrl = returnUrl});
+            }
+
+
 
             if (returnUrl == null)
             {

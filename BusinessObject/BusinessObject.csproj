@@ -66,9 +66,11 @@
     <Compile Include="ClassMap\EmployeeMapping.cs" />
     <Compile Include="ClassMap\GroupMapping.cs" />
     <Compile Include="ClassMap\ProjectMapping.cs" />
+    <Compile Include="CustomAttribute\NotNullableAttribute.cs" />
     <Compile Include="CustomAttribute\ValidLengthAttribute.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="CustomAttribute\EndDateAttribute.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Project.cs" />
